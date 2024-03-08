@@ -1,15 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 14:54:29 by bboissen          #+#    #+#             */
-/*   Updated: 2024/03/08 14:54:35 by bboissen         ###   ########.fr       */
+/*   Created: 2024/03/08 14:54:40 by bboissen          #+#    #+#             */
+/*   Updated: 2024/03/08 14:54:45 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+int main(void)
+{
+    char *rl;
+    rl = readline("Prompt > ");
+    printf("%s\n", rl);
+    return (0);
+}
