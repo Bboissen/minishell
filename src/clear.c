@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 16:26:06 by bboissen          #+#    #+#             */
-/*   Updated: 2024/03/13 16:15:36 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/03/19 14:04:45 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,33 @@
 #include <readline/history.h>
 #include <errno.h>
 
+char	*ft_strtok(char *str, char delim)
+{
+	static char	*token;
+	char		*start;
+
+	if (str)
+		token = str;
+	if (!token)
+		return (NULL);
+	while (*token == delim)
+		token++;
+	if (!*token)
+	{
+		token = NULL;
+		return (NULL);
+	}
+	start = token;
+	while (*token && *token != delim)
+		token++;
+	if (*token)
+	{
+		*token = '\0';
+		token++;
+	}
+	return (start);
+}
+
 int main(void)
 {
 	char *rl;
@@ -26,7 +53,6 @@ int main(void)
 	while (1)
 	{
 		rl = readline("Prompt > ");
-		free(rl);
 		if (rl == NULL && errno == ENOMEM) 
 		{
 			fprintf(stderr, "Insufficient memory for readline\n");
@@ -45,3 +71,4 @@ int main(void)
 	rl_clear_history();
 	return (0);
 }
+
