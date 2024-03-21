@@ -1,0 +1,118 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bin.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/14 18:44:12 by gdumas            #+#    #+#             */
+/*   Updated: 2024/03/18 17:54:43 by gdumas           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+static int	error_message(char *path)
+{
+	ft_putstr_fd("minishell: ", STDERR);
+	ft_putstr_fd(path, STDERR);
+
+	if (access(path, F_OK) != 0)
+		return (ft_putendl_fd(": No such file or directory", STDERR),
+			UNKNOWN_COMMAND);
+	else if (access(path, X_OK) != 0)
+		return (ft_putendl_fd(": Permission denied", STDERR), IS_DIRECTORY);
+	else
+		return (ft_putendl_fd(": command not found", STDERR), UNKNOWN_COMMAND);
+}
+
+static int	cmd_execution(char *path, char **args, t_env *env, t_mini *mini)
+{
+	char	**env_array;
+	int		ret;
+
+	ret = SUCCESS;
+	g_sig.pid = fork();
+	if (g_sig.pid == 0)
+	{
+		env_array = ft_split(env_to_str(env), '\n');
+		if (ft_strchr(path, '/') != NULL)
+			execve(path, args, env_array);
+		ret = error_message(path);
+		free_tab(env_array);
+		free_token(mini->start);
+		exit(ret);
+	}
+	else
+		waitpid(g_sig.pid, &ret, 0);
+	if (g_sig.sigint == 1 || g_sig.sigquit == 1)
+		return (g_sig.exit_status);
+	if (ret == 32256 || ret == 32512)
+		ret = ret / 256;
+	else
+		ret = !!ret;
+	return (ret);
+}
+
+static char	*path_join(char *s1, char *s2)
+{
+	char	*tmp;
+	char	*path;
+
+	tmp = ft_strjoin(s1, "/");
+	path = ft_strjoin(tmp, s2);
+	ft_memdel(tmp);
+	return (path);
+}
+
+static char	*check_dir(char *bin, char *command)
+{
+	DIR				*folder;
+	struct dirent	*item;
+	char			*path;
+
+	path = NULL;
+	folder = opendir(bin);
+	if (!folder)
+		return (NULL);
+	item = readdir(folder);
+	while (item)
+	{
+		if (ft_strcmp(item->d_name, command) == 0)
+		{
+			path = path_join(bin, item->d_name);
+			break ;
+		}
+		item = readdir(folder);
+	}
+	closedir(folder);
+	return (path);
+}
+
+int	exec_bin(char **args, t_env *env, t_mini *mini)
+{
+	int		i;
+	int		ret;
+	t_env	*path_env;
+	char	**bin;
+	char	*path;
+
+	path_env = env;
+	while (env && env->value && ft_strncmp(env->value, "PATH=", 5) != 0)
+		env = env->next;
+	if (!path_env)
+		return (cmd_execution(args[0], args, env, mini));
+	bin = ft_split(path_env->value, ':');
+	if (!args[0] || !bin[0])
+		return (ERROR);
+	path = NULL;
+	i = -1;
+	while (bin[++i] && !path)
+		path = check_dir(bin[i], args[0]);
+	free_tab(bin);
+	if (path)
+		ret = cmd_execution(path, args, env, mini);
+	else
+		ret = cmd_execution(args[0], args, env, mini);
+	return (ft_memdel(path), ret);
+}

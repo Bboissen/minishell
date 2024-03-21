@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 11:05:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/04 18:23:54 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/20 13:41:10 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,21 @@ int		ft_printnbr(int n);
 int		ft_printunsigned(unsigned int n);
 int		ft_printhex(unsigned int num, const char format);
 
+/*ft_printfd*/
+size_t	ft_strlen(const char *s);
+int		seq_write(int fd, char *s, int len);
+int		ft_printfd(int fd, const char *format, ...);
+int		converter(int fd, char c, va_list ptr);
+
 /*ft_put*/
-void	ft_putchar_fd(char c, int fd);
+int		ft_putchar_fd(char c, int fd);
 void	ft_putchar(char c);
-void	ft_putendl_fd(char *s, int fd);
+int		ft_putendl_fd(char *s, int fd);
 void	ft_putendl(char *s);
+int		ft_putnbr_base(int fd, unsigned long long nbr, char *base, char c);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_putnbr(int n);
-void	ft_putstr_fd(char *s, int fd);
+int		ft_putstr_fd(char *s, int fd);
 void	ft_putstr(char *s);
 
 /*ft_skip*/
@@ -105,6 +112,7 @@ char	**ft_split(char const *s, char c);
 char	*ft_strchr(char const *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *str);
+int		ft_strequ(const char *s1, const char *s2);
 int		ft_strisnum(const char *str);
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 char	*ft_strjoin(char *s1, char *s2);

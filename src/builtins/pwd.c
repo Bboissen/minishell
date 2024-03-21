@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 14:39:32 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 12:07:28 by gdumas           ###   ########.fr       */
+/*   Created: 2024/03/12 15:09:58 by gdumas            #+#    #+#             */
+/*   Updated: 2024/03/12 15:13:26 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_putendl_fd(char *str, int fd)
+int	mini_pwd(void)
 {
-	int	i;
+	char	cwd[PATH_MAX];
 
-	i = 0;
-	while (str && str[i])
+	if (getcwd(cwd, PATH_MAX))
 	{
-		write(fd, &str[i], 1);
-		i++;
+		ft_putendl_fd(cwd, 1);
+		return (SUCCESS);
 	}
-	i += write(fd, "\n", 1);
-	return (i);
+	else
+		return (ERROR);
 }

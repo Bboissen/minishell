@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 13:27:07 by gdumas            #+#    #+#              #
-#    Updated: 2024/03/04 18:21:00 by gdumas           ###   ########.fr        #
+#    Updated: 2024/03/20 13:41:24 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,10 +72,15 @@ PRT_SRC =	ft_printf_char	\
 			ft_printf_ptr	\
 			ft_printf
 
+PFD_SRC	=	converter		\
+			printf_fd		\
+			seq_write
+
 PUT_SRC =	ft_putchar_fd	\
 			ft_putchar		\
 			ft_putendl_fd	\
 			ft_putendl		\
+			ft_putnbr_base	\
 			ft_putnbr_fd	\
 			ft_putnbr		\
 			ft_putstr_fd	\
@@ -90,6 +95,7 @@ STR_SRC =	ft_split	\
 			ft_strchr	\
 			ft_strcmp	\
 			ft_strdup	\
+			ft_strequ	\
 			ft_strisnum	\
 			ft_striteri	\
 			ft_strjoin	\
@@ -115,6 +121,7 @@ SRCS	=	$(addprefix $(SRC_DIR)ft_gnl/, $(addsuffix .c, $(GNL_SRC)))		\
 			$(addprefix $(SRC_DIR)ft_math/, $(addsuffix .c, $(MATH_SRC)))	\
 			$(addprefix $(SRC_DIR)ft_mem/, $(addsuffix .c, $(MEM_SRC)))		\
 			$(addprefix $(SRC_DIR)ft_printf/, $(addsuffix .c, $(PRT_SRC)))	\
+			$(addprefix $(SRC_DIR)ft_printfd/, $(addsuffix .c, $(PFD_SRC)))	\
 			$(addprefix $(SRC_DIR)ft_put/, $(addsuffix .c, $(PUT_SRC)))		\
 			$(addprefix $(SRC_DIR)ft_skip/, $(addsuffix .c, $(SKIP_SRC)))	\
 			$(addprefix $(SRC_DIR)ft_str/, $(addsuffix .c, $(STR_SRC)))		\
@@ -128,13 +135,13 @@ OBJS	=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
 all				:	$(NAME)
 
 $(NAME)			:	$(OBJS)
-				@echo "Creating libft.a"
+				@echo "\nCreating libft.a"
 				@$(AR) $(NAME) $^
 				@echo "Done !"
 
 $(OBJ_DIR)%.o	:	$(SRC_DIR)%.c $(HEADER)| $(OBJ_DIR)
 				@mkdir -p $(dir $@)
-				@echo "Compiling $<"
+				@printf "Generating libft objects... %-33.33s\r" $@
 				@$(CC) $(FLAGS) -c $< -o $@
 
 $(OBJ_DIR)		:
@@ -142,7 +149,7 @@ $(OBJ_DIR)		:
 
 clean			:
 				@if [ -d "$(OBJ_DIR)" ]; then			\
-					echo "Cleaning obj directory";	\
+					echo "Cleaning libft obj/ directory";	\
 					rm -rf $(OBJ_DIR);					\
 				fi
 
@@ -152,7 +159,6 @@ fclean			:	clean
 					rm -f $(NAME);						\
 				fi
 
-	
 re				:	fclean all
 
 

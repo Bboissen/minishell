@@ -1,0 +1,6 @@
+signal part
+remplacer un maximum de putfd par printfd
+use access and readline instead of rebuilding it
+
+allow -c
+commencer les test du tester

@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 14:39:32 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 12:07:28 by gdumas           ###   ########.fr       */
+/*   Created: 2024/03/07 12:35:11 by gdumas            #+#    #+#             */
+/*   Updated: 2024/03/20 17:45:46 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_putendl_fd(char *str, int fd)
+int	mini_env(t_mini *mini)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (str && str[i])
+	mini->sig.status = 0;
+	while (mini->env)
 	{
-		write(fd, &str[i], 1);
-		i++;
+		if (ft_printf("%s=%s\n", mini->env->name, mini->env->value) < 0)
+		{
+			perror("printf");
+			return (errno);
+		}
+		mini->env = mini->env->next;
 	}
-	i += write(fd, "\n", 1);
-	return (i);
+	return (TRUE);
 }

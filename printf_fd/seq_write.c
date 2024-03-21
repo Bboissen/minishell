@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   seq_write.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 14:39:32 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 12:07:28 by gdumas           ###   ########.fr       */
+/*   Created: 2023/11/07 13:24:34 by bboissen          #+#    #+#             */
+/*   Updated: 2023/12/22 11:54:48 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "printf_fd.h"
 
-int	ft_putendl_fd(char *str, int fd)
+int	seq_write(int fd, char *s, int len)
 {
-	int	i;
+	return (write(fd, s, len));
+}
 
-	i = 0;
-	while (str && str[i])
-	{
-		write(fd, &str[i], 1);
-		i++;
-	}
-	i += write(fd, "\n", 1);
-	return (i);
+int	ft_putstr_fd(char *s, int fd)
+{
+	return (write(fd, s, ft_strlen(s)));
+}
+
+int	ft_putchar_fd(char c, int fd)
+{
+	return (write(fd, &c, 1));
 }

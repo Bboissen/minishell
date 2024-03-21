@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/03/06 16:42:10 by gdumas           ###   ########.fr        #
+#    Updated: 2024/03/21 11:13:40 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME		=	minishell
 CC			=	gcc
 FLAGS		=	-Werror -Wall -Wextra $(IFLAGS)
 IFLAGS		=	-I $(INCS) -I $(LIBFT_DIR)includes/
-LFLAGS		=	-L libft -lft
+LFLAGS		=	-L libft -lft -lreadline
 
 INCS		=	inc/
 HEADER		=	$(addprefix $(INCS), minishell.h)
@@ -29,12 +29,13 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-BUILTINS	=	cd		\
-				echo	\
-				env		\
-				exit	\
-				export	\
-				pwd		\
+BUILTINS	=	cd			\
+				echo		\
+				env			\
+				exit		\
+				exp_handler	\
+				exp_print	\
+				pwd			\
 				unset
 
 ENV			=	env			\
@@ -50,23 +51,24 @@ MAIN		=	minishell	\
 				redir		\
 				signal
 
-PARSING		=	line		\
-				tokens		\
-				expansions
+PARSING		=	expansions	\
+				line		\
+				tokens
 
-TOOLS		=	fd			\
+UTILS		=	expansions	\
+				fd			\
 				free		\
+				parsing		\
 				token		\
 				type		\
-				expansions	\
-				parsing
+				update_tokens
 
 SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
 				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
 				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))		\
 				$(addprefix $(SRC_DIR)main/, $(addsuffix .c, $(MAIN)))			\
 				$(addprefix $(SRC_DIR)parsing/, $(addsuffix .c, $(PARSING)))	\
-				$(addprefix $(SRC_DIR)tools/, $(addsuffix .c, $(TOOLS)))
+				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))
 
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
 

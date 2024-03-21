@@ -1,27 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 14:39:32 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 12:07:28 by gdumas           ###   ########.fr       */
+/*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
+/*   Updated: 2024/03/18 15:51:18 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_putendl_fd(char *str, int fd)
+void	ft_close(int fd)
 {
-	int	i;
+	if (fd > 0)
+		close(fd);
+}
 
-	i = 0;
-	while (str && str[i])
-	{
-		write(fd, &str[i], 1);
-		i++;
-	}
-	i += write(fd, "\n", 1);
-	return (i);
+void	reset_std(t_mini *mini)
+{
+	dup2(mini->in, STDIN);
+	dup2(mini->out, STDOUT);
+}
+
+void	close_fds(t_mini *mini)
+{
+	ft_close(mini->fdin);
+	ft_close(mini->fdout);
+	ft_close(mini->pipin);
+	ft_close(mini->pipout);
+}
+
+void	reset_fds(t_mini *mini)
+{
+	mini->fdin = -1;
+	mini->fdout = -1;
+	mini->pipin = -1;
+	mini->pipout = -1;
+	mini->pid = -1;
 }

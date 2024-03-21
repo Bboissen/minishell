@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 14:39:32 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 12:07:28 by gdumas           ###   ########.fr       */
+/*   Created: 2023/11/07 13:47:56 by bboissen          #+#    #+#             */
+/*   Updated: 2024/01/18 14:51:01 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "printf_fd.h"
 
-int	ft_putendl_fd(char *str, int fd)
+char	*ft_strchr(const char *s, int c)
 {
-	int	i;
-
-	i = 0;
-	while (str && str[i])
+	while (*s)
 	{
-		write(fd, &str[i], 1);
-		i++;
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
 	}
-	i += write(fd, "\n", 1);
-	return (i);
+	if (*s == (char)c)
+		return ((char *)s);
+	return (NULL);
 }
