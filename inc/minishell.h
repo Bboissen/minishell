@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/21 14:42:26 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/03/22 12:03:50 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef enum e_type
 {
 	EMPTY = 0,
 	CMD,
-	ARG,
+	VAR,
 	TRUNC,
 	APPEND,
 	INPUT,
@@ -93,6 +93,7 @@ typedef struct s_sig
 typedef struct s_token
 {
 	char			*tokens;
+	int				len;
 	int				type;
 	int				expand;
 	struct s_token	*prev;

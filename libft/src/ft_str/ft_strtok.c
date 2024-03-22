@@ -3,40 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:17:44 by gdumas            #+#    #+#             */
-/*   Updated: 2024/01/30 14:57:35 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/21 14:45:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_strtok(char **av)
+char	*ft_strtok(char *str, char delim)
 {
-	static char	*buffer;
-	char		*token;
-	int			i;
+	static char	*token;
+	char		*start;
 
-	buffer = av[1];
-	if (av[1] && (*buffer != '\0'))
+	if (str)
+		token = str;
+	if (!token)
+		return (NULL);
+	while (*token == delim)
+		token++;
+	if (!*token)
 	{
-		token = buffer;
-		i = 1;
-		while (*buffer)
-		{
-			if (*buffer == ' ')
-			{
-				*buffer = '\0';
-				av[i++] = token;
-				token = buffer + 1;
-			}
-			buffer++;
-		}
-		if (buffer != token || *buffer != '\0')
-			av[i++] = token;
-		av[i] = NULL;
+		token = NULL;
+		return (NULL);
 	}
-	else
-		exit(0);
+	start = token;
+	while (*token && *token != delim)
+		token++;
+	if (*token)
+	{
+		*token = '\0';
+		token++;
+	}
+	return (start);
 }
