@@ -6,12 +6,19 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/21 17:09:50 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:26:29 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Convert a string to a long long integer, checking for potential errors.
+ * @param {const char*} str - The string to convert.
+ * @param {int} i - The starting index in the string.
+ * @param {int*} pbm - Pointer to an integer to store the error status.
+ * @return {long long} - Returns the converted integer.
+ */
 static long long	ft_atoi_exit(const char *str, int i, int *pbm)
 {
 	int			j;
@@ -41,6 +48,10 @@ static long long	ft_atoi_exit(const char *str, int i, int *pbm)
 	return (sum * neg);
 }
 
+/**
+ * Print an error message if the exit argument is not numeric.
+ * @param {t_mini*} mini - The main structure of the shell.
+ */
 static void	exit_error_numeric(t_mini *mini)
 {
 	ft_printfd(2,
@@ -50,6 +61,10 @@ static void	exit_error_numeric(t_mini *mini)
 	clean_exit(mini, 1);
 }
 
+/**
+ * Check the arguments of the exit command.
+ * @param {t_mini*} mini - The main structure of the shell.
+ */
 static void	exit_arg(t_mini *mini)
 {
 	int		i;
@@ -71,6 +86,10 @@ static void	exit_arg(t_mini *mini)
 	}
 }
 
+/**
+ * Execute the exit command.
+ * @param {t_mini*} mini - The main structure of the shell.
+ */
 void	mini_exit(t_mini *mini)
 {
 	size_t		i;

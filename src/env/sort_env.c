@@ -6,12 +6,17 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/15 11:06:16 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:17:49 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Calculate the length of the environment array.
+ * @param {char**} env - The environment array.
+ * @return {int} - Returns the length of the environment array.
+ */
 int	str_env_len(char **env)
 {
 	int		i;
@@ -22,6 +27,11 @@ int	str_env_len(char **env)
 	return (i);
 }
 
+/**
+ * Sort an array of strings in ascending order.
+ * @param {char**} tab - The array to sort.
+ * @param {int} env_len - The length of the array.
+ */
 void	sort_env(char **tab, int env_len)
 {
 	int		ordered;
@@ -46,6 +56,10 @@ void	sort_env(char **tab, int env_len)
 	}
 }
 
+/**
+ * Print the environment variables in sorted order.
+ * @param {t_env*} env - The environment to print.
+ */
 void	print_sorted_env(t_env *env)
 {
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 13:34:19 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:21:24 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,12 @@ typedef struct s_mini
 
 /* Functions */
 
-void		redir(t_mini *mini, t_token *token);
+void		redir(t_mini *mini, t_token *token, int type);
 void		input(t_mini *mini);
 int			minipipe(t_mini *mini);
 char		*expansions(char *arg, t_env *env, int ret);
 
-void		exec_cmd(t_mini *mini, t_token *token);
+void		exec_cmd(t_mini *mini);
 int			exec_bin(char **args, t_env *env, t_mini *mini);
 int			exec_builtin(char **args, t_mini *mini);
 int			is_builtin(char	*command);
@@ -145,10 +145,10 @@ int			is_builtin(char	*command);
 int			mini_cd(char **args, t_env *env);
 int			mini_echo(char **args);
 int			mini_env(t_env *env);
-void		mini_exit(t_mini *mini, char **cmd);
+void		mini_exit(t_mini *mini);
 int			mini_export(char **args, t_env *env, t_env *secret);
 int			mini_pwd(void);
-int			mini_unset(char **args, t_mini *mini);
+int			mini_unset(t_mini *mini);
 
 int			env_add(const char *value, t_env *env);
 char		*get_env_name(char *dest, const char *src);

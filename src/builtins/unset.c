@@ -6,12 +6,17 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/21 17:01:37 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:19:36 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Calculate the size of an environment variable up to the '=' character.
+ * @param {char*} env - The environment variable.
+ * @return {size_t} - Returns the size of the environment variable.
+ */
 static size_t	env_size(char *env)
 {
 	size_t	i;
@@ -22,6 +27,11 @@ static size_t	env_size(char *env)
 	return (i);
 }
 
+/**
+ * Free the memory allocated for an environment variable node.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @param {t_env*} env - The environment variable node to free.
+ */
 static void	free_node(t_mini *mini, t_env *env)
 {
 	if (mini->env == env && env->next == NULL)
@@ -35,6 +45,12 @@ static void	free_node(t_mini *mini, t_env *env)
 	ft_memdel(env);
 }
 
+/**
+ * Link the environment variables in the shell, skipping the one to be unset.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @param {char**} args - The arguments for the unset command.
+ * @return {int} - Returns SUCCESS if the linking was successful.
+ */
 static int	link_env(t_mini *mini, char **args)
 {
 	t_env	*tmp;
@@ -54,6 +70,11 @@ static int	link_env(t_mini *mini, char **args)
 	}
 }
 
+/**
+ * Unset an environment variable in the shell.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @return {int} - Returns SUCCESS if the variable was unset successfully.
+ */
 int	mini_unset(t_mini *mini)
 {
 	char	**args;

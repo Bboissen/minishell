@@ -6,12 +6,17 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/21 21:10:53 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:10:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Initialize the mini structure with the given environment.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @param {char**} env - The environment for the shell.
+ */
 void	init_mini(t_mini *mini, char **env)
 {
 	mini->cmd->in = dup(STDIN);
@@ -23,6 +28,11 @@ void	init_mini(t_mini *mini, char **env)
 	increment_shell_level(mini->env);
 }
 
+/**
+ * Calculate the size of the environment list.
+ * @param {t_env*} lst - The environment list.
+ * @return {size_t} - Returns the size of the environment list.
+ */
 size_t	size_env(t_env *lst)
 {
 	size_t	lst_len;
@@ -40,6 +50,11 @@ size_t	size_env(t_env *lst)
 	return (lst_len);
 }
 
+/**
+ * Convert the environment list to a string.
+ * @param {t_env*} lst - The environment list.
+ * @return {char*} - Returns a string representation of the environment list.
+ */
 char	*env_to_str(t_env *lst)
 {
 	char	*env;
@@ -66,6 +81,12 @@ char	*env_to_str(t_env *lst)
 	return (env);
 }
 
+/**
+ * Initialize the environment list with the given environment array.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @param {char**} env_array - The environment array.
+ * @return {int} - Returns SUCCESS if the initialization was successful, ERROR otherwise.
+ */
 int	env_init(t_mini *mini, char **env_array)
 {
 	t_env	*env;

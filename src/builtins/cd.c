@@ -6,115 +6,17 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/21 15:37:44 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:46:50 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*static void	print_error(char **args)
-{
-	ft_putstr_fd("cd: ", 2);
-	if (args[2])
-		ft_putstr_fd("string not in pwd: ", 2);
-	else
-	{
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd(": ", 2);
-	}
-	ft_putendl_fd(args[1], 2);
-}
-
-static char	*get_env_path(t_env *env, const char *var, size_t len)
-{
-	char	*env_value;
-	int		i;
-	int		j;
-	int		s_alloc;
-
-	while (env != NULL)
-	{
-		if (ft_strncmp(env->value, var, len) == 0)
-		{
-			s_alloc = ft_strlen(env->value) - len;
-			env_value = malloc(sizeof(char) * s_alloc + 1);
-			if (!env_value)
-				return (NULL);
-			i = 0;
-			j = 0;
-			while (env->value[i++])
-				if (i > (int)len)
-					env_value[j++] = env->value[i];
-			env_value[j] = '\0';
-			return (env_value);
-		}
-		env = env->next;
-	}
-	return (NULL);
-}
-
-static int	update_oldpwd(t_env *env)
-{
-	char	cwd[PATH_MAX];
-	char	*oldpwd;
-
-	if (getcwd(cwd, PATH_MAX) == NULL)
-		return (ERROR);
-	oldpwd = ft_strjoin("OLDPWD=", cwd);
-	if (!oldpwd)
-		return (ERROR);
-	if (!is_in_env(env, oldpwd))
-		env_add(oldpwd, env);
-	ft_memdel(oldpwd);
-	return (SUCCESS);
-}
-
-static int	go_to_path(int option, t_env *env)
-{
-	int		ret;
-	char	*env_path;
-
-	env_path = NULL;
-	if (option == 0)
-	{
-		update_oldpwd(env);
-		env_path = get_env_path(env, "HOME", 4);
-		if (!env_path)
-			return (ft_putendl_fd
-				("minishell: cd: HOME not set", STDERR), ERROR);
-	}
-	else if (option == 1)
-	{
-		env_path = get_env_path(env, "OLDPWD", 6);
-		if (!env_path)
-			return (ft_putendl_fd
-				("minishell: cd: OLDPWD not set", STDERR), ERROR);
-		update_oldpwd(env);
-	}
-	ret = chdir(env_path);
-	return (ft_memdel(env_path), ret);
-}
-
-int	mini_cd(char **args, t_env *env)
-{
-	int		cd_ret;
-
-	if (!args[1])
-		return (go_to_path(0, env));
-	if (ft_strcmp(args[1], "-") == 0)
-		cd_ret = go_to_path(1, env);
-	else
-	{
-		update_oldpwd(env);
-		cd_ret = chdir(args[1]);
-		if (cd_ret < 0)
-			cd_ret *= -1;
-		if (cd_ret != 0)
-			print_error(args);
-	}
-	return (cd_ret);
-}*/
-
+/**
+ * Add the home path to the given path if it starts with '~/'
+ * @param {char*} path - The path to add the home path to.
+ * @return {char*} - Returns the new path with the home path added.
+ */
 static char	*add_home_path(char *path)
 {
 	char	*tmp1;
@@ -134,6 +36,14 @@ static char	*add_home_path(char *path)
 	return (path);
 }
 
+/**
+ * Change the current directory to the given path and update the PWD and OLDPWD 
+ * environment variables.
+ * @param {char*} path - The path to change to.
+ * @param {int} home - Flag to indicate if the path is the home directory.
+ * @return {int} - Returns ERROR if the directory change was successful, 
+ * SUCCESS otherwise.
+ */
 static int	change(char *path, int home)
 {
 	char	*pwd;
@@ -159,6 +69,15 @@ static int	change(char *path, int home)
 	return (free(pwd), SUCCESS);
 }
 
+/**
+ * Set the current directory to the given path and print an error message 
+ * if the directory change was not successful.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @param {char*} path - The path to set as the current directory.
+ * @param {int} home - Flag to indicate if the path is the home directory.
+ * @return {int} - Returns SUCCESS if the directory was set successfully, 
+ * ERROR otherwise.
+ */
 static int	set_directory(t_mini *mini, char *path, int home)
 {
 	struct stat	st;
@@ -185,6 +104,13 @@ static int	set_directory(t_mini *mini, char *path, int home)
 	return (SUCCESS);
 }
 
+/**
+ * Change the current directory to the given path or to the previous directory 
+ * if the path is '-'.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @return {int} - Returns ERROR if the directory change was successful, the 
+ * result of set_directory otherwise.
+ */
 static int	s_path(t_mini *mini)
 {
 	char	*tmp;
@@ -210,6 +136,12 @@ static int	s_path(t_mini *mini)
 	return (set_directory(mini, args[1], 0));
 }
 
+/**
+ * Execute the cd command.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @return {int} - Returns the result of set_directory if the directory 
+ * change was successful, ERROR otherwise.
+ */
 int	mini_cd(t_mini *mini)
 {
 	char	*home;

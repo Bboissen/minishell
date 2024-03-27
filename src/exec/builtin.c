@@ -6,12 +6,17 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:04:19 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/21 14:12:27 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 14:55:27 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Check if a command is a built-in command.
+ * @param {char*} command - The command to check.
+ * @return {int} - Returns ERROR if the command is a built-in command, otherwise returns SUCCESS.
+ */
 int	is_builtin(char *command)
 {
 	if (ft_strcmp(command, "echo") == SUCCESS
@@ -25,6 +30,12 @@ int	is_builtin(char *command)
 		return (SUCCESS);
 }
 
+/**
+ * Execute a built-in command.
+ * @param {char**} args - The arguments for the command.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @return {int} - Returns the result of the command execution.
+ */
 int	exec_builtin(char **args, t_mini *mini)
 {
 	int	result;

@@ -6,12 +6,17 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/18 17:51:33 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:16:00 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Check if a string represents a valid shell level.
+ * @param {const char*} str - The string to check.
+ * @return {int} - Returns SUCCESS if the string is a valid shell level, ERROR otherwise.
+ */
 static int	invalid_lvl(const char *str)
 {
 	int	i;
@@ -23,6 +28,11 @@ static int	invalid_lvl(const char *str)
 	return (SUCCESS);
 }
 
+/**
+ * Get the shell level from a string.
+ * @param {const char*} str - The string to get the level from.
+ * @return {int} - Returns the shell level.
+ */
 static int	get_lvl(const char *str)
 {
 	int	i;
@@ -44,6 +54,10 @@ static int	get_lvl(const char *str)
 	return (num * sign);
 }
 
+/**
+ * Increment the shell level in the environment.
+ * @param {t_env*} env - The environment to increment the shell level in.
+ */
 void	increment_shell_level(t_env *env)
 {
 	int		shell_level;

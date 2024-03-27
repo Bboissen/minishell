@@ -6,12 +6,17 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:35:11 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/21 15:24:18 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:27:03 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Print the environment variables.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @return {int} - Returns SUCCESS if the environment variables were printed successfully, the error number otherwise.
+ */
 int	mini_env(t_mini *mini)
 {
 	size_t	i;

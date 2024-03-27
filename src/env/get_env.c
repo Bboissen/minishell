@@ -6,17 +6,28 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/15 11:10:47 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 18:15:00 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Check if a character is valid in an environment variable name.
+ * @param {int} c - The character to check.
+ * @return {int} - Returns 1 if the character is valid, 0 otherwise.
+ */
 int	is_env_char(int c)
 {
 	return (ft_isalnum(c) || c == '_');
 }
 
+/*not used*/
+/**
+ * Check if an environment variable is valid.
+ * @param {const char*} env - The environment variable to check.
+ * @return {int} - Returns 1 if the variable is valid, 0 if the name starts with a digit, -1 if the name contains invalid characters, 2 if there is no '=' character.
+ */
 int	is_valid_env(const char *env)
 {
 	int	i;
@@ -35,7 +46,12 @@ int	is_valid_env(const char *env)
 	return (1);
 }
 
-int	env_value_len(const char *env)
+/**
+ * Calculate the length of the value of an environment variable.
+ * @param {const char*} env - The environment variable.
+ * @return {int} - Returns the length of the value.
+ */
+static int	env_value_len(const char *env)
 {
 	int		i;
 	int		size_name;
@@ -49,7 +65,12 @@ int	env_value_len(const char *env)
 	return (size_name);
 }
 
-char	*env_value(char *env)
+/**
+ * Get the value of an environment variable.
+ * @param {char*} env - The environment variable.
+ * @return {char*} - Returns a string containing the value of the variable.
+ */
+static char	*env_value(char *env)
 {
 	int		i;
 	int		j;
@@ -70,6 +91,12 @@ char	*env_value(char *env)
 	return (env_value);
 }
 
+/**
+ * Get the value of an environment variable from a list of variables.
+ * @param {char*} arg - The name of the variable.
+ * @param {t_env*} env - The list of environment variables.
+ * @return {char*} - Returns a string containing the value of the variable, or an empty string if the variable is not found.
+ */
 char	*get_env_value(char *arg, t_env *env)
 {
 	char	env_name[BUFF_SIZE];

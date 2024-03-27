@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 13:38:41 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 15:59:15 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,28 @@ void	reset_and_wait(t_mini *mini, int *status)
 
 void	minishell(t_mini *mini)
 {
-	t_token	*token;
+	t_token	*tmp;
 	int		status;
 
-	token = next_run(mini->start, NOSKIP);
-	if (is_types(mini->start, "TAI"))
-		token = mini->start->next;
-	while (mini->exit == 0 && token)
+	tmp = next_run(mini->token);
+	if (is_types(mini->token, "TAI"))
+		tmp = mini->token->next;
+	while (mini->sig.exit == 0 && tmp)
 	{
 		mini->charge = 1;
 		mini->parent = 1;
 		mini->last = 1;
-		redir_and_exec(mini, token);
+		redir_and_exec(mini, tmp);
 		reset_and_wait(mini, &status);
 		if (mini->last == 0)
-			mini->ret = status;
+			mini->sig.status = status;
 		if (mini->parent == 0)
 		{
-			free_token(mini->start);
-			exit(mini->ret);
+			free_token(mini->token);
+			exit(mini->sig.status);
 		}
-		mini->no_exec = 0;
-		token = next_run(token);
+		mini->token->skip = 0;
+		tmp = next_run(tmp);
 	}
 }
 

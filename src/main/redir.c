@@ -6,12 +6,16 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:23 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 13:34:37 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 16:14:32 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Handle error when a file or directory does not exist.
+ * @param {t_mini*} mini - The main structure of the shell.
+ */
 static void	handle_error(t_mini *mini)
 {
 	ft_printfd(STDERR, "minishell: %s: No such file or directory\n",
@@ -20,10 +24,15 @@ static void	handle_error(t_mini *mini)
 	mini->token->skip = 1;
 }
 
-void	redir(t_mini *mini, t_token *token)
+/**
+ * Redirect the output of a command to a file.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @param {t_token*} token - The token structure containing the file name.
+ */
+void	redir(t_mini *mini, t_token *token, int type)
 {
 	ft_close(mini->cmd->fd[1]);
-	if (token->type == TRUNC)
+	if (type == TRUNC)
 		mini->cmd->fd[1] = open(token->str, O_CREAT
 				| O_WRONLY | O_TRUNC, S_IRWXU);
 	else
@@ -37,6 +46,10 @@ void	redir(t_mini *mini, t_token *token)
 	dup2(mini->cmd->fd[1], STDOUT);
 }
 
+/**
+ * Open a file for reading and redirect the input from this file.
+ * @param {t_mini*} mini - The main structure of the shell.
+ */
 void	input(t_mini *mini)
 {
 	ft_close(mini->cmd->fd[0]);
@@ -49,6 +62,12 @@ void	input(t_mini *mini)
 	dup2(mini->cmd->fd[0], STDIN);
 }
 
+/**
+ * Create a pipe and fork a new process.
+ * The child process reads from the pipe and the parent writes to it.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @return {int} - Returns 2 if it's the child process, 1 if it's the parent.
+ */
 int	minipipe(t_mini *mini)
 {
 	pid_t	pid;

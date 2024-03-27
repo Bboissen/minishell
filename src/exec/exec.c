@@ -6,52 +6,67 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 13:42:20 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 16:53:20 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_tokens(t_token *start)
+/**
+ * Count the number of tokens in a list starting from a given token.
+ * @param {t_token*} token - The starting token.
+ * @return {int} - Returns the count of tokens.
+ */
+static int	count_tokens(t_token *token)
 {
 	int		count;
-	t_token	*token;
+	t_token	*tmp;
 
 	count = 2;
-	token = start->next;
-	while (token && token->type < TRUNC)
+	tmp = token->next;
+	while (tmp && tmp->type < TRUNC)
 	{
-		token = token->next;
+		tmp = tmp->next;
 		count++;
 	}
 	return (count);
 }
 
-char	**cmd_tab(t_token *start)
+/**
+ * Create a command table from a list of tokens.
+ * @param {t_token*} token - The starting token.
+ * @return {char**} - Returns a dynamically allocated array of strings representing the command.
+ */
+static char	**cmd_tab(t_token *token)
 {
-	t_token	*token;
+	t_token	*tmp;
 	char	**tab;
 	int		size;
 	int		i;
 
-	if (!start)
+	if (!token)
 		return (NULL);
-	size = count_tokens(start);
+	size = count_tokens(token);
 	tab = malloc(sizeof(char *) * size);
 	if (!tab)
 		return (NULL);
-	token = start->next;
-	tab[0] = start->str;
+	tmp = token->next;
+	tab[0] = token->str;
 	i = 1;
-	while (token && token->type < TRUNC)
+	while (tmp && tmp->type < TRUNC)
 	{
 		tab[i++] = token->str;
-		token = token->next;
+		tmp = token->next;
 	}
 	tab[i] = NULL;
 	return (tab);
 }
 
+/**
+ * Expand and execute a command.
+ * @param {char**} cmd - The command to execute.
+ * @param {t_mini*} mini - The main structure of the shell.
+ */
 static void	expand_and_exec_cmd(char **cmd, t_mini *mini)
 {
 	int	i;
@@ -68,6 +83,10 @@ static void	expand_and_exec_cmd(char **cmd, t_mini *mini)
 		mini->sig.status = exec_bin(cmd, mini->env, mini);
 }
 
+/**
+ * Execute a command.
+ * @param {t_mini*} mini - The main structure of the shell.
+ */
 void	exec_cmd(t_mini *mini)
 {
 	char	**cmd;
