@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/18 18:10:01 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/26 15:36:40 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 static int	ret_size(int ret)
 {
 	char	*tmp;
-	int		ret_len;
+	int		len;
 
 	tmp = ft_itoa(ret);
-	ret_len = ft_strlen(tmp);
+	len = ft_strlen(tmp);
 	ft_memdel(tmp);
-	return (ret_len);
+	return (len);
 }
 
 static char	*get_var_name(const char *arg, int *pos)
@@ -39,7 +39,7 @@ static char	*get_var_name(const char *arg, int *pos)
 	return (var_name);
 }
 
-int	get_var_len(const char *arg, int pos, t_env *env, int ret)
+static int	get_var_len(const char *arg, int pos, t_env *env, int ret)
 {
 	char	*var_name;
 	char	*var_value;

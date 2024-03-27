@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/20 18:17:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/21 17:09:50 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ static long long	ft_atoi_exit(const char *str, int i, int *pbm)
 
 static void	exit_error_numeric(t_mini *mini)
 {
-	ft_putstr_fd("minishell: exit: ", 2);
-	ft_putstr_fd(mini->cmd->args[1], 2);
-	ft_putstr_fd(": numeric argument required\n", 2);
+	ft_printfd(2,
+		"minishell: exit: '%s': numeric argument required\n",
+		mini->cmd->args[1]);
 	mini->sig.status = 2;
-	ft_exit(mini, 1);
+	clean_exit(mini, 1);
 }
 
 static void	exit_arg(t_mini *mini)
@@ -81,13 +81,13 @@ void	mini_exit(t_mini *mini)
 	i = 1;
 	mini->sig.status = 0;
 	if (!mini->cmd->args[1])
-		ft_exit(mini, 1);
+		clean_exit(mini, 1);
 	exit_arg(mini);
 	while (mini->cmd->args[i])
 		i++;
 	if (i > 2)
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		ft_printfd(2, "minishell: exit: too many arguments\n");
 		mini->sig.status = 1;
 	}
 	else
@@ -97,5 +97,5 @@ void	mini_exit(t_mini *mini)
 			exit_error_numeric(mini);
 		mini->sig.status = code % 256;
 	}
-	ft_exit(mini, 1);
+	clean_exit(mini, 1);
 }

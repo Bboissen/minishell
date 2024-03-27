@@ -6,13 +6,12 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/21 11:44:00 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 13:34:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 
 /* Includes */
 
@@ -31,7 +30,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-
 /* Defines */
 
 # define BUFF_SIZE 4096
@@ -48,6 +46,17 @@ typedef enum e_type
 	PIPE,
 	END
 }	t_type;
+
+typedef enum e_builtin
+{
+	CD = 0,
+	ECHO,
+	ENV,
+	EXIT,
+	EXPORT,
+	PWD,
+	UNSET
+}	t_builtin;
 
 typedef enum e_io
 {
@@ -71,7 +80,6 @@ typedef enum e_error
 	MALLOC = 256
 }	t_;
 
-
 /* Structures */
 
 typedef struct s_env
@@ -86,15 +94,18 @@ typedef struct s_sig
 	int				sigint;
 	int				sigquit;
 	int				status;
-	int				err;
+	int				exit;
 	pid_t			pid;
 }	t_sig;
 
 typedef struct s_token
 {
-	char			*tokens;
+	char			*str;
 	int				type;
 	int				expand;
+	int				join;
+	int				skip;
+	int				quote;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
@@ -119,11 +130,10 @@ typedef struct s_mini
 	t_sig			sig;
 }	t_mini;
 
-
 /* Functions */
 
-void		redir(t_mini *mini, t_token *token, int type);
-void		input(t_mini *mini, t_token *token);
+void		redir(t_mini *mini, t_token *token);
+void		input(t_mini *mini);
 int			minipipe(t_mini *mini);
 char		*expansions(char *arg, t_env *env, int ret);
 
@@ -175,9 +185,9 @@ void		free_token(t_token *start);
 void		free_env(t_env *env);
 void		free_tab(char **tab);
 
-t_token		*next_sep(t_token *token, int skip);
-t_token		*prev_sep(t_token *token, int skip);
-t_token		*next_run(t_token *token, int skip);
+t_token		*next_sep(t_token *token);
+t_token		*prev_sep(t_token *token);
+t_token		*next_run(t_token *token);
 void		process_tokens(t_mini *mini);
 void		update_token_pointers(t_token *token, t_token *prev);
 void		update_mini_start(t_mini *mini, t_token *token);
@@ -193,8 +203,8 @@ int			arg_alloc_len(const char *arg, t_env *env, int ret);
 char		*get_var_value(const char *arg, int pos, t_env *env, int ret);
 int			handle_quotes(char *line, int *i, int *j, char *c);
 
-void		sig_int(int code);
-void		sig_quit(int code);
-void		sig_init(void);
+void		sig_int(t_mini *mini, int code);
+void		sig_quit(t_mini *mini, int code);
+void		sig_init(t_mini *mini);
 
 #endif

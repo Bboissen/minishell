@@ -6,12 +6,18 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:35 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/18 14:50:46 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/26 10:54:09 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Defines the type of the token
+ * 
+ * @param token Pointer to the token whose type is to be defined
+ * @param separator Integer representing whether a separator is present or not
+ */
 void	type_arg(t_token *token, int separator)
 {
 	if (ft_strcmp(token->str, "") == SUCCESS)
@@ -32,15 +38,20 @@ void	type_arg(t_token *token, int separator)
 		token->type = ARG;
 }
 
+/**
+ * @brief Squishes arguments in the mini structure
+ * 
+ * @param mini Pointer to the mini structure
+ */
 void	squish_args(t_mini *mini)
 {
 	t_token	*token;
 	t_token	*prev;
 
-	token = mini->start;
+	token = mini->token;
 	while (token)
 	{
-		prev = prev_sep(token, NOSKIP);
+		prev = prev_sep(token);
 		if (is_type(token, ARG) && is_types(prev, "TAI"))
 		{
 			while (is_last_valid_arg(prev) == 0)
@@ -52,6 +63,13 @@ void	squish_args(t_mini *mini)
 	}
 }
 
+/**
+ * @brief Allocates memory for the next token
+ * 
+ * @param line The line from which to extract the token
+ * @param i Pointer to the index in the line
+ * @return int The size of the memory to be allocated
+ */
 int	next_alloc(char *line, int *i)
 {
 	int		count;
@@ -66,6 +84,13 @@ int	next_alloc(char *line, int *i)
 	return (j - count + 1);
 }
 
+/**
+ * @brief Generates the next token from the line
+ * 
+ * @param line The line from which to extract the token
+ * @param i Pointer to the index in the line
+ * @return t_token* Pointer to the generated token
+ */
 t_token	*next_token(char *line, int *i)
 {
 	t_token	*token;
@@ -84,6 +109,12 @@ t_token	*next_token(char *line, int *i)
 	return (token);
 }
 
+/**
+ * @brief Extracts all tokens from the line
+ * 
+ * @param line The line from which to extract the tokens
+ * @return t_token* Pointer to the first token in the linked list of tokens
+ */
 t_token	*get_tokens(char *line)
 {
 	t_token	*prev;

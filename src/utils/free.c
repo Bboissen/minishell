@@ -6,46 +6,23 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/18 15:51:32 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/26 15:06:25 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_token(t_token *start)
-{
-	while (start && start->next)
-	{
-		ft_memdel(start->str);
-		start = start->next;
-		ft_memdel(start->prev);
-	}
-	if (start)
-	{
-		ft_memdel(start->str);
-		ft_memdel(start);
-	}
-}
-
-void	free_env(t_env *env)
-{
-	t_env	*tmp;
-
-	while (env && env->next)
-	{
-		tmp = env;
-		env = env->next;
-		ft_memdel(tmp->value);
-		ft_memdel(tmp);
-	}
-	ft_memdel(env->value);
-	ft_memdel(env);
-}
-
+/**
+ * @brief Frees a null-terminated array of strings.
+ * 
+ * @param tab The array of strings to free.
+ */
 void	free_tab(char **tab)
 {
 	int	i;
 
+	if (!tab)
+		return ;
 	i = 0;
 	while (tab[i])
 	{
@@ -55,4 +32,85 @@ void	free_tab(char **tab)
 	}
 	if (tab)
 		ft_memdel(tab);
+}
+
+/**
+ * @brief Frees a linked list of commands.
+ * 
+ * @param cmd The head of the linked list of commands.
+ */
+void	free_cmd(t_cmd *cmd)
+{
+	t_cmd	*tmp;
+
+	while (cmd)
+	{
+		tmp = cmd->next;
+		if (cmd->args)
+			free_tab(cmd->args);
+		if (cmd->in)
+			free(cmd->in);
+		if (cmd->out)
+			free(cmd->out);
+		free(cmd);
+		cmd = tmp;
+	}
+}
+
+/**
+ * @brief Frees a linked list of tokens.
+ * 
+ * @param token The head of the linked list of tokens.
+ */
+void	free_token(t_token *token)
+{
+	t_token	*tmp;
+
+	while (token)
+	{
+		tmp = token->next;
+		if (token->str)
+			ft_memdel(token->str);
+		ft_memdel(token);
+		token = tmp;
+	}
+}
+
+/**
+ * @brief Frees a linked list of environment variables.
+ * 
+ * @param env The head of the linked list of environment variables.
+ */
+void	free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env->next;
+		ft_memdel(env->name);
+		ft_memdel(env->value);
+		ft_memdel(env);
+		env = tmp;
+	}
+}
+
+
+/**
+ * @brief Frees all allocated memory and exits the program.
+ * 
+ * @param mini The main structure of the program.
+ */
+void	clean_exit(t_mini *mini)
+{
+	if (mini->token)
+		free_token(mini->token);
+	if (mini->cmd)
+		free_cmd(mini->cmd);
+	if (mini->env)
+		free_env(mini->env);
+	if (mini->sig.exit == 1)
+		ft_putstr_fd("exit\n", 2);
+	free(mini);
+	exit(mini->sig.status);
 }

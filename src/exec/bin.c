@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:12 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/18 17:54:43 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/25 14:47:21 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static int	cmd_execution(char *path, char **args, t_env *env, t_mini *mini)
 	int		ret;
 
 	ret = SUCCESS;
-	g_sig.pid = fork();
-	if (g_sig.pid == 0)
+	mini->sig.pid = fork();
+	if (mini->sig.pid == 0)
 	{
 		env_array = ft_split(env_to_str(env), '\n');
 		if (ft_strchr(path, '/') != NULL)
@@ -44,9 +44,9 @@ static int	cmd_execution(char *path, char **args, t_env *env, t_mini *mini)
 		exit(ret);
 	}
 	else
-		waitpid(g_sig.pid, &ret, 0);
-	if (g_sig.sigint == 1 || g_sig.sigquit == 1)
-		return (g_sig.exit_status);
+		waitpid(mini->sig.pid, &ret, 0);
+	if (mini->sig.sigint == 1 || mini->sig.sigquit == 1)
+		return (mini->sig.status);
 	if (ret == 32256 || ret == 32512)
 		ret = ret / 256;
 	else
@@ -92,13 +92,13 @@ static char	*check_dir(char *bin, char *command)
 int	exec_bin(char **args, t_env *env, t_mini *mini)
 {
 	int		i;
-	int		ret;
+	int		status;
 	t_env	*path_env;
 	char	**bin;
 	char	*path;
 
 	path_env = env;
-	while (env && env->value && ft_strncmp(env->value, "PATH=", 5) != 0)
+	while (env && env->name && ft_strncmp(env->name, "PATH", 4) != 0)
 		env = env->next;
 	if (!path_env)
 		return (cmd_execution(args[0], args, env, mini));
@@ -111,8 +111,8 @@ int	exec_bin(char **args, t_env *env, t_mini *mini)
 		path = check_dir(bin[i], args[0]);
 	free_tab(bin);
 	if (path)
-		ret = cmd_execution(path, args, env, mini);
+		status = cmd_execution(path, args, env, mini);
 	else
-		ret = cmd_execution(args[0], args, env, mini);
-	return (ft_memdel(path), ret);
+		status = cmd_execution(args[0], args, env, mini);
+	return (ft_memdel(path), status);
 }

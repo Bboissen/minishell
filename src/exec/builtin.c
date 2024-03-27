@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:04:19 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/18 17:55:19 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/21 14:12:27 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	exec_builtin(char **args, t_mini *mini)
 	if (ft_strcmp(args[0], "env") == SUCCESS)
 		mini_env(mini->env);
 	if (ft_strcmp(args[0], "export") == SUCCESS)
-		mini_export(args, mini->env, mini->secret_env);
+		mini_export(args, mini->env, mini->env);
 	if (ft_strcmp(args[0], "unset") == SUCCESS)
 		mini_unset(args, mini);
 	return (result);

@@ -6,37 +6,21 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 11:46:29 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/18 17:59:49 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/26 15:10:53 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	update_token_pointers(t_token *token, t_token *prev)
-{
-	token->prev->next = token->next;
-	if (token->next)
-		token->next->prev = token->prev;
-	token->prev = prev;
-	if (token->next == (prev))
-		token->next = prev->next;
-	else
-		token->next = NULL;
-	if (prev)
-	{
-		prev->next->prev = token;
-		prev->next = token;
-	}
-}
-
-void	update_mini_start(t_mini *mini, t_token *token)
-{
-	if (mini->start->prev)
-		mini->start = mini->start->prev;
-	else
-		mini->start = token;
-}
-
+/**
+ * @brief Handles quotes in a given line of text.
+ * 
+ * @param line The line of text to process.
+ * @param i Pointer to the current index in the line.
+ * @param j Pointer to the current position in the line.
+ * @param c Pointer to the current character being processed.
+ * @return int The count of quotes handled.
+ */
 int	handle_quotes(char *line, int *i, int *j, char *c)
 {
 	int	count;
@@ -54,4 +38,3 @@ int	handle_quotes(char *line, int *i, int *j, char *c)
 		(*j)++;
 	return (count);
 }
-

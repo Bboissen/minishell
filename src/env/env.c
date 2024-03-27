@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 17:04:46 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/21 21:10:53 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 void	init_mini(t_mini *mini, char **env)
 {
-	mini->in = dup(STDIN);
-	mini->out = dup(STDOUT);
-	mini->exit = 0;
-	mini->ret = 0;
-	mini->no_exec = 0;
+	mini->cmd->in = dup(STDIN);
+	mini->cmd->out = dup(STDOUT);
+	mini->sig.status = 0;
+	mini->sig.exit = 0;
 	reset_fds(mini);
 	env_init(mini, env);
 	increment_shell_level(mini->env);

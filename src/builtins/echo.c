@@ -6,13 +6,13 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:36:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/20 17:37:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/21 15:24:46 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	mini_echo(char **args)
+/*int	mini_echo(char **args)
 {
 	int	i;
 	int	n_option;
@@ -34,7 +34,7 @@ int	mini_echo(char **args)
 	if (n_option == 0)
 		write(STDOUT_FILENO, "\n", 1);
 	return (SUCCESS);
-}
+}*/
 
 static size_t	check_n(char **args)
 {
@@ -71,7 +71,7 @@ int	mini_echo(t_mini *mini)
 	if (!args[1])
 		return (ft_putchar_fd('\n', 1), TRUE);
 	if ((ft_strequ(args[1], " ") && !args[2]))
-		return (TRUE);
+		return (SUCCESS);
 	i = check_n(args);
 	if (i > 1)
 		n = 0;
@@ -83,5 +83,5 @@ int	mini_echo(t_mini *mini)
 	}
 	if (n)
 		ft_putchar_fd('\n', 1);
-	return (TRUE);
+	return (SUCCESS);
 }

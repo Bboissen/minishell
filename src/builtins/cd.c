@@ -6,13 +6,13 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/20 17:08:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/21 15:37:44 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_error(char **args)
+/*static void	print_error(char **args)
 {
 	ft_putstr_fd("cd: ", 2);
 	if (args[2])
@@ -113,12 +113,12 @@ int	mini_cd(char **args, t_env *env)
 			print_error(args);
 	}
 	return (cd_ret);
-}
+}*/
 
 static char	*add_home_path(char *path)
 {
-	char		*tmp1;
-	char		*tmp2;
+	char	*tmp1;
+	char	*tmp2;
 
 	if (!ft_strncmp(path, "~/", 2))
 	{
@@ -165,22 +165,24 @@ static int	set_directory(t_mini *mini, char *path, int home)
 
 	if (change(path, home))
 		return (ERROR);
-	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(path, 2);
-	mini->sig.exit_status = ERROR;
+	ft_printfd(2, "minishell: cd: %s", path);
+	mini->sig.status = ERROR;
 	if (stat(path, &st) == -1)
 	{
-		ft_putstr_fd(": No such file or directory", 2);
-		mini->sig.exit_status = CMD;
+		ft_printfd(2, ": No such file or directory");
+		mini->sig.status = DIRECTORY;
 	}
 	else if (!(st.st_mode & S_IXUSR))
-		ft_putstr_fd(": Permission denied", 2);
+	{
+		ft_printfd(2, ": Permission denied");
+		mini->sig.status = CMD;
+	}
 	else
-		ft_putstr_fd(": Not a directory", 2);
-	ft_putchar_fd('\n', 2);
+		ft_printfd(2, ": Not a directory");
+	ft_printfd(2, '\n');
 	if (home)
 		free(path);
-	return (1);
+	return (SUCCESS);
 }
 
 static int	s_path(t_mini *mini)
@@ -200,9 +202,8 @@ static int	s_path(t_mini *mini)
 		tmp = get_env("PWD");
 		if (tmp)
 		{
-			ft_putstr_fd(tmp, 1);
+			ft_printfd(1, "%s\n", tmp);
 			free(tmp);
-			ft_putchar_fd('\n', 1);
 		}
 		return (ERROR);
 	}
@@ -219,7 +220,7 @@ int	mini_cd(t_mini *mini)
 	args = mini->cmd->args;
 	if (args && args[1] && args[2])
 	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		ft_printfd(2, "minishell: cd: too many arguments\n");
 		return (ERROR);
 	}
 	if (!args[1] || ft_strequ(args[1], "~") || ft_strequ(args[1], "--"))
@@ -227,7 +228,7 @@ int	mini_cd(t_mini *mini)
 		home = get_env("HOME");
 		if (!home)
 		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			ft_printfd(2, "minishell: cd: HOME not set\n");
 			return (ERROR);
 		}
 		return (set_directory(mini, home, 1));

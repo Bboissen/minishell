@@ -6,12 +6,20 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:54 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/18 18:10:58 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/26 15:16:45 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Checks if a token is of a specific type.
+ * 
+ * @param token The token to check.
+ * @param type The type to compare with the token's type.
+ * @return int Returns TRUE if the token is of the specified type,
+ * FALSE otherwise.
+ */
 int	is_type(t_token *token, int type)
 {
 	if (token && token->type == type)
@@ -20,6 +28,14 @@ int	is_type(t_token *token, int type)
 		return (FALSE);
 }
 
+/**
+ * @brief Checks if a token is of any of the types specified in a string.
+ * 
+ * @param token The token to check.
+ * @param types A string where each character represents a type.
+ * @return int Returns TRUE if the token is of any of the
+ * specified types, FALSE otherwise.
+ */
 int	is_types(t_token *token, char *types)
 {
 	if ((ft_strchr(types, ' ') && is_type(token, EMPTY))
@@ -35,6 +51,15 @@ int	is_types(t_token *token, char *types)
 		return (FALSE);
 }
 
+/*not used*/
+/**
+ * @brief Checks if a token of a specific type exists in the token list.
+ * 
+ * @param token The starting point in the token list.
+ * @param type The type to search for.
+ * @return int Returns TRUE if a token of the specified type
+ * is found, FALSE otherwise.
+ */
 int	has_type(t_token *token, int type)
 {
 	while (token)
@@ -46,6 +71,14 @@ int	has_type(t_token *token, int type)
 	return (FALSE);
 }
 
+/**
+ * @brief Checks if a PIPE type token exists in the token
+ * list before an END type token.
+ * 
+ * @param token The starting point in the token list.
+ * @return int Returns TRUE if a PIPE type token is found
+ * before an END type token, FALSE otherwise.
+ */
 int	has_pipe(t_token *token)
 {
 	while (token && is_type(token, END) == 0)
@@ -57,6 +90,16 @@ int	has_pipe(t_token *token)
 	return (FALSE);
 }
 
+/*not used*/
+/**
+ * @brief Finds the next token of a specific type in the token list.
+ * 
+ * @param token The starting point in the token list.
+ * @param type The type of token to find.
+ * @param skip If true, start searching from the next token in the list.
+ * @return t_token* The next token of the specified type,
+ * or NULL if no such token is found.
+ */
 t_token	*next_type(t_token *token, int type, int skip)
 {
 	if (token && skip)

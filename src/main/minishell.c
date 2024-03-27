@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 14:17:07 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/27 13:38:41 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	handle_redir(t_mini *mini, t_token *token, t_token *prev, int *pipe)
 	else if (is_type(prev, APPEND))
 		redir(mini, token, APPEND);
 	else if (is_type(prev, INPUT))
-		input(mini, token);
+		input(mini);
 	else if (is_type(prev, PIPE))
 		*pipe = minipipe(mini);
 }
@@ -31,14 +31,14 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 	int		pipe;
 
 	pipe = 0;
-	prev = prev_sep(token, NOSKIP);
-	next = next_sep(token, NOSKIP);
+	prev = prev_sep(token);
+	next = next_sep(token);
 	handle_redir(mini, token, prev, &pipe);
 	if (next && is_type(next, END) == 0 && pipe != 1)
 		redir_and_exec(mini, next->next);
 	if ((is_type(prev, END) || is_type(prev, PIPE) || !prev)
-		&& pipe != 1 && mini->no_exec == 0)
-		exec_cmd(mini, token);
+		&& pipe != 1 && mini->token->skip == 0)
+		exec_cmd(mini);
 }
 
 void	reset_and_wait(t_mini *mini, int *status)
@@ -73,7 +73,7 @@ void	minishell(t_mini *mini)
 			exit(mini->ret);
 		}
 		mini->no_exec = 0;
-		token = next_run(token, SKIP);
+		token = next_run(token);
 	}
 }
 
@@ -84,15 +84,14 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	init_mini(&mini, env);
-	while (!mini.exit)
+	while (!mini.sig.exit)
 	{
-		sig_init();
+		sig_init(&mini);
 		parse(&mini);
-		if (mini.start != NULL && check_line(&mini, mini.start))
+		if (mini.token != NULL && check_line(&mini, mini.token))
 			minishell(&mini);
-		free_token(mini.start);
+		free_token(mini.token);
 	}
-	free_env(mini.env);
-	free_env(mini.secret_env);
-	return (mini.ret);
+	clean_exit(&mini);
+	return (mini.sig.status);
 }
