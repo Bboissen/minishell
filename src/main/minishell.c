@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 15:59:15 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/28 15:12:30 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,11 @@ void	minishell(t_mini *mini)
 	t_token	*tmp;
 	int		status;
 
-	tmp = next_run(mini->token);
+	tmp = next_run(mini->cmd);
 	if (is_types(mini->token, "TAI"))
 		tmp = mini->token->next;
 	while (mini->sig.exit == 0 && tmp)
 	{
-		mini->charge = 1;
-		mini->parent = 1;
-		mini->last = 1;
 		redir_and_exec(mini, tmp);
 		reset_and_wait(mini, &status);
 		if (mini->last == 0)
@@ -81,17 +78,25 @@ int	main(int ac, char **av, char **env)
 {
 	t_mini	mini;
 
-	(void)ac;
-	(void)av;
-	init_mini(&mini, env);
-	while (!mini.sig.exit)
-	{
-		sig_init(&mini);
-		parse(&mini);
-		if (mini.token != NULL && check_line(&mini, mini.token))
-			minishell(&mini);
-		free_token(mini.token);
-	}
+	if (ac != 1)
+		return (ERROR);
+	signal(SIGINT, &sig_int);
+	signal(SIGQUIT, &sig_quit);
+	init_mini(&mini, env, av[0]);
+	/*hardcode_parser;*/
+	/*exec*/
+
+	// while (!mini.sig.exit)
+	// {
+	// 	sig_init(&mini);
+	// 	/*lexer(&mini);*/
+	// 	parser(&mini);
+	// 	if (mini.cmd)
+	// 		minishell(&mini);
+	// 	free_token(mini.token);
+	// 	free_cmd(mini.cmd);
+		
+	// }*/
 	clean_exit(&mini);
 	return (mini.sig.status);
 }

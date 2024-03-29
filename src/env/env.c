@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 18:10:19 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/28 11:33:40 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,18 @@
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char**} env - The environment for the shell.
  */
-void	init_mini(t_mini *mini, char **env)
+void	init_mini(t_mini *mini, char **env, char *name)
 {
-	mini->cmd->in = dup(STDIN);
-	mini->cmd->out = dup(STDOUT);
+	mini->name = name;
+	mini = malloc(sizeof(t_mini));
+	if (!mini)
+		clean_exit(NULL);
+	mini->cmd = NULL;
+	mini->token = NULL;
 	mini->sig.status = 0;
 	mini->sig.exit = 0;
-	reset_fds(mini);
 	env_init(mini, env);
+	/*reset_fds(mini);*/
 	increment_shell_level(mini->env);
 }
 

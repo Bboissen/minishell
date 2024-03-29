@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:32 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/26 16:53:06 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/28 15:08:43 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ void	parse(t_mini *mini)
 {
 	char	*line;
 
-	signal(SIGINT, &sig_int);
-	signal(SIGQUIT, &sig_quit);
 	if (readline("\033[32;1m minishell ▸ \033[0m"))
 		return ;
 	if (mini->sig.sigint == 1)

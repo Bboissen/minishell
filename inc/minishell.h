@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 18:21:24 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/28 15:04:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ typedef enum e_error
 	ERROR = 1,
 	DIRECTORY = 126,
 	CMD = 127,
+	INTERUPT = 130,
+	QUIT = 131,
 	MALLOC = 256
 }	t_;
 
@@ -91,11 +93,10 @@ typedef struct s_env
 
 typedef struct s_sig
 {
+	int				status;
 	int				sigint;
 	int				sigquit;
-	int				status;
 	int				exit;
-	pid_t			pid;
 }	t_sig;
 
 typedef struct s_token
@@ -124,6 +125,7 @@ typedef struct s_cmd
 
 typedef struct s_mini
 {
+	char 			*name;
 	t_token			*token;
 	t_env			*env;
 	t_cmd			*cmd;
@@ -166,7 +168,7 @@ int			ignore_sep(char *line, int i);
 int			check_line(t_mini *mini, t_token *token);
 char		*env_to_str(t_env *lst);
 int			env_init(t_mini *mini, char **env_array);
-void		init_mini(t_mini *mini, char **env);
+void		init_mini(t_mini *mini, char **env, char *name);
 char		*get_env_value(char *arg, t_env *env);
 char		*env_value(char *env);
 int			env_value_len(const char *env);
@@ -190,7 +192,6 @@ t_token		*prev_sep(t_token *token);
 t_token		*next_run(t_token *token);
 void		process_tokens(t_mini *mini);
 void		update_token_pointers(t_token *token, t_token *prev);
-void		update_mini_start(t_mini *mini, t_token *token);
 
 int			is_type(t_token *token, int type);
 int			is_types(t_token *token, char *types);

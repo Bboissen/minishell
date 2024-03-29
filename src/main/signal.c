@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/26 16:46:41 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/28 15:04:26 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	sig_int(t_mini *mini, int code)
 	else
 	{
 		ft_putstr_fd("\n", STDERR);
-		mini->sig.status = 130;
+		mini->sig.status = INTERUPT;
 	}
 	mini->sig.sigint = 1;
 }
@@ -59,7 +59,7 @@ void	sig_quit(t_mini *mini, int code)
 	if (mini->sig.pid != 0)
 	{
 		print_quit_message(code);
-		mini->sig.status = 131;
+		mini->sig.status = QUIT;
 		mini->sig.sigquit = 1;
 	}
 	else
@@ -73,9 +73,8 @@ void	sig_quit(t_mini *mini, int code)
  */
 void	sig_init(t_mini *mini)
 {
+	mini->sig.status = 0;
 	mini->sig.sigint = 0;
 	mini->sig.sigquit = 0;
-	mini->sig.status = 0;
 	mini->sig.exit = 0;
-	mini->sig.pid = 0;
 }

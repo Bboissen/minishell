@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:12 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 17:01:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/28 15:19:20 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /**
  * Prints an error message based on the accessibility of the given path.
  * @param {char*} path - The path to check.
- * @return {int} - Returns CMD if the file does not exist or is not a command, DIRECTORY if the file is not executable.
+ * @return {int} - Returns CMD if the file does not exist or is not a command, 
+ * DIRECTORY if the file is not executable.
  */
 static int	error_message(char *path)
 {
@@ -45,8 +46,8 @@ static int	cmd_execution(char *path, char **args, t_env *env, t_mini *mini)
 	int		ret;
 
 	ret = SUCCESS;
-	mini->sig.pid = fork();
-	if (mini->sig.pid == 0)
+	mini->cmd->pid = fork();
+	if (mini->cmd->pid == 0)
 	{
 		env_array = ft_split(env_to_str(env), '\n');
 		if (ft_strchr(path, '/') != NULL)
@@ -57,7 +58,7 @@ static int	cmd_execution(char *path, char **args, t_env *env, t_mini *mini)
 		exit(ret);
 	}
 	else
-		waitpid(mini->sig.pid, &ret, 0);
+		waitpid(mini->cmd->pid, &ret, 0);
 	if (mini->sig.sigint == 1 || mini->sig.sigquit == 1)
 		return (mini->sig.status);
 	if (ret == 32256 || ret == 32512)
@@ -88,7 +89,8 @@ static char	*path_join(char *s1, char *s2)
  * Checks if a command exists in a directory.
  * @param {char*} bin - The directory to check.
  * @param {char*} command - The command to check for.
- * @return {char*} - Returns the path to the command if it exists, NULL otherwise.
+ * @return {char*} - Returns the path to the command if it exists, 
+ * NULL otherwise.
  */
 static char	*check_dir(char *bin, char *command)
 {

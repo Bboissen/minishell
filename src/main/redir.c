@@ -68,7 +68,7 @@ void	input(t_mini *mini)
  * @param {t_mini*} mini - The main structure of the shell.
  * @return {int} - Returns 2 if it's the child process, 1 if it's the parent.
  */
-int	minipipe(t_mini *mini)
+/*int	minipipe(t_mini *mini)
 {
 	pid_t	pid;
 	int		pipefd[2];
@@ -92,4 +92,4 @@ int	minipipe(t_mini *mini)
 		mini->last = 0;
 		return (1);
 	}
-}
+}*/

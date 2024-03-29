@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:48 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/26 11:08:49 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/28 10:38:40 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ int	quotes(char *line, int index)
  * @brief Checks if a token is the last valid argument.
  * 
  * @param token The token to check.
- * @return int Returns TRUE if the token is the last valid argument, FALSE otherwise.
+ * @return int Returns TRUE if the token is the last valid argument, 
+ * FALSE otherwise.
  */
 int	is_last_valid_arg(t_token *token)
 {

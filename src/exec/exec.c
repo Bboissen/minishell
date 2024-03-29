@@ -91,7 +91,7 @@ void	exec_cmd(t_mini *mini)
 {
 	char	**cmd;
 
-	cmd = cmd_tab(mini->token);
+	cmd = cmd_tab(mini->cmd);
 	expand_and_exec_cmd(cmd, mini);
 	free_tab(cmd);
 	ft_close(mini->cmd->pipe[0]);
