@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/22 12:03:50 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/01 12:36:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 /* Includes */
 
-# include "libft.h"
+# include "../libft/includes/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -40,13 +40,16 @@
 typedef enum e_type
 {
 	EMPTY = 0,
-	CMD,
+	STR,
 	VAR,
 	TRUNC,
 	APPEND,
 	INPUT,
+	HEREDOC,
 	PIPE,
-	END
+	END,
+	JOIN,
+	EXPAND
 }	t_type;
 
 typedef enum e_io
@@ -67,12 +70,15 @@ typedef enum e_error
 	SUCCESS = 0,
 	ERROR = 1,
 	DIRECTORY = 126,
-	CMD = 127,
-	MALLOC = 256
-}	t_;
+	EXE = 127,
+	MALLOC = 128,
+	QUOTE = 129,
+	PARSE = 130
+}	t_error;
 
 
 /* Structures */
+
 
 typedef struct s_env
 {
@@ -83,17 +89,16 @@ typedef struct s_env
 
 typedef struct s_sig
 {
+	int				status;
 	int				sigint;
 	int				sigquit;
-	int				status;
-	int				err;
-	pid_t			pid;
+	int				exit;
 }	t_sig;
 
 typedef struct s_token
 {
 	char			*tokens;
-	int				len;
+	int				join;
 	int				type;
 	int				expand;
 	struct s_token	*prev;
@@ -114,6 +119,7 @@ typedef struct s_cmd
 
 typedef struct s_mini
 {
+	char 			*name;
 	t_token			*token;
 	t_env			*env;
 	t_cmd			*cmd;
@@ -198,4 +204,7 @@ void		sig_int(int code);
 void		sig_quit(int code);
 void		sig_init(void);
 
+// lexer
+int			lexer_err(int err);
+int			lexer_err(int err, char c);
 #endif

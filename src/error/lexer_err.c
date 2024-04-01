@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   lexer_err.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/14 12:46:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/28 15:45:01 by bboissen         ###   ########.fr       */
+/*   Created: 2024/04/01 10:34:17 by bboissen          #+#    #+#             */
+/*   Updated: 2024/04/01 11:27:35 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../inc/minishell.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+int	lexer_err(int err, char c)
 {
-	t_list	*tmp;
-
-	if (lst)
+	if (err == QUOTE)
 	{
-		while (*lst)
-		{
-			tmp = (*lst)->next;
-			ft_lstdelone(*lst, del);
-			(*lst) = tmp;
-		}
+		dprintf(STDERR, "minishell: odd number of quotes\n");
+		return (QUOTE);
+	}
+	else if(err == PARSE)
+	{
+		dprintf(STDERR, "minishell: syntax error near unexpected token '%c'\n", c);
+		return (PARSE);
 	}
 }
