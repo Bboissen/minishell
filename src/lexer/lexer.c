@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/01 12:47:16 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:18:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	odd_quote(char *str)
 	}
 	return (s_quote % 2 || d_quote % 2);
 }
+
 int	is_spechar(char c)
 {
 	if (c == '|' || c == '>' || c == '<')
@@ -46,39 +47,53 @@ int	is_spechar(char c)
 	return (0);
 }
 
-
-int lexer(t_mini *mini, char *str)
+int	lexer(t_mini *mini, char *str)
 {
-	int		err;
-	int		i;
+	int		quote;
 	t_token	*token;
 
-	err = odd_quote(str);
-	if (err)
-		return(lexer_err(QUOTE));
-	token = malloc(sizeof(t_token));
-	token->prev = NULL;
-	token->next = NULL;
+	mini->sig.status = odd_quote(str);
+	if (mini->sig.status)
+		return (lexer_err(QUOTE, 0));
+	token = NULL;
 	mini->token = token;
-	i = 0;
-	while(str[i] && mini->sig.exit == 0)
+	quote = 0;
+	while (str && *str && mini->sig.exit == 0)
 	{
-		str = syntax_check(mini, token, str);
-		str = string_handler(mini, token, str);
-		str = s_quote_handler(mini, token, str);
-		str = d_quote_handler(mini, token, str);
-		str = var_handler(mini, token, str);
+		while (*str && is_space(*str))
+			str++;
+		str = syntax_check(mini, &token, str, &quote);
+		// dprintf(2, "syntax |%s|", str);
+		// getchar();
+		str = string_handler(mini, &token, str, &quote);
+		// dprintf(2, "string");
+		// getchar();
+		str = s_quote_handler(mini, &token, str, &quote);
+		// dprintf(2, "s_quote");
+		// getchar();
+		str = d_quote_handler(mini, &token, str, &quote);
+		// dprintf(2, "d_quote");
+		// getchar();
+		str = var_handler(mini, &token, str, &quote);
+		// dprintf(2, "var");
+		// getchar();
 	}
-	return (err);
+	while (mini->token)
+	{
+		dprintf(1, "|%d|%s|\n", mini->token->type, mini->token->str);
+		mini->token = mini->token->next;
+	}
+	return (mini->sig.status);
 }
 
-int main(void)
+int	main(int ac, char **argv)
 {
-	int	err;
-	char *str = "< >'in\"f\"il'e2' grep t";
-	t_mini *mini;
-	
+	int		err;
+	char	*str = argv[1];
+	t_mini	*mini;
+
+	(void) ac;
 	mini = malloc(sizeof(t_mini));
-	err = lexer(mini, str);
-	return (err);
+	mini->sig.status = lexer(mini, str);
+	return (mini->sig.status);
 }

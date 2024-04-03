@@ -6,13 +6,12 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/01 12:36:13 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/03 16:51:11 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 
 /* Includes */
 
@@ -30,7 +29,6 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
 
 /* Defines */
 
@@ -76,9 +74,7 @@ typedef enum e_error
 	PARSE = 130
 }	t_error;
 
-
 /* Structures */
-
 
 typedef struct s_env
 {
@@ -97,10 +93,11 @@ typedef struct s_sig
 
 typedef struct s_token
 {
-	char			*tokens;
-	int				join;
-	int				type;
-	int				expand;
+	char			*str;
+	t_type			join;
+	t_type			type;
+	t_type			expand;
+	int				quote;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
@@ -119,13 +116,12 @@ typedef struct s_cmd
 
 typedef struct s_mini
 {
-	char 			*name;
+	char			*name;
 	t_token			*token;
 	t_env			*env;
 	t_cmd			*cmd;
 	t_sig			sig;
 }	t_mini;
-
 
 /* Functions */
 
@@ -205,6 +201,13 @@ void		sig_quit(int code);
 void		sig_init(void);
 
 // lexer
-int			lexer_err(int err);
+int			is_spechar(char c);
+int			is_space(int c);
+char		*ft_strdup(const char *str);
 int			lexer_err(int err, char c);
+char		*syntax_check(t_mini *mini, t_token **token, char *str, int *quote);
+char		*string_handler(t_mini *mini, t_token **token, char *str, int *quote);
+char		*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
+char		*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
+char		*var_handler(t_mini *mini, t_token **token, char *str, int *quote);
 #endif
