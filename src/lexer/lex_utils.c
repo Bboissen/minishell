@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/03 17:34:29 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:03:55 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
 		return (str);
 	if (((*str == '|' && !(*token))
 			|| ((*token) && ((*token)->type == APPEND || (*token)->type == TRUNC
-					|| (*token)->type == PIPE || (*token)->type == HEREDOC))))
+					|| (*token)->type == INPUT || (*token)->type == HEREDOC || (*token)->type == PIPE)))) //no parse error when | >test
 	{
 		mini->sig.exit = lexer_err(PARSE, *str);
 		return (NULL);
@@ -37,21 +37,22 @@ char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
 	new_token(mini, token, NULL, options);
 	return (++str);
 }
-
+//enter while empty string
 char	*string_handler(t_mini *mini, t_token **token, char *str, int *quote)
 {
 	char	*start;
 	char	end;
 	t_type	options[3];
 
-	if (!str || *quote != 0 || *str == '\'' || *str == '"' || *str == '$')
-		return (str);
 	while (str && *str && is_space(*str))
 		str++;
+	if (!str || !*str || *quote != 0 || is_spechar(*str) != 0)
+		return (str);
 	start = str;
 	while (*str && !is_space(*str) && is_spechar(*str) == 0)
 		str++;
 	end = *str;
+	// printf("str fail");
 	*str = 0;
 	options[0] = STR;
 	options[1] = 0;
@@ -69,15 +70,17 @@ char	*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	char	*start;
 	t_type	options[3];
 
-	if (!str)
+	if (!str || *quote != 0)
 		return (str);
-	while (*quote != 0 || *str == '\'')
+	while (*str == '\'')
 	{
 		str++;
-		*quote = *quote++ % 2;
+		*quote = (++(*quote)) % 2;
 	}
 	if (*quote == 0)
 		return (str);
+	// printf("squote fail");
+	start = str;
 	while (*str != '\'')
 		str++;
 	*str++ = '\0';
@@ -87,6 +90,9 @@ char	*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	if (*(str) && is_spechar(*(str)) != 1 && !is_space(*(str)))
 		options[1] = JOIN;
 	new_token(mini, token, start, options);
+	*quote = 0;
+	// printf("s_quote %s\n", start);
+	// getchar();
 	return (str);
 }
 
@@ -101,10 +107,12 @@ char	*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	while (*str == '"')
 	{
 		str++;
-		*quote = *quote++ % 2;
+		*quote = (++(*quote)) % 2;
 	}
 	if (*quote == 0)
 		return (str);
+	// printf("duote fail");
+	start = str;
 	while (*str != '"' && *str != '$')
 		str++;
 	end = *str;
@@ -114,7 +122,8 @@ char	*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	options[2] = 0;
 	if (end == '$' || (*(str + 1) && is_spechar(*(str + 1)) != 1 && !is_space(*(str + 1))))
 		options[1] = JOIN;
-	new_token(mini, token, start, options);
+	if (strlen(start) > 0)
+		new_token(mini, token, start, options);
 	if (end == '"')
 	{
 		*quote = 0;
@@ -134,6 +143,8 @@ char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	if (!str || *str != '$')
 		return (str);
 	start = ++str;
+	// printf("var_handler %s\n", str);
+	// getchar();
 	if (!*start || is_space(*str) && is_spechar(*str) != 0)
 		return (str);
 	while (*str && !is_space(*str) && is_spechar(*str) == 0)
@@ -145,7 +156,8 @@ char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	options[2] = EXPAND;
 	if (is_spechar(end) == 2)
 		options[1] = JOIN;
-	new_token(mini, token, start, options);
+	if (*start)
+		new_token(mini, token, start, options);
 	if (end == '"' && *quote == 1)
 	{
 		*quote = 0;
@@ -202,6 +214,8 @@ static void	new_token(t_mini *mini, t_token **token, char *str, t_type options[3
 			return ;
 		}
 	}
+	else
+		new_token->str = NULL;
 	new_token->type = options[0];
 	new_token->join = options[1];
 	new_token->expand = options[2];
