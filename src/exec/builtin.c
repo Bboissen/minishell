@@ -6,28 +6,24 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:04:19 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 14:55:27 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/03 16:18:08 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Check if a command is a built-in command.
- * @param {char*} command - The command to check.
- * @return {int} - Returns ERROR if the command is a built-in command, otherwise returns SUCCESS.
- */
-int	is_builtin(char *command)
+int	is_builtin(t_mini *mini)
 {
-	if (ft_strcmp(command, "echo") == SUCCESS
-		|| ft_strcmp(command, "cd") == SUCCESS
-		|| ft_strcmp(command, "pwd") == SUCCESS
-		|| ft_strcmp(command, "env") == SUCCESS
-		|| ft_strcmp(command, "export") == SUCCESS
-		|| ft_strcmp(command, "unset") == SUCCESS)
-		return (ERROR);
+	if (mini->cmd->builtin == CD
+		|| mini->cmd->builtin == ECHO
+		|| mini->cmd->builtin == ENV
+		|| mini->cmd->builtin == EXIT
+		|| mini->cmd->builtin == EXPORT
+		|| mini->cmd->builtin == PWD
+		|| mini->cmd->builtin == UNSET)
+		return (TRUE);
 	else
-		return (SUCCESS);
+		return (FALSE);
 }
 
 /**
@@ -38,20 +34,18 @@ int	is_builtin(char *command)
  */
 int	exec_builtin(char **args, t_mini *mini)
 {
-	int	result;
 
-	result = 0;
-	if (ft_strcmp(args[0], "echo") == SUCCESS)
-		result = mini_echo(args);
-	if (ft_strcmp(args[0], "cd") == SUCCESS)
-		result = mini_cd(args, mini->env);
-	if (ft_strcmp(args[0], "pwd") == SUCCESS)
-		result = mini_pwd();
-	if (ft_strcmp(args[0], "env") == SUCCESS)
-		mini_env(mini->env);
-	if (ft_strcmp(args[0], "export") == SUCCESS)
-		mini_export(args, mini->env, mini->env);
-	if (ft_strcmp(args[0], "unset") == SUCCESS)
-		mini_unset(args, mini);
-	return (result);
+	if (mini->cmd->builtin == CD)
+		mini->sig.status = mini_cd(args, mini->env);
+	if (mini->cmd->builtin == ECHO)
+		mini->sig.status = mini_echo(mini);
+	if (mini->cmd->builtin == ENV)
+		mini->sig.status = mini_env(mini);
+	if (mini->cmd->builtin == EXPORT)
+		mini->sig.status = mini_export(args, mini->env, mini->env);
+	if (mini->cmd->builtin == PWD)
+		mini->sig.status = mini_pwd();
+	if (mini->cmd->builtin == UNSET)
+		mini->sig.status = mini_unset(mini);
+	return (mini->sig.status);
 }

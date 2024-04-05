@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 18:15:00 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 11:25:02 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,21 +95,19 @@ static char	*env_value(char *env)
  * Get the value of an environment variable from a list of variables.
  * @param {char*} arg - The name of the variable.
  * @param {t_env*} env - The list of environment variables.
- * @return {char*} - Returns a string containing the value of the variable, or an empty string if the variable is not found.
+ * @return {char*} - Returns a string containing the value of the 
+ * variable, or an empty string if the variable is not found.
  */
 char	*get_env_value(char *arg, t_env *env)
 {
-	char	env_name[BUFF_SIZE];
 	char	*env_val;
 
 	env_val = ft_strdup("");
-	while (env && env->value)
+	while (env && env->name)
 	{
-		get_env_name(env_name, env->value);
-		if (!ft_strcmp(arg, env_name))
+		if (!ft_strcmp(arg, env->name))
 		{
-			ft_memdel(env_val);
-			env_val = env_value(env->value);
+			env_val = ft_strdup(env->value);
 			return (env_val);
 		}
 		env = env->next;

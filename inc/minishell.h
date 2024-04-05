@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/28 15:04:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 14:17:55 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ typedef enum e_type
 
 typedef enum e_builtin
 {
-	CD = 0,
+	NONE = 0,
+	CD,
 	ECHO,
 	ENV,
 	EXIT,
@@ -106,7 +107,6 @@ typedef struct s_token
 	int				expand;
 	int				join;
 	int				skip;
-	int				quote;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
@@ -119,13 +119,14 @@ typedef struct s_cmd
 	int				fd[2];
 	int				pipe[2];
 	int				pid;
+	t_builtin		builtin;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
 
 typedef struct s_mini
 {
-	char 			*name;
+	char			*name;
 	t_token			*token;
 	t_env			*env;
 	t_cmd			*cmd;
@@ -142,7 +143,7 @@ char		*expansions(char *arg, t_env *env, int ret);
 void		exec_cmd(t_mini *mini);
 int			exec_bin(char **args, t_env *env, t_mini *mini);
 int			exec_builtin(char **args, t_mini *mini);
-int			is_builtin(char	*command);
+int			is_builtin(t_mini *mini);
 
 int			mini_cd(char **args, t_env *env);
 int			mini_echo(char **args);

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:29 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 11:24:22 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/04 11:16:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,50 @@ char	*expansions(char *arg, t_env *env, int ret)
 	ex.new_arg[ex.i] = '\0';
 	return (ex.new_arg);
 }
+
+/*------------------------------------------
+
+char	*expand_vars(t_mini *mini, char *input)
+{
+	size_t len = strlen(input);
+	char *output = malloc(len + 1);
+	size_t i = 0, j = 0;
+
+	while (i < len)
+	{
+		if (input[i] == '$')
+		{
+			i++;
+			size_t var_start = i;
+			while (i < len && (isalnum(input[i]) || input[i] == '_'))
+				i++;
+			size_t var_len = i - var_start;
+			char *var_name = strndup(&input[var_start], var_len);
+			char *var_value = get_var_value(mini->env, var_name);
+			free(var_name);
+			if (var_value)
+			{
+				size_t new_len = j + strlen(var_value) + len - i + 1;
+				output = realloc(output, new_len);
+				strcpy(&output[j], var_value);
+				j += strlen(var_value);
+				free(var_value);
+			}
+		}
+		else
+			output[j++] = input[i++];
+	}
+	output[j] = '\0';
+	return (output);
+}
+
+char	*get_var_value(t_env *env, const char *var_name)
+{
+	while (env)
+	{
+		if (strcmp(env->name, var_name) == 0)
+			return (strdup(env->value));
+		env = env->next;
+	}
+	return (NULL);
+}*/

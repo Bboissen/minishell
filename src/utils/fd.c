@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/26 15:10:44 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/02 16:55:11 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,10 @@ void	reset_std(t_mini *mini)
  * 
  * @param mini The main structure of the program.
  */
-void	close_fds(t_mini *mini)
+void	close_fds(t_cmd *cmd)
 {
-	ft_close(mini->cmd->fd[0]);
-	ft_close(mini->cmd->fd[1]);
-	ft_close(mini->cmd->pipe[0]);
-	ft_close(mini->cmd->pipe[1]);
+	ft_close(cmd->fd[0]);
+	ft_close(cmd->fd[1]);
 }
 
 /**

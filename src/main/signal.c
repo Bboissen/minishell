@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/28 15:04:26 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 12:44:29 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,26 @@
  * 
  * @param code The exit code to print.
  */
-static void	print_quit_message(int code)
+static void	print_quit_message(int signo)
 {
 	char	*nbr;
 
-	nbr = ft_itoa(code);
+	nbr = ft_itoa(signo);
 	ft_printfd(STDERR, "Quit: %s\n", nbr);
 	ft_memdel(nbr);
 }
 
+/*crtl-c*/
 /**
  * @brief Handles the SIGINT signal.
  * 
  * @param mini The main structure of the program.
  * @param code The signal code.
  */
-void	sig_int(t_mini *mini, int code)
+void	sig_int(t_mini *mini, int signo)
 {
-	(void)code;
-	if (mini->sig.pid == 0)
+	(void)signo;
+	if (mini->cmd->pid == 0)
 	{
 		ft_printfd(STDERR, "\b\b  \n\033[0;36m\033[1m🤬 minishell ▸ \033[0m");
 		mini->sig.status = 1;
@@ -48,22 +49,24 @@ void	sig_int(t_mini *mini, int code)
 	mini->sig.sigint = 1;
 }
 
+/*crtl-\*/
 /**
  * @brief Handles the SIGQUIT signal.
  * 
  * @param mini The main structure of the program.
  * @param code The signal code.
  */
-void	sig_quit(t_mini *mini, int code)
+void	sig_quit(t_mini *mini, int signo)
 {
-	if (mini->sig.pid != 0)
+	print_quit_message(signo);
+	mini->sig.status = QUIT;
+	mini->sig.sigquit = 1;
+	while (mini->cmd->pid != 0)
 	{
-		print_quit_message(code);
-		mini->sig.status = QUIT;
-		mini->sig.sigquit = 1;
+		kill(mini->cmd->pid, SIGKILL);
+		mini->cmd = mini->cmd->next;
 	}
-	else
-		ft_putstr_fd("\b\b  \b\b", STDERR);
+	ft_putstr_fd("\b\b  \b\b", STDERR);
 }
 
 /**

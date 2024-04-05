@@ -1,6 +1,7 @@
-signal part
-remplacer un maximum de putfd par printfd
-use access and readline instead of rebuilding it
+// signal part
 
-allow -c
-commencer les test du tester
+// adapter pipex
+
+// gerer tout de meme le casou une des commande retire les droit
+// d'un autre fichier necessaire a la suite du pipe
+

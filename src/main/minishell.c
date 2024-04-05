@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/28 15:12:30 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 14:17:08 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,26 +77,19 @@ void	minishell(t_mini *mini)
 int	main(int ac, char **av, char **env)
 {
 	t_mini	mini;
+	char	*rl;
 
 	if (ac != 1)
 		return (ERROR);
-	signal(SIGINT, &sig_int);
-	signal(SIGQUIT, &sig_quit);
 	init_mini(&mini, env, av[0]);
-	/*hardcode_parser;*/
-	/*exec*/
-
-	// while (!mini.sig.exit)
-	// {
-	// 	sig_init(&mini);
-	// 	/*lexer(&mini);*/
-	// 	parser(&mini);
-	// 	if (mini.cmd)
-	// 		minishell(&mini);
-	// 	free_token(mini.token);
-	// 	free_cmd(mini.cmd);
-		
-	// }*/
+	while (!mini.sig.exit)
+	{
+		lexer(&mini);
+		parser(&mini);
+		if (mini.cmd)
+			minishell(&mini);
+		reinit(&mini, rl);
+	}
 	clean_exit(&mini);
 	return (mini.sig.status);
 }

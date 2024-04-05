@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/28 11:29:04 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/29 16:00:57 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ void	free_cmd(t_cmd *cmd)
 			free(cmd->in);
 		if (cmd->out)
 			free(cmd->out);
+		if (cmd->fd[0] != -1)
+			free(cmd->fd[0]);
+		if (cmd->fd[1] != -1)
+			free(cmd->fd[1]);
 		free(cmd);
 		cmd = tmp;
 	}

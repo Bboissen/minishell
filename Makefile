@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/03/21 11:13:40 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/04 17:05:28 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ BUILTINS	=	cd			\
 
 ENV			=	env			\
 				get_env		\
+				init		\
 				sort_env	\
 				shlvl
 
