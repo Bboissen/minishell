@@ -6,17 +6,11 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/04 15:38:31 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/05 17:09:38 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/*<infile1 grep a >outfile1 | <infile1 cat >outfile2 | <infile2 sed "s/And/But/" | grep But | cat >outfile3 | cat*/
-
-// syntax error if sequential spe charact (except $), empty string or spaces, 
-
-// < >in"f"il'e2' grep t
 
 int	odd_quote(char *str)
 {
@@ -42,11 +36,20 @@ int	odd_quote(char *str)
 
 int	is_spechar(char c)
 {
-	if (c == '|' || c == '>' || c == '<')
+	if (c == '\'' || c == '"' || c == '$')
 		return (1);
-	else if (c == '\'' || c == '"' || c == '$')
+	else if (c == '|' || c == '>' || c == '<')
 		return (2);
 	return (0);
+}
+
+int	is_spe_expand(char c)
+{
+	if ((c >= 33 && c <= 47) || (c >= 58 && c <= 64)
+		|| (c >= 91 && c <= 93) || (c >= 123 && c <= 125))
+		return (1);
+	else
+		return (0);
 }
 
 int	lexer(t_mini *mini, char *str)
@@ -65,26 +68,25 @@ int	lexer(t_mini *mini, char *str)
 	printf("------------------------------------------\n");
 	while (str && *str /*&& mini->sig.exit == 0*/)
 	{
-		while (*str && is_space(*str))
+		while (str && quote == 0 && *str && is_space(*str))
+		{
 			str++;
+			if (token && (token)->join == JOIN)
+			{
+				printf("token = %d\n", (token)->join);
+				(token)->join = 0;
+			}
+		}
 		str = syntax_check(mini, &token, str, &quote);
-		// dprintf(2, "|%s|", str);
-		// getchar();
 		str = string_handler(mini, &token, str, &quote);
-		// dprintf(2, "string");
-		// getchar();
 		str = s_quote_handler(mini, &token, str, &quote);
-		// dprintf(2, "s_quote |%s|", str);
-		// getchar();
 		str = d_quote_handler(mini, &token, str, &quote);
-		// dprintf(2, "d_quote |%s|", str);
-		// getchar();
 		str = var_handler(mini, &token, str, &quote);
-		// dprintf(2, "var |%s|", str);
-		// getchar();
 	}
 	if (token && !token->str)
 		return (printf("bash: syntax error near unexpected token `newline'\n"));
+	if (token && (token)->join == JOIN)
+			(token)->join = 0;
 	while (mini->token)
 	{
 		dprintf(1, "|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
@@ -114,6 +116,7 @@ int	main(void)
 		}
 		mini->sig.status = lexer(mini, rl);
 		rl_on_new_line();
+		free(rl);
 		printf("\n\n\n");
 	}
 	return (mini->sig.status);

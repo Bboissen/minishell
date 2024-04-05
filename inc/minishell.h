@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/04 10:02:17 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/05 12:34:50 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,7 @@ void		sig_init(void);
 // lexer
 int			is_spechar(char c);
 int			is_space(int c);
+int			is_spe_expand(char c);
 char		*ft_strdup(const char *str);
 int			lexer_err(int err, char c);
 char		*syntax_check(t_mini *mini, t_token **token, char *str, int *quote);
