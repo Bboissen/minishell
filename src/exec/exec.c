@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/03 16:32:41 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 16:37:24 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static int	count_tokens(t_token *token)
 /**
  * Create a command table from a list of tokens.
  * @param {t_token*} token - The starting token.
- * @return {char**} - Returns a dynamically allocated array of strings representing the command.
+ * @return {char**} - Returns a dynamically allocated array 
+ * of strings representing the command.
  */
 static char	**cmd_tab(t_token *token)
 {

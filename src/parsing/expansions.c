@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:29 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/04 11:16:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/08 14:31:35 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*expansions(char *arg, t_env *env, int ret)
 	return (ex.new_arg);
 }
 
-/*------------------------------------------
+------------------------------------------
 
 char	*expand_vars(t_mini *mini, char *input)
 {
@@ -121,4 +121,4 @@ char	*get_var_value(t_env *env, const char *var_name)
 		env = env->next;
 	}
 	return (NULL);
-}*/
+}

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:04:19 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/03 16:18:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 16:53:58 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,10 @@
 
 int	is_builtin(t_mini *mini)
 {
-	if (mini->cmd->builtin == CD
-		|| mini->cmd->builtin == ECHO
-		|| mini->cmd->builtin == ENV
-		|| mini->cmd->builtin == EXIT
-		|| mini->cmd->builtin == EXPORT
-		|| mini->cmd->builtin == PWD
-		|| mini->cmd->builtin == UNSET)
-		return (TRUE);
-	else
+	if (mini->cmd->builtin == NONE)
 		return (FALSE);
+	else
+		return (TRUE);
 }
 
 /**
@@ -32,20 +26,21 @@ int	is_builtin(t_mini *mini)
  * @param {t_mini*} mini - The main structure of the shell.
  * @return {int} - Returns the result of the command execution.
  */
-int	exec_builtin(char **args, t_mini *mini)
+void	exec_builtin(char **args, t_mini *mini)
 {
 
 	if (mini->cmd->builtin == CD)
 		mini->sig.status = mini_cd(args, mini->env);
-	if (mini->cmd->builtin == ECHO)
+	else if (mini->cmd->builtin == ECHO)
 		mini->sig.status = mini_echo(mini);
-	if (mini->cmd->builtin == ENV)
+	else if (mini->cmd->builtin == ENV)
 		mini->sig.status = mini_env(mini);
-	if (mini->cmd->builtin == EXPORT)
+	else if (mini->cmd->builtin == EXPORT)
 		mini->sig.status = mini_export(args, mini->env, mini->env);
-	if (mini->cmd->builtin == PWD)
+	else if (mini->cmd->builtin == PWD)
 		mini->sig.status = mini_pwd();
-	if (mini->cmd->builtin == UNSET)
+	else if (mini->cmd->builtin == UNSET)
 		mini->sig.status = mini_unset(mini);
-	return (mini->sig.status);
+	else if (mini->cmd->builtin == LST_STS)
+		ft_printf("%d", mini->sig.status);
 }

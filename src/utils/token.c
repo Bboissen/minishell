@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:51 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/26 11:05:52 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/08 14:19:10 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ t_token	*next_sep(t_token *token)
  * @brief Finds the previous separator token in the token list.
  * 
  * @param token The starting point in the token list.
- * @return t_token* The previous separator token, or NULL if no such token is found.
+ * @return t_token* The previous separator token, 
+ * or NULL if no such token is found.
  */
 t_token	*prev_sep(t_token *token)
 {

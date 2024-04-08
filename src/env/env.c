@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/04 17:04:15 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 14:38:54 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int	env_cpy(t_mini *mini, char **env_array, t_env *env, int *i)
  * @return {int} - Returns ERROR if memory allocation fails, 
  * otherwise returns SUCCESS.
  */
-int	env_init(t_mini *mini, char **env_array)
+int	init_env(t_mini *mini, char **env_array)
 {
 	t_env	*env;
 	int		i;

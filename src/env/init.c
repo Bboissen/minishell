@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 14:15:15 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 14:37:24 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ void	init_mini(t_mini *mini, char **env, char *name)
 	sig_init(mini);
 }
 
+/**
+ * Reinitializes the mini structure and frees memory.
+ * @param {t_mini*} mini - The mini structure to reinitialize.
+ * @param {char*} rl - The readline string to free.
+ */
 void	reinit(t_mini *mini, char *rl)
 {
 	free_token(mini->token);

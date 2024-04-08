@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 14:17:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/08 16:32:56 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 void	reset_and_wait(t_mini *mini, int *status)
 {
 	reset_std(mini);
-	close_fds(mini);
+	close_fds(mini->cmd->fd);
 	reset_fds(mini);
 	waitpid(-1, status, 0);
 	*status = WEXITSTATUS(*status);
@@ -84,12 +84,14 @@ int	main(int ac, char **av, char **env)
 	init_mini(&mini, env, av[0]);
 	while (!mini.sig.exit)
 	{
-		lexer(&mini);
+		readline_setup(&rl, &mini);
+		heredoc(&mini);
+		lexer(&mini, rl);
+		expand_join(&mini);
 		parser(&mini);
 		if (mini.cmd)
-			minishell(&mini);
+			exec_cmd(&mini);
 		reinit(&mini, rl);
 	}
-	clean_exit(&mini);
-	return (mini.sig.status);
+	return (clean_exit(&mini));
 }

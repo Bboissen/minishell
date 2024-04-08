@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 11:25:02 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 17:13:44 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int	is_env_char(int c)
 /**
  * Check if an environment variable is valid.
  * @param {const char*} env - The environment variable to check.
- * @return {int} - Returns 1 if the variable is valid, 0 if the name starts with a digit, -1 if the name contains invalid characters, 2 if there is no '=' character.
+ * @return {int} - Returns 1 if the variable is valid, 0 if the name 
+ * starts with a digit, -1 if the name contains invalid characters, 
+ * 2 if there is no '=' character.
  */
 int	is_valid_env(const char *env)
 {

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 14:17:55 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 16:35:21 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ typedef enum e_builtin
 	EXIT,
 	EXPORT,
 	PWD,
-	UNSET
+	UNSET,
+	LST_STS
 }	t_builtin;
 
 typedef enum e_io
@@ -117,7 +118,6 @@ typedef struct s_cmd
 	char			*in;
 	char			*out;
 	int				fd[2];
-	int				pipe[2];
 	int				pid;
 	t_builtin		builtin;
 	struct s_cmd	*prev;
@@ -168,7 +168,7 @@ int			ignore_sep(char *line, int i);
 
 int			check_line(t_mini *mini, t_token *token);
 char		*env_to_str(t_env *lst);
-int			env_init(t_mini *mini, char **env_array);
+int			init_env(t_mini *mini, char **env_array);
 void		init_mini(t_mini *mini, char **env, char *name);
 char		*get_env_value(char *arg, t_env *env);
 char		*env_value(char *env);
@@ -180,7 +180,7 @@ void		increment_shell_level(t_env *env);
 size_t		size_env(t_env *lst);
 
 void		reset_std(t_mini *mini);
-void		close_fds(t_mini *mini);
+void		close_fds(int fd);
 void		ft_close(int fd);
 void		reset_fds(t_mini *mini);
 

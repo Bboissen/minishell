@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 12:42:32 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/05 14:43:47 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static int	get_lvl(const char *str)
 	return (num * sign);
 }
 
+//REVIEW:
 /**
  * Increment the shell level in the environment.
  * @param {t_env*} env - The environment to increment the shell level in.
