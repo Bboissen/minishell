@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/05 17:09:38 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:33:51 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int	main(void)
 		mini->sig.status = lexer(mini, rl);
 		rl_on_new_line();
 		free(rl);
+		rl = NULL;
 		printf("\n\n\n");
 	}
 	return (mini->sig.status);
