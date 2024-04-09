@@ -6,15 +6,17 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/05 17:14:21 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/09 13:32:15 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+#include "../../libft/minishell.h"
 
 static char	*token_typer(t_mini *mini, t_type type[3], char *str);
 static void	new_token(t_mini *mini, t_token **token,
 				char *str, t_type options[3]);
+static char *random_file();
 
 char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
 {
@@ -281,3 +283,20 @@ char	*ft_strdup(const char *str)
 	out[i] = '\0';
 	return (out);
 }
+static char *random_file()
+{
+	char *file;
+	char *tmp;
+	int i;
+
+	file = ft_strdup("/tmp/");
+	i = 0;
+	while (i < 10)
+	{
+		tmp = ft_itoa(rand() % 10);
+		file = ft_strjoin_free(file, tmp, 3);
+		i++;
+	}
+	return (file);
+}
+

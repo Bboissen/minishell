@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/08 16:33:51 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/08 17:40:45 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,13 @@ int	main(void)
 	int		err;
 	char *rl = NULL;
 	char *pwd;
+	char *test = "Michel";
 	t_mini	*mini;
 
 	mini = malloc(sizeof(t_mini));
 	while (!rl || rl[0] != 'z')
 	{
-		rl = readline("Michel > ");
+		rl = readline(test);
 		add_history(rl);
 		if (rl[0] == 'c')
 			rl_clear_history();
@@ -122,3 +123,22 @@ int	main(void)
 	}
 	return (mini->sig.status);
 }
+
+// int heredoc_mgmt(t_mini *mini, t_token **token)
+// {
+// 	char	*filename;
+// 	char	*str;
+
+// 	str = readline("heredoc> ");
+// 	while (str && *str && quote == 0)
+// 	{
+// 		tmp = ft_strjoin((*token)->str, str);
+// 		free((*token)->str);
+// 		(*token)->str = tmp;
+// 		free(str);
+// 		str = readline("> ");
+// 	}
+// 	if (str)
+// 		free(str);
+// 	return (0);
+// }
