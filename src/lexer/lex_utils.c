@@ -6,23 +6,21 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/09 13:32:15 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/10 11:29:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
-#include "../../libft/minishell.h"
+#include "minishell.h"
 
-static char	*token_typer(t_mini *mini, t_type type[3], char *str);
+static char	*token_typer(t_type type[3], char *str);
 static void	new_token(t_mini *mini, t_token **token,
 				char *str, t_type options[3]);
-static char *random_file();
 
 char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
 {
 	t_type	options[3];
 
-	while (str && *quote == 0 && *str && is_space(*str))
+	while (str && *quote == 0 && *str && ft_isspace(*str))
 	{
 		str++;
 		if (*token && (*token)->join == JOIN)
@@ -38,7 +36,7 @@ char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
 		mini->sig.exit = lexer_err(PARSE, *str);
 		return (NULL);
 	}
-	str = token_typer(mini, options, str);
+	str = token_typer(options, str);
 	options[1] = 0;
 	options[2] = 0;
 	new_token(mini, token, NULL, options);
@@ -51,7 +49,7 @@ char	*string_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	char	end;
 	t_type	options[3];
 
-	while (str && *quote == 0 && *str && is_space(*str))
+	while (str && *quote == 0 && *str && ft_isspace(*str))
 	{
 		str++;
 		if (*token && (*token)->join == JOIN)
@@ -60,12 +58,10 @@ char	*string_handler(t_mini *mini, t_token **token, char *str, int *quote)
 			(*token)->join = 0;
 		}
 	}
-	// printf("str = %s\n", str);
-	// getchar();
 	if (!str || !*str || *quote != 0 || is_spechar(*str) != 0)
 		return (str);
 	start = str;
-	while (*str && !is_space(*str) && is_spechar(*str) == 0)
+	while (*str && !ft_isspace(*str) && is_spechar(*str) == 0)
 		str++;
 	end = *str;
 	*str = 0;
@@ -90,7 +86,7 @@ char	*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	while (*str == '\'')
 	{
 		str++;
-		*quote = (++(*quote)) % 2;
+		*quote = ((*quote) + 1) % 2;
 	}
 	if (*quote == 0)
 		return (str);
@@ -101,7 +97,7 @@ char	*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*(str) && is_spechar(*(str)) != 2 && !is_space(*(str)))
+	if (*(str) && is_spechar(*(str)) != 2 && !ft_isspace(*(str)))
 		options[1] = JOIN;
 	new_token(mini, token, start, options);
 	*quote = 0;
@@ -119,7 +115,7 @@ char	*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	while (*str == '"')
 	{
 		str++;
-		*quote = (++(*quote)) % 2;
+		*quote = ((*quote) + 1) % 2;
 	}
 	if (*quote == 0)
 		return (str);
@@ -131,7 +127,7 @@ char	*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (end == '$' || ((*(str + 1) && is_spechar(*(str + 1)) != 2 && !is_space(*(str + 1)))))
+	if (end == '$' || ((*(str + 1) && is_spechar(*(str + 1)) != 2 && !ft_isspace(*(str + 1)))))
 		options[1] = JOIN;
 	if (strlen(start) > 0)
 		new_token(mini, token, start, options);
@@ -145,8 +141,6 @@ char	*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	return (str);
 }
 
-// """""""e""""""""""c""""""""""""h""""""""o""""""""""""""""""""" bonjour should not join
-//solve by adding a while 
 char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
 {
 	char	*start;
@@ -158,12 +152,12 @@ char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
 		return (str);
 	start = str++;
 	flag = 0;
-	if (*str && !is_space(*str) && !is_spe_expand(*str))
+	if (*str && !ft_isspace(*str) && !is_spe_expand(*str))
 	{
 		start = str;
 		flag++;
 	}
-	while (*str && !is_space(*str) && is_spechar(*str) == 0
+	while (*str && !ft_isspace(*str) && is_spechar(*str) == 0
 		&& (flag == 0 || !is_spe_expand(*str)))
 		str++;
 	end = *str;
@@ -189,7 +183,7 @@ char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	return (str);
 }
 
-static char	*token_typer(t_mini *mini, t_type type[3], char *str)
+static char	*token_typer(t_type type[3], char *str)
 {
 	if (!str || *str == '|')
 		type[0] = PIPE;
@@ -255,48 +249,5 @@ static void	new_token(t_mini *mini, t_token **token,
 		*token = (*token)->next;
 	}
 	return ;
-}
-
-int	is_space(int c)
-{
-	return ((c >= 9 && c <= 13) || c == ' ');
-}
-
-char	*ft_strdup(const char *str)
-{
-	int		i;
-	int		len;
-	char	*out;
-
-	len = 0;
-	while (str[len])
-		len++;
-	out = (char *)malloc(sizeof(char) * (len + 1));
-	if (!out)
-		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		out[i] = str[i];
-		i++;
-	}
-	out[i] = '\0';
-	return (out);
-}
-static char *random_file()
-{
-	char *file;
-	char *tmp;
-	int i;
-
-	file = ft_strdup("/tmp/");
-	i = 0;
-	while (i < 10)
-	{
-		tmp = ft_itoa(rand() % 10);
-		file = ft_strjoin_free(file, tmp, 3);
-		i++;
-	}
-	return (file);
 }
 

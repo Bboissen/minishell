@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
+#    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 13:27:07 by gdumas            #+#    #+#              #
-#    Updated: 2024/03/04 18:21:00 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/09 14:06:57 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Aliases #
 
 NAME	=	libft.a
-CC		=	gcc
+CC		=	cc
 FLAGS	=	-Wall -Wextra -Werror -I $(INCS)
 SRC_DIR	=	src/
 OBJ_DIR	=	obj/

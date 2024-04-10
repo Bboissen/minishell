@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 12:34:50 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/09 14:49:15 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,4 +211,5 @@ char		*string_handler(t_mini *mini, t_token **token, char *str, int *quote);
 char		*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
 char		*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
 char		*var_handler(t_mini *mini, t_token **token, char *str, int *quote);
+char		*random_file(void);
 #endif

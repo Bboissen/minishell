@@ -6,29 +6,27 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/08 17:40:45 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/10 11:29:31 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 int	odd_quote(char *str)
 {
 	int		i;
-	int		flag;
 	int		s_quote;
 	int		d_quote;
 
 	i = 0;
-	flag = 0;
 	s_quote = 0;
 	d_quote = 0;
 	while (str[i])
 	{
 		if (str[i] == '\'' && d_quote != 1)
-			s_quote = ++s_quote % 2;
+			s_quote = (s_quote + 1) % 2;
 		else if (str[i] == '"' && s_quote != 1)
-			d_quote = ++d_quote % 2;
+			d_quote = (d_quote + 1) % 2;
 		i++;
 	}
 	return (s_quote % 2 || d_quote % 2);
@@ -45,8 +43,8 @@ int	is_spechar(char c)
 
 int	is_spe_expand(char c)
 {
-	if ((c >= 33 && c <= 47) || (c >= 58 && c <= 64)
-		|| (c >= 91 && c <= 93) || (c >= 123 && c <= 125))
+	if ((c >= '!' && c <= '/') || (c >= ':' && c <= '@'  && c != '?')
+		|| (c >= '[' && c <= ']') || (c >= '{' && c <= '}'))
 		return (1);
 	else
 		return (0);
@@ -68,7 +66,7 @@ int	lexer(t_mini *mini, char *str)
 	printf("------------------------------------------\n");
 	while (str && *str /*&& mini->sig.exit == 0*/)
 	{
-		while (str && quote == 0 && *str && is_space(*str))
+		while (str && quote == 0 && *str && ft_isspace(*str))
 		{
 			str++;
 			if (token && (token)->join == JOIN)
@@ -97,10 +95,9 @@ int	lexer(t_mini *mini, char *str)
 
 int	main(void)
 {
-	int		err;
 	char *rl = NULL;
 	char *pwd;
-	char *test = "Michel";
+	char *test = "Michel >";
 	t_mini	*mini;
 
 	mini = malloc(sizeof(t_mini));
@@ -123,22 +120,3 @@ int	main(void)
 	}
 	return (mini->sig.status);
 }
-
-// int heredoc_mgmt(t_mini *mini, t_token **token)
-// {
-// 	char	*filename;
-// 	char	*str;
-
-// 	str = readline("heredoc> ");
-// 	while (str && *str && quote == 0)
-// 	{
-// 		tmp = ft_strjoin((*token)->str, str);
-// 		free((*token)->str);
-// 		(*token)->str = tmp;
-// 		free(str);
-// 		str = readline("> ");
-// 	}
-// 	if (str)
-// 		free(str);
-// 	return (0);
-// }
