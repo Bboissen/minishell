@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 16:35:21 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/10 10:59:56 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,16 @@
 typedef enum e_type
 {
 	EMPTY = 0,
-	CMD,
-	ARG,
+	STR,
+	VAR,
 	TRUNC,
 	APPEND,
 	INPUT,
+	HEREDOC,
 	PIPE,
-	END
+	END,
+	JOIN,
+	EXPAND
 }	t_type;
 
 typedef enum e_builtin
@@ -57,7 +60,6 @@ typedef enum e_builtin
 	EXPORT,
 	PWD,
 	UNSET,
-	LST_STS
 }	t_builtin;
 
 typedef enum e_io
@@ -77,12 +79,13 @@ typedef enum e_error
 {
 	SUCCESS = 0,
 	ERROR = 1,
+	STX = 2,
 	DIRECTORY = 126,
 	CMD = 127,
 	INTERUPT = 130,
 	QUIT = 131,
 	MALLOC = 256
-}	t_;
+}	t_error;
 
 /* Structures */
 

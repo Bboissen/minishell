@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 13:27:07 by gdumas            #+#    #+#              #
-#    Updated: 2024/03/20 13:41:24 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/10 14:39:02 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,6 +104,7 @@ STR_SRC =	ft_split	\
 			ft_strlen	\
 			ft_strmapi	\
 			ft_strncmp	\
+			ft_strndup	\
 			ft_strnstr	\
 			ft_strrchr	\
 			ft_strtok	\

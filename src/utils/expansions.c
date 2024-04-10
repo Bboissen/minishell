@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/26 15:36:40 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/10 10:57:27 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,21 @@ char	*get_var_value(const char *arg, int pos, t_env *env, int ret)
 	var_name = get_var_name(arg, &pos);
 	var_value = get_env_value(var_name, env);
 	return (var_value);
+}
+
+char	*expand_token(t_mini *mini, char *str)
+{
+	if (!ft_strcmp(str, "?"))
+		return (ft_itoa(mini->sig.status));
+	while (mini->env != NULL)
+	{
+		if (!ft_strcmp(str, mini->env->name))
+		{
+			free(str);
+			str = strdup(mini->env->value);
+			break ;
+		}
+		mini->env = mini->env->next;
+	}
+	return (str);
 }

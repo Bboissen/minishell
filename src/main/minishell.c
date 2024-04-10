@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/08 16:32:56 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/08 17:45:14 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	main(int ac, char **av, char **env)
 	init_mini(&mini, env, av[0]);
 	while (!mini.sig.exit)
 	{
-		readline_setup(&rl, &mini);
+		readline_setup(&rl, &mini, av[0]);
 		heredoc(&mini);
 		lexer(&mini, rl);
 		expand_join(&mini);
@@ -94,4 +94,17 @@ int	main(int ac, char **av, char **env)
 		reinit(&mini, rl);
 	}
 	return (clean_exit(&mini));
+}
+
+void	readline_setup(char *rl, t_mini *mini, char *str)
+{
+	char	*prompt;
+
+	prompt = ft_strjoin(str, " > ");
+	if (!prompt)
+		exit(MALLOC);
+	rl = readline(prompt);
+	add_history(rl);
+	rl_on_new_line();
+	free(prompt);
 }

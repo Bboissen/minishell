@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 14:38:54 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/10 14:19:44 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,23 @@
  * @param {t_env*} lst - The environment list.
  * @return {size_t} - Returns the size of the environment list.
  */
-size_t	size_env(t_env *lst)
+static size_t	size_env(t_env *env_lst)
 {
 	size_t	lst_len;
 
 	lst_len = 0;
-	while (lst && lst->next != NULL)
+	while (env_lst)
 	{
-		if (lst->value != NULL)
+		if (env_lst->name)
 		{
-			lst_len += ft_strlen(lst->value);
-			lst_len++;
+			lst_len += ft_strlen(env_lst->name);
+			lst_len += 1;
+			if (env_lst->value != NULL)
+				lst_len += ft_strlen(env_lst->value);
 		}
-		lst = lst->next;
+		if (env_lst->next)
+			lst_len += 1;
+		env_lst = env_lst->next;
 	}
 	return (lst_len);
 }
@@ -41,23 +45,23 @@ size_t	size_env(t_env *lst)
  * @param {int*} i - The current position in the string.
  * @return {char*} - Returns the updated string.
  */
-char	*append_name_value(char *env_str, t_env *lst, int *i)
+char	*append_name_value(char *env_str, t_env *env_lst, int *i)
 {
 	int	j;
 	int	k;
 
-	j = 1;
+	j = -1;
 	k = -1;
-	if (lst->name != NULL)
+	if (env_lst->name)
 	{
-		while (lst->name[++j])
-			env_str[++(*i)] = lst->name[j];
+		while (env_lst->name[++j])
+			env_str[++(*i)] = env_lst->name[j];
 		env_str[++(*i)] = '=';
 	}
-	if (lst->value != NULL)
+	if (env_lst->value)
 	{
-		while (lst->value[++k])
-			env_str[++(*i)] = lst->value[k];
+		while (env_lst->value[++k])
+			env_str[++(*i)] = env_lst->value[k];
 	}
 	return (env_str);
 }
@@ -67,21 +71,23 @@ char	*append_name_value(char *env_str, t_env *lst, int *i)
  * @param {t_env*} lst - The environment list.
  * @return {char*} - Returns a string representation of the environment list.
  */
-char	*env_to_str(t_env *lst)
+char	*env_to_str(t_env *env_lst)
 {
 	char	*env_str;
 	int		i;
 
 	i = -1;
-	env_str = malloc(sizeof(char) * size_env(lst) + 1);
+	env_str = malloc(sizeof(char) * size_env(env_lst) + 1);
 	if (!env_str)
 		return (NULL);
-	while (lst && lst->next != NULL)
+	while (env_lst)
 	{
-		env_str = append_name_value(env_str, lst, &i);
-		if (lst->next->next != NULL)
+		env_str = append_name_value(env_str, env_lst, &i);
+		if (!env_str)
+			return (NULL);
+		if (env_lst->next != NULL)
 			env_str[++i] = '\n';
-		lst = lst->next;
+		env_lst = env_lst->next;
 	}
 	env_str[++i] = '\0';
 	return (env_str);
@@ -113,7 +119,7 @@ int	env_cpy(t_mini *mini, char **env_array, t_env *env, int *i)
 	else
 	{
 		new->name = ft_strdup(env_array[*i]);
-		new->value = NULL;
+		new->value = NULL; //strdup ""
 	}
 	new->next = NULL;
 	env->next = new;
