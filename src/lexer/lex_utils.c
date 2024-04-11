@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/11 11:27:47 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:31:01 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,13 +145,14 @@ char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
 		return (str);
 	start = str++;
 	flag = 0;
-	if (*str && !ft_isspace(*str) && !is_spe_expand(*str))
+	printf("str = %s\n", str);
+	if (*str && !ft_isspace(*str) && (!is_spe_expand(*str) || *str == '?'))
 	{
 		start = str;
 		flag++;
 	}
 	while (*str && !ft_isspace(*str) && is_spechar(*str) == 0
-		&& (flag == 0 || !is_spe_expand(*str)))
+		&& (flag == 0 || !is_spe_expand(*str) || *str == '?'))
 		str++;
 	end = *str;
 	*str = '\0';
@@ -211,16 +212,16 @@ static void	new_token(t_mini *mini, t_token **token,
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		mini->sig.exit = MALLOC;
-	if (str && (mini->sig.exit = !MALLOC))
+	if (str && (mini->sig.exit != MALLOC))
 	{
 		new_token->str = ft_strdup(str);
 		if (!new_token->str)
 			mini->sig.exit = MALLOC;
 	}
-	if (mini->sig.exit = MALLOC)
-		return ;
 	else
 		new_token->str = NULL;
+	if (mini->sig.exit == MALLOC)
+		return ;
 	new_token->type = options[0];
 	new_token->join = options[1];
 	new_token->expand = options[2];

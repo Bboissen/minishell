@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/10 14:13:33 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/11 18:10:25 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	parser(t_mini *mini)
 	t_cmd	*cmd;
 	int		flag;
 
-	token = mini->token_head;
+	token = mini->token_h;
 	init_cmd(mini, &cmd);
 	flag = 0;
 	while (token)

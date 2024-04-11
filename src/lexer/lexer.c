@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/11 10:35:35 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:29:39 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	is_spechar(char c)
 
 int	is_spe_expand(char c)
 {
-	if ((c >= '!' && c <= '/') || (c >= ':' && c <= '@'  && c != '?')
+	if ((c >= '!' && c <= '/') || (c >= ':' && c <= '@')
 		|| (c >= '[' && c <= ']') || (c >= '{' && c <= '}'))
 		return (1);
 	else
@@ -74,8 +74,8 @@ int	lexer(t_mini *mini, char *str)
 		str = d_quote_handler(mini, &token, str, &quote);
 		str = var_handler(mini, &token, str, &quote);
 	}
-	if (token && !token->str)
-		return (printf("bash: syntax error near unexpected token `newline'\n"));
+	// if (token && !token->str)
+	// 	return (printf("bash: syntax error near unexpected token `newline'\n"));
 	if (token && (token)->join == JOIN)
 			(token)->join = 0;
 	while (mini->token)

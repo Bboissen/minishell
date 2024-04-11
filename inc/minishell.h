@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/09 14:49:15 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:11:33 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,10 @@ typedef struct s_cmd
 typedef struct s_mini
 {
 	char			*name;
+	t_token			*token_h;
 	t_token			*token;
 	t_env			*env;
+	t_cmd			*cmd_h;
 	t_cmd			*cmd;
 	t_sig			sig;
 }	t_mini;
