@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/10 11:29:46 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/11 11:27:47 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,7 @@ char	*string_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	t_type	options[3];
 
 	while (str && *quote == 0 && *str && ft_isspace(*str))
-	{
 		str++;
-		if (*token && (*token)->join == JOIN)
-		{
-			printf("token = %s\n", (*token)->str);
-			(*token)->join = 0;
-		}
-	}
 	if (!str || !*str || *quote != 0 || is_spechar(*str) != 0)
 		return (str);
 	start = str;
@@ -217,19 +210,15 @@ static void	new_token(t_mini *mini, t_token **token,
 
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
-	{
 		mini->sig.exit = MALLOC;
-		return ;
-	}
-	if (str)
+	if (str && (mini->sig.exit = !MALLOC))
 	{
 		new_token->str = ft_strdup(str);
 		if (!new_token->str)
-		{
 			mini->sig.exit = MALLOC;
-			return ;
-		}
 	}
+	if (mini->sig.exit = MALLOC)
+		return ;
 	else
 		new_token->str = NULL;
 	new_token->type = options[0];
