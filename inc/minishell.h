@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/10 10:59:56 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 17:54:24 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 
 # define BUFF_SIZE 4096
 # define PATH_MAX 4096
+
+# define ERROR_LEX "" //to define, etc..
 
 typedef enum e_type
 {
@@ -130,31 +132,39 @@ typedef struct s_cmd
 typedef struct s_mini
 {
 	char			*name;
+	t_token			*h_token;
 	t_token			*token;
 	t_env			*env;
+	t_cmd			*h_cmd;
 	t_cmd			*cmd;
 	t_sig			sig;
 }	t_mini;
 
-/* Functions */
+/* Builtin */
 
-void		redir(t_mini *mini, t_token *token, int type);
-void		input(t_mini *mini);
+int			is_builtin(t_mini *mini);
+int			exec_builtin(char **args, t_mini *mini);
+int			mini_cd(t_mini *mini);
+int			mini_echo(t_mini *mini);
+int			mini_env(t_mini *mini);
+void		mini_exit(t_mini *mini);
+int			mini_export(char **args, t_env *env, t_env *secret);
+int			mini_pwd(void);
+int			mini_unset(t_mini *mini);
+
+/* Env */
+
+
+
+
+
+
+
 int			minipipe(t_mini *mini);
 char		*expansions(char *arg, t_env *env, int ret);
 
 void		exec_cmd(t_mini *mini);
 int			exec_bin(char **args, t_env *env, t_mini *mini);
-int			exec_builtin(char **args, t_mini *mini);
-int			is_builtin(t_mini *mini);
-
-int			mini_cd(char **args, t_env *env);
-int			mini_echo(char **args);
-int			mini_env(t_env *env);
-void		mini_exit(t_mini *mini);
-int			mini_export(char **args, t_env *env, t_env *secret);
-int			mini_pwd(void);
-int			mini_unset(t_mini *mini);
 
 int			env_add(const char *value, t_env *env);
 char		*get_env_name(char *dest, const char *src);
@@ -191,11 +201,6 @@ void		free_token(t_token *start);
 void		free_env(t_env *env);
 void		free_tab(char **tab);
 
-t_token		*next_sep(t_token *token);
-t_token		*prev_sep(t_token *token);
-t_token		*next_run(t_token *token);
-void		process_tokens(t_mini *mini);
-void		update_token_pointers(t_token *token, t_token *prev);
 
 int			is_type(t_token *token, int type);
 int			is_types(t_token *token, char *types);

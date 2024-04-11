@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 14:37:24 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 17:54:51 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	init_mini(t_mini *mini, char **env, char *name)
 	mini->token = NULL;
 	mini->sig.status = 0;
 	mini->sig.exit = 0;
-	env_init(mini, env);
+	init_env(mini, env);
 	increment_shell_level(mini->env);
 	sig_init(mini);
 }
@@ -44,4 +44,14 @@ void	reinit(t_mini *mini, char *rl)
 	free(rl);
 	mini->sig.sigint = 0;
 	mini->sig.sigquit = 0;
+}
+
+/*study*/
+void	reset_and_wait(t_mini *mini, int *status)
+{
+	reset_std(mini);
+	close_fds(mini->cmd->fd);
+	reset_fds(mini);
+	waitpid(-1, status, 0);
+	*status = WEXITSTATUS(*status);
 }

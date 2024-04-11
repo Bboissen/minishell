@@ -6,12 +6,13 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 18:17:49 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 15:53:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*to delete*/
 /**
  * Calculate the length of the environment array.
  * @param {char**} env - The environment array.
@@ -56,6 +57,7 @@ void	sort_env(char **tab, int env_len)
 	}
 }
 
+/*plutot faire env_to_tab*/
 /**
  * Print the environment variables in sorted order.
  * @param {t_env*} env - The environment to print.
@@ -69,7 +71,7 @@ void	print_sorted_env(t_env *env)
 	str_env = env_to_str(env);
 	tab = ft_split(str_env, '\n');
 	ft_memdel(str_env);
-	sort_env(tab, str_env_len(tab));
+	sort_env(tab, str_env_len(tab)); //lst size
 	i = 0;
 	while (tab[i])
 	{

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/09 12:54:29 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 16:06:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	sig_int(t_mini *mini, int signo)
 	(void)signo;
 	if (mini->cmd->pid == 0)
 	{
-		ft_printfd(STDERR, "\b\b  \n\033[0;36m\033[1m🤬 minishell ▸ \033[0m");
 		mini->sig.status = 1;
 	}
 	else

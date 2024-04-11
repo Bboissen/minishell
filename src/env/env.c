@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/10 14:19:44 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 17:18:15 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	env_cpy(t_mini *mini, char **env_array, t_env *env, int *i)
 	else
 	{
 		new->name = ft_strdup(env_array[*i]);
-		new->value = NULL; //strdup ""
+		new->value = ft_strdup("");
 	}
 	new->next = NULL;
 	env->next = new;

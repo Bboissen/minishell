@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 14:43:47 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 17:22:11 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,30 @@ static int	get_lvl(const char *str)
 	return (num * sign);
 }
 
-//REVIEW:
+/**
+ * Get the value of an environment variable from a list of variables.
+ * @param {char*} arg - The name of the variable.
+ * @param {t_env*} env - The list of environment variables.
+ * @return {char*} - Returns a string containing the value of the 
+ * variable, or an empty string if the variable is not found.
+ */
+char	*get_env_value(char *arg, t_env *env)
+{
+	char	*env_val;
+
+	env_val = ft_strdup("");
+	while (env && env->name)
+	{
+		if (!ft_strcmp(arg, env->name))
+		{
+			env_val = ft_strdup(env->value);
+			return (env_val);
+		}
+		env = env->next;
+	}
+	return (env_val);
+}
+
 /**
  * Increment the shell level in the environment.
  * @param {t_env*} env - The environment to increment the shell level in.

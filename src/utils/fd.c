@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/08 14:22:02 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 16:14:37 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,3 +57,5 @@ void	reset_fds(t_mini *mini)
 	mini->cmd->fd[0] = -1;
 	mini->cmd->fd[1] = -1;
 }
+
+/*delete heredoc function, navigate t_token->type=HEREDOC, unlink token->next->str*/

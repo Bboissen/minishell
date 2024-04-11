@@ -1,7 +1,7 @@
-// signal part
+recheck commentaries
 
-// adapter pipex
+pipex42 exec part to adapter
+builtin export
 
-// gerer tout de meme le cas ou une des commande retire les droit
-// d'un autre fichier necessaire a la suite du pipe
-
+error manager
+norminette

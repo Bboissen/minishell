@@ -6,52 +6,33 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/05 16:37:24 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 17:30:10 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Count the number of tokens in a list starting from a given token.
- * @param {t_token*} token - The starting token.
- * @return {int} - Returns the count of tokens.
- */
-static int	count_tokens(t_token *token)
-{
-	int		count;
-	t_token	*tmp;
-
-	count = 2;
-	tmp = token->next;
-	while (tmp && tmp->type < TRUNC)
-	{
-		tmp = tmp->next;
-		count++;
-	}
-	return (count);
-}
-
+/*adapt for t_env*/
 /**
  * Create a command table from a list of tokens.
  * @param {t_token*} token - The starting token.
  * @return {char**} - Returns a dynamically allocated array 
  * of strings representing the command.
  */
-static char	**cmd_tab(t_token *token)
+static char	**cmd_tab(t_env *env)
 {
 	t_token	*tmp;
 	char	**tab;
 	int		size;
 	int		i;
 
-	if (!token)
+	if (!env)
 		return (NULL);
-	size = count_tokens(token);
+	size = lst_size(env);
 	tab = malloc(sizeof(char *) * size);
 	if (!tab)
 		return (NULL);
-	tmp = token->next;
+	tmp = env->next;
 	tab[0] = token->str;
 	i = 1;
 	while (tmp && tmp->type < TRUNC)
@@ -63,40 +44,34 @@ static char	**cmd_tab(t_token *token)
 	return (tab);
 }
 
-/**
- * Expand and execute a command.
- * @param {char**} cmd - The command to execute.
+/*
+ * Create a pipe and fork a new process.
+ * The child process reads from the pipe and the parent writes to it.
  * @param {t_mini*} mini - The main structure of the shell.
+ * @return {int} - Returns 2 if it's the child process, 1 if it's the parent.
  */
-static void	expand_and_exec_cmd(char **cmd, t_mini *mini)
+int	minipipe(t_mini *mini)
 {
-	int	i;
+	pid_t	pid;
+	int		pipefd[2];
 
-	i = -1;
-	while (cmd && cmd[++i])
-		cmd[i] = expansions(cmd[i], mini->env, mini->sig.status);
-	if (cmd && ft_strcmp(cmd[0], "exit") == SUCCESS
-		&& has_pipe(mini->token) == FALSE)
-		mini_exit(mini);
-	else if (cmd && is_builtin(mini))
-		exec_builtin(mini);
-	else if (cmd)
-		exec_bin(cmd, mini->env, mini);
-}
-
-/**
- * Execute a command.
- * @param {t_mini*} mini - The main structure of the shell.
- */
-void	exec_cmd(t_mini *mini)
-{
-	char	**cmd;
-
-	cmd = cmd_tab(mini->cmd);
-	expand_and_exec_cmd(cmd, mini);
-	free_tab(cmd);
-	ft_close(mini->cmd->pipe[0]);
-	ft_close(mini->cmd->pipe[1]);
-	mini->cmd->pipe[0] = -1;
-	mini->cmd->pipe[1] = -1;
+	pipe(pipefd);
+	pid = fork();
+	if (pid == 0)
+	{
+		ft_close(pipefd[1]);
+		dup2(pipefd[0], STDIN);
+		mini->cmd->pipe[0] = pipefd[0];
+		mini->parent = 0;
+		mini->token->skip = 0;
+		return (2);
+	}
+	else
+	{
+		ft_close(pipefd[0]);
+		dup2(pipefd[1], STDOUT);
+		mini->cmd->pipe[1] = pipefd[1];
+		mini->last = 0;
+		return (1);
+	}
 }

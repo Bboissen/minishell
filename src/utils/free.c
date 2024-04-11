@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/29 16:00:57 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 16:16:59 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	clean_exit(t_mini *mini)
 	if (mini->env)
 		free_env(mini->env);
 	if (mini->sig.exit == 1)
-		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("exit\n", 2); // study
 	free(mini);
 	exit(status);
 }
