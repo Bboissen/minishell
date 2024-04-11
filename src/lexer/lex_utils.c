@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/11 18:31:01 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:38:23 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,7 @@ char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
 		return (str);
 	start = str++;
 	flag = 0;
-	printf("str = %s\n", str);
-	if (*str && !ft_isspace(*str) && (!is_spe_expand(*str) || *str == '?'))
+	if (*str && !ft_isspace(*str) && !ft_isdigit(*str) && (!is_spe_expand(*str) || *str == '?'))
 	{
 		start = str;
 		flag++;
