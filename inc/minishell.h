@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/12 11:47:23 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/12 15:36:28 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ typedef enum e_builtin
 	NONE = 0,
 	CD, //skip when pipe
 	ECHO, //work with pipe
-	ENV,
-	EXIT,
-	EXPORT,
-	PWD,
-	UNSET,
+	ENV, //work with pipe
+	EXIT, //work with pipe but output devnull
+	EXPORT, //work with pipe without args
+	PWD, //work with pipe
+	UNSET, //skip when pipe
 }	t_builtin;
 
 typedef enum e_io
@@ -120,8 +120,8 @@ typedef struct s_cmd
 	char			*in;
 	char			*out;
 	int				fd[2];
-	int				pipe[2];
 	int				pid;
+	t_builtin		builtin;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
