@@ -1,7 +1,12 @@
-recheck commentaries
+/*
 
 pipex42 exec part to adapter
-builtin export
+delete heredoc function, navigate t_token->type=HEREDOC, unlink token->next->str
 
+builtin exit, numeric argument only if, return 2
+builtin export
+remake verif env variable not starting with a number
+
+recheck commentaries
 error manager
 norminette

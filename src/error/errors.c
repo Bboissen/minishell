@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:44:03 by bboissen          #+#    #+#             */
-/*   Updated: 2024/02/11 12:43:32 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/12 12:05:42 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/utils.h"
+#include "minishell.h"
 
 int	check_infile(int argc, char **files)
 {
@@ -77,4 +77,24 @@ char	*check_perm(char const *s, t_list **cmd, char **argv, char **env)
 	else if (errno == EACCES)
 		exe = error_handler(s, cmd, exe, argv);
 	return (free(temp), exe);
+}
+
+/**
+ * Prints an error message based on the accessibility of the given path.
+ * @param {char*} path - The path to check.
+ * @return {int} - Returns CMD if the file does not exist or is not a command, 
+ * DIRECTORY if the file is not executable.
+ */
+static int	error_message(char *path)
+{
+	ft_putstr_fd("minishell: ", STDERR);
+	ft_putstr_fd(path, STDERR);
+
+	if (access(path, F_OK) != 0)
+		return (ft_putendl_fd(": No such file or directory", STDERR),
+			CMD);
+	else if (access(path, X_OK) != 0)
+		return (ft_putendl_fd(": Permission denied", STDERR), DIRECTORY);
+	else
+		return (ft_putendl_fd(": command not found", STDERR), CMD);
 }

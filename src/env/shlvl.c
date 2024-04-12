@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 17:22:11 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 18:46:22 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,54 +55,30 @@ static int	get_lvl(const char *str)
 }
 
 /**
- * Get the value of an environment variable from a list of variables.
- * @param {char*} arg - The name of the variable.
- * @param {t_env*} env - The list of environment variables.
- * @return {char*} - Returns a string containing the value of the 
- * variable, or an empty string if the variable is not found.
- */
-char	*get_env_value(char *arg, t_env *env)
-{
-	char	*env_val;
-
-	env_val = ft_strdup("");
-	while (env && env->name)
-	{
-		if (!ft_strcmp(arg, env->name))
-		{
-			env_val = ft_strdup(env->value);
-			return (env_val);
-		}
-		env = env->next;
-	}
-	return (env_val);
-}
-
-/**
  * Increment the shell level in the environment.
  * @param {t_env*} env - The environment to increment the shell level in.
  */
-void	increment_shell_level(t_env *env)
+void	increment_shell_level(t_mini *mini)
 {
+	char	*shell_level_value;
 	int		shell_level;
 	char	*shlvl;
-	char	*shell_level_value;
 
-	shell_level_value = get_env_value("SHLVL", env);
+	shell_level_value = expand_token(mini, "SHLVL");
 	if (!ft_strcmp(shell_level_value, ""))
 		free(shell_level_value);
 	shell_level = get_lvl(shell_level_value) + 1;
 	ft_memdel(shell_level_value);
-	while (env && env->name)
+	while (mini->env && mini->env->name)
 	{
-		if (!ft_strcmp(env->name, "SHLVL"))
+		if (!ft_strcmp(mini->env->name, "SHLVL"))
 		{
-			ft_memdel(env->value);
+			ft_memdel(mini->env->value);
 			shlvl = ft_itoa(shell_level);
-			env->value = ft_strdup(shlvl);
+			mini->env->value = ft_strdup(shlvl);
 			ft_memdel(shlvl);
 			return ;
 		}
-		env = env->next;
+		mini->env = mini->env->next;
 	}
 }

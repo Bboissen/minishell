@@ -1,20 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   error_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/07 09:29:48 by bboissen          #+#    #+#             */
-/*   Updated: 2023/11/15 12:08:47 by bboissen         ###   ########.fr       */
+/*   Created: 2024/04/12 11:34:34 by gdumas            #+#    #+#             */
+/*   Updated: 2024/04/12 12:05:44 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	*ft_memset(void *str, int c, size_t n)
-{
-	while (n-- > 0)
-		((unsigned char *)str)[n] = (unsigned char)c;
-	return (str);
-}
+#include "minishell.h"

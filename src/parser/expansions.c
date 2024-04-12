@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 17:32:53 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/11 18:47:16 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,16 @@
  */
 void	expand_join(t_mini *mini)
 {
+	char	*tmp;
+
 	mini->token = mini->h_token;
 	while (mini->token)
 	{
 		if (mini->token->expand)
 		{
-			mini->token->str = expand_token(mini, mini->token->str);
+			tmp = expand_token(mini, mini->token->str);
+			free(mini->token->str);
+			mini->token->str = tmp;
 			mini->token->expand = 0;
 		}
 		mini->token = mini->token->next;
@@ -46,19 +50,21 @@ void	expand_join(t_mini *mini)
  */
 char	*expand_token(t_mini *mini, char *str)
 {
+	char	*env_val;
+
+	env_val = ft_strdup("");
 	if (!ft_strcmp(str, "?"))
 		return (ft_itoa(mini->sig.status));
-	while (mini->env)
+	while (mini->env && mini->env->name)
 	{
 		if (!ft_strcmp(str, mini->env->name))
 		{
-			free(str);
-			str = strdup(mini->env->value);
-			break ;
+			env_val = strdup(mini->env->value);
+			return (env_val);
 		}
 		mini->env = mini->env->next;
 	}
-	return (str);
+	return (env_val);
 }
 
 /**

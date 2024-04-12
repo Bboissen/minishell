@@ -6,31 +6,11 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:12 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/28 15:19:20 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/12 11:48:16 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * Prints an error message based on the accessibility of the given path.
- * @param {char*} path - The path to check.
- * @return {int} - Returns CMD if the file does not exist or is not a command, 
- * DIRECTORY if the file is not executable.
- */
-static int	error_message(char *path)
-{
-	ft_putstr_fd("minishell: ", STDERR);
-	ft_putstr_fd(path, STDERR);
-
-	if (access(path, F_OK) != 0)
-		return (ft_putendl_fd(": No such file or directory", STDERR),
-			CMD);
-	else if (access(path, X_OK) != 0)
-		return (ft_putendl_fd(": Permission denied", STDERR), DIRECTORY);
-	else
-		return (ft_putendl_fd(": command not found", STDERR), CMD);
-}
 
 /**
  * Executes a command with the given arguments and environment.
@@ -66,54 +46,6 @@ static int	cmd_execution(char *path, char **args, t_env *env, t_mini *mini)
 	else
 		ret = !!ret;
 	return (ret);
-}
-
-/**
- * Joins two strings with a "/" separator.
- * @param {char*} s1 - The first string.
- * @param {char*} s2 - The second string.
- * @return {char*} - Returns a new string that is the result of the join.
- */
-static char	*path_join(char *s1, char *s2)
-{
-	char	*tmp;
-	char	*path;
-
-	tmp = ft_strjoin(s1, "/");
-	path = ft_strjoin(tmp, s2);
-	ft_memdel(tmp);
-	return (path);
-}
-
-/**
- * Checks if a command exists in a directory.
- * @param {char*} bin - The directory to check.
- * @param {char*} command - The command to check for.
- * @return {char*} - Returns the path to the command if it exists, 
- * NULL otherwise.
- */
-static char	*check_dir(char *bin, char *command)
-{
-	DIR				*folder;
-	struct dirent	*item;
-	char			*path;
-
-	path = NULL;
-	folder = opendir(bin);
-	if (!folder)
-		return (NULL);
-	item = readdir(folder);
-	while (item)
-	{
-		if (ft_strcmp(item->d_name, command) == 0)
-		{
-			path = path_join(bin, item->d_name);
-			break ;
-		}
-		item = readdir(folder);
-	}
-	closedir(folder);
-	return (path);
 }
 
 /**

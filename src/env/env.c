@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 17:18:15 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/12 11:59:07 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static size_t	size_env(t_env *env_lst)
  * @param {int*} i - The current position in the string.
  * @return {char*} - Returns the updated string.
  */
-char	*append_name_value(char *env_str, t_env *env_lst, int *i)
+static char	*append_name_value(char *env_str, t_env *env_lst, int *i)
 {
 	int	j;
 	int	k;
@@ -66,11 +66,7 @@ char	*append_name_value(char *env_str, t_env *env_lst, int *i)
 	return (env_str);
 }
 
-/**
- * Converts the environment list to a string.
- * @param {t_env*} lst - The environment list.
- * @return {char*} - Returns a string representation of the environment list.
- */
+/*transform into env_to_tab*/
 char	*env_to_str(t_env *env_lst)
 {
 	char	*env_str;
@@ -93,6 +89,32 @@ char	*env_to_str(t_env *env_lst)
 	return (env_str);
 }
 
+/*adapt for t_env*/
+static char	**cmd_tab(t_env *env)
+{
+	t_token	*tmp;
+	char	**tab;
+	int		size;
+	int		i;
+
+	if (!env)
+		return (NULL);
+	size = lst_size(env);
+	tab = malloc(sizeof(char *) * size);
+	if (!tab)
+		return (NULL);
+	tmp = env->next;
+	tab[0] = token->str;
+	i = 1;
+	while (tmp && tmp->type < TRUNC)
+	{
+		tab[i++] = token->str;
+		tmp = token->next;
+	}
+	tab[i] = NULL;
+	return (tab);
+}
+
 /**
  * Copies an environment variable from an array to a linked list.
  * @param {t_mini*} mini - The mini structure.
@@ -102,7 +124,7 @@ char	*env_to_str(t_env *env_lst)
  * @return {int} - Returns ERROR if memory allocation fails, 
  * otherwise returns SUCCESS.
  */
-int	env_cpy(t_mini *mini, char **env_array, t_env *env, int *i)
+static int	env_cpy(t_mini *mini, char **env_array, t_env *env, int *i)
 {
 	char	*equals_pos;
 	t_env	*new;
@@ -110,7 +132,7 @@ int	env_cpy(t_mini *mini, char **env_array, t_env *env, int *i)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (ERROR);
-	strchr(env_array[*i], '=');
+	equals_pos = strchr(env_array[*i], '=');
 	if (equals_pos != NULL)
 	{
 		new->name = strndup(env_array[*i], equals_pos - env_array[*i]);
@@ -122,7 +144,9 @@ int	env_cpy(t_mini *mini, char **env_array, t_env *env, int *i)
 		new->value = ft_strdup("");
 	}
 	new->next = NULL;
-	env->next = new;
+	env = new;
+	if (*i == 0)
+		mini->h_env = env;
 	env = env->next;
 	return (SUCCESS);
 }
@@ -143,8 +167,8 @@ int	init_env(t_mini *mini, char **env_array)
 	env = malloc(sizeof(t_env));
 	if (!env)
 		return (ERROR);
-	i = 0;
-	while (env_array && env_array[0] && env_array[++i])
+	i = -1;
+	while (env_array && env_array[++i])
 		if (env_cpy(mini, env_array, env, &i))
 			return (ERROR);
 	return (SUCCESS);
