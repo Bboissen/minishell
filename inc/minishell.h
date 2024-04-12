@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 18:11:33 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/12 11:47:23 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,18 @@ typedef enum e_type
 	JOIN,
 	EXPAND
 }	t_type;
+
+typedef enum e_builtin
+{
+	NONE = 0,
+	CD, //skip when pipe
+	ECHO, //work with pipe
+	ENV,
+	EXIT,
+	EXPORT,
+	PWD,
+	UNSET,
+}	t_builtin;
 
 typedef enum e_io
 {
