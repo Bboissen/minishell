@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/12 15:41:55 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/12 15:53:41 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,4 +117,3 @@ static void	init_cmd(t_cmd **cmd, int *pipe, t_mini *mini, t_token *token)
 	(*cmd)->prev = NULL;
 	(*cmd)->next = NULL;
 }
-

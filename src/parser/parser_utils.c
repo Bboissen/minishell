@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/12 15:41:32 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:28:00 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,61 @@ void	check_blt(t_mini *mini, t_cmd **cmd, char *str)
 		(*cmd)->builtin = NONE;
 }
 
-path_finder()
+void	path_finder(t_mini *mini, t_cmd *cmd, char *str)
 {
-	
+	t_env	*local_env;
+	int		err;
+	char	*cmd;
+	char	**path;
+
+	cmd = NULL;
+	local_env = mini->h_env;
+	while (local_env && !ft_strcmp(local_env->name, "PATH"))
+		local_env = local_env->next;
+	path = ft_split(str + 5, ':');
+	if (path)
+	{
+		err = path_checker(str, &cmd, path);
+		free_array(path);
+	}
+	if (path == NULL || (cmd == NULL && err == 0))
+		mini->sig.status = MALLOC;
+	else if (err == -1)
+		mini->sig.status = errno;
+	else
+	{
+		cmd->args = malloc(sizeof(char *) * 2);
+		cmd->args[0] = cmd;
+		cmd->args[1] = NULL;
+	}
+}
+
+static char	*path_checker(char const *str, char	**cmd, char	**path)
+{
+	char	*buff;
+	int		i;
+	int		err;
+
+	i = -1;
+	err = -1;
+	while (path[++i] && err == -1)
+	{
+		// err = 0;
+		buff = ft_strjoin(path[i], "/");
+		if (buff == NULL)
+			return (NULL);
+		str = ft_strjoin(buff, str);
+		if (str == NULL)
+		{
+			free(buff);
+			return (NULL);
+		}
+		err = access(str, X_OK);
+		if (err == -1)
+			free(str);
+		free(buff);
+	}
+	if (err != -1)
+		*cmd = str;
+	return (err);
 }

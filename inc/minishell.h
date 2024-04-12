@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/12 15:36:28 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/12 15:57:44 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef enum e_error
 
 /* Structures */
 
+
 typedef struct s_env
 {
 	char			*name;
@@ -131,6 +132,7 @@ typedef struct s_mini
 	char			*name;
 	t_token			*token_h;
 	t_token			*token;
+	t_env			*h_env;
 	t_env			*env;
 	t_cmd			*cmd_h;
 	t_cmd			*cmd;
