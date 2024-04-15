@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/10 11:01:14 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/15 14:35:32 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,9 +50,9 @@ LIBFT_DIR	=	libft/
 # 				redir		\
 # 				signal
 
-# PARSING		=	line		\
-# 				tokens		\
-# 				expansions
+PARSER	=	expansions		\
+			parser			\
+			parser_utils	\
 
 # TOOLS		=	fd			\
 # 				free		\
@@ -63,11 +63,12 @@ LIBFT_DIR	=	libft/
 
 LEXER		=	lexer		\
 				lex_utils	\
-				# heredoc
+				heredoc
 	
 ERROR		=	lexer_err
 				
 SRCS		=	$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))	\
+				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSER)))	\
 				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))
 
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
