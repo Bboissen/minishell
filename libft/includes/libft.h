@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 11:05:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 13:38:37 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 13:54:49 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,21 @@ int		ft_printnbr(int n);
 int		ft_printunsigned(unsigned int n);
 int		ft_printhex(unsigned int num, const char format);
 
+/*ft_printfd*/
+size_t	ft_strlen(const char *s);
+int		seq_write(int fd, char *s, int len);
+int		ft_printfd(int fd, const char *format, ...);
+int		converter(int fd, char c, va_list ptr);
+
 /*ft_put*/
-void	ft_putchar_fd(char c, int fd);
+int		ft_putchar_fd(char c, int fd);
 void	ft_putchar(char c);
-void	ft_putendl_fd(char *s, int fd);
+int		ft_putendl_fd(char *s, int fd);
 void	ft_putendl(char *s);
+int		ft_putnbr_base(int fd, unsigned long long nbr, char *base, char c);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_putnbr(int n);
-void	ft_putstr_fd(char *s, int fd);
+int		ft_putstr_fd(char *s, int fd);
 void	ft_putstr(char *s);
 
 /*ft_skip*/
@@ -102,22 +109,24 @@ void	ft_skip_spacenl(const char *str, int *i);
 
 /*ft_str*/
 char	**ft_split(char const *s, char c);
+char	*ft_strcat(char *dest, const char *src);
 char	*ft_strchr(char const *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strdup(const char *str);
+int		ft_strequ(const char *s1, const char *s2);
 int		ft_strisnum(const char *str);
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlcat(char *dest, const char *src, size_t dstsize);
 size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize);
-char	*ft_strcat(char *dest, char *src);
-char	*ft_strcpy(char *dest, char *src);
 size_t	ft_strlen(const char *str);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strndup(const char *str, int n);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strrchr(char *s, int c);
-char	*ft_strtok(char *str, char delim);
+void	ft_strtok(char **av);
 char	*ft_strtrim(const char *s1, const char *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 

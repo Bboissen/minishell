@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/15 14:35:32 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/15 15:39:03 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,47 +29,49 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-# BUILTINS	=	cd		\
-# 				echo	\
-# 				env		\
-# 				exit	\
-# 				export	\
-# 				pwd		\
+# BUILTINS	=	cd			\
+# 				echo		\
+# 				env			\
+# 				exit		\
+# 				export		\
+# 				pwd			\
 # 				unset
 
-# ENV			=	env			\
-# 				get_env		\
-# 				sort_env	\
-# 				shlvl
+ENV			=	env			\
+				init		\
+				shlvl		\
+				sort_env
 
-# EXEC		=	bin			\
-# 				builtin		\
+# ERROR		=	error_manager	\
+# 				errors			\
+# 				print_messages
+
+# EXEC		=	bin		\
+# 				builtin	\
 # 				exec
 
-# MAIN		=	minishell	\
-# 				redir		\
-# 				signal
+UTILS		=	fd			\
+				free		\
+				signal
 
-PARSER	=	expansions		\
-			parser			\
-			parser_utils	\
-
-# TOOLS		=	fd			\
-# 				free		\
-# 				token		\
-# 				type		\
-# 				expansions	\
-# 				parsing
+MAIN		=	minishell
 
 LEXER		=	lexer		\
 				lex_utils	\
 				heredoc
+
+PARSING		=	expansions		\
+# 				parser	\
+				parser_utils
 	
 ERROR		=	lexer_err
 				
-SRCS		=	$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))	\
-				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSER)))	\
-				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))
+SRCS		=	$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
+				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
+				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
+				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
+				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
+				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
 

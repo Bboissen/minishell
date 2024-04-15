@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 14:46:33 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:51:42 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ typedef enum e_error
 	EXE = 127,
 	MALLOC = 128,
 	QUOTE = 129,
-	PARSE = 130
+	INTERUPT = 130,
+	QUIT = 131,
+	PARSE = 132
 }	t_error;
 
 /* Structures */
@@ -140,83 +142,65 @@ typedef struct s_mini
 }	t_mini;
 
 /* Functions */
+/* Builtin */
 
-void		redir(t_mini *mini, t_token *token, int type);
-void		input(t_mini *mini, t_token *token);
-int			minipipe(t_mini *mini);
-char		*expansions(char *arg, t_env *env, int ret);
+int		is_builtin(t_mini *mini);
+void	exec_builtin(char **args, t_mini *mini);
+int		mini_cd(t_mini *mini);
+int		mini_echo(t_mini *mini);
+int		mini_env(t_mini *mini);
+int		mini_exit(t_mini *mini);
+int		mini_export(char **args, t_env *env, t_env *secret);
+int		mini_pwd(void);
+int		mini_unset(t_mini *mini);
 
-void		exec_cmd(t_mini *mini, t_token *token);
-int			exec_bin(char **args, t_env *env, t_mini *mini);
-int			exec_builtin(char **args, t_mini *mini);
-int			is_builtin(char	*command);
+/* Env */
 
-int			mini_cd(char **args, t_env *env);
-int			mini_echo(char **args);
-int			mini_env(t_env *env);
-void		mini_exit(t_mini *mini, char **cmd);
-int			mini_export(char **args, t_env *env, t_env *secret);
-int			mini_pwd(void);
-int			mini_unset(char **args, t_mini *mini);
+int		init_env(t_mini **mini, char **env_array);
+void	increment_shell_level(t_mini *mini);
+char	**env_to_tab(t_env *env_lst);
+char	*get_env(t_env *env, char *name);
+void	set_env(t_env **env, char *name, char *value);
+void	print_sorted_env(t_env *env);
+void	sort_env(char **tab, int env_len);
 
-int			env_add(const char *value, t_env *env);
-char		*get_env_name(char *dest, const char *src);
-int			is_in_env(t_env *env, char *args);
+/* Init */
 
-void		parse(t_mini *mini);
-t_token		*get_tokens(char *line);
-void		squish_args(t_mini *mini);
-int			is_last_valid_arg(t_token *token);
-int			quotes(char *line, int index);
-void		type_arg(t_token *token, int separator);
-int			is_sep(char *line, int i);
-int			ignore_sep(char *line, int i);
+void	init_mini(t_mini **mini, char **env, char *name);
+void	readline_setup(char *rl, char *str);
+void	reinit(t_mini *mini, char *rl);
 
-int			check_line(t_mini *mini, t_token *token);
-char		*env_to_str(t_env *lst);
-int			env_init(t_mini *mini, char **env_array);
-void		init_mini(t_mini *mini, char **env);
-char		*get_env_value(char *arg, t_env *env);
-char		*env_value(char *env);
-int			env_value_len(const char *env);
-int			is_env_char(int c);
-int			is_valid_env(const char *env);
-void		print_sorted_env(t_env *env);
-void		increment_shell_level(t_env *env);
-size_t		size_env(t_env *lst);
+/* Exec */
 
-void		reset_std(t_mini *mini);
-void		close_fds(t_mini *mini);
-void		ft_close(int fd);
-void		reset_fds(t_mini *mini);
+int		cmd_exec(t_mini *mini);
+void	pipex(t_mini *mini);
+void	fd_handler(t_mini *mini);
+pid_t	exec(t_mini *mini);
 
-void		free_token(t_token *start);
-void		free_env(t_env *env);
-void		free_tab(char **tab);
+/* Stds & fds */
 
-t_token		*next_sep(t_token *token, int skip);
-t_token		*prev_sep(t_token *token, int skip);
-t_token		*next_run(t_token *token, int skip);
-void		process_tokens(t_mini *mini);
-void		update_token_pointers(t_token *token, t_token *prev);
-void		update_mini_start(t_mini *mini, t_token *token);
+void	ft_close(int fd);
+void	close_fds(int *fd);
+void	reset_fds(t_mini *mini);
+void	reset_std(t_mini *mini);
 
-int			is_type(t_token *token, int type);
-int			is_types(t_token *token, char *types);
-int			has_type(t_token *token, int type);
-int			has_pipe(t_token *token);
-t_token		*next_type(t_token *token, int type, int skip);
+/* Free */
 
-int			get_var_len(const char *arg, int pos, t_env *env, int ret);
-int			arg_alloc_len(const char *arg, t_env *env, int ret);
-char		*get_var_value(const char *arg, int pos, t_env *env, int ret);
-int			handle_quotes(char *line, int *i, int *j, char *c);
+void	free_token(t_token *start);
+void	free_env(t_env *env);
+void	free_tab(char **tab);
+void	free_cmd(t_cmd *cmd);
+int		clean_exit(t_mini *mini);
 
-void		sig_int(int code);
-void		sig_quit(int code);
-void		sig_init(void);
+/* Signals */
+
+void	sig_int(t_mini *mini, int code);
+void	sig_quit(t_mini *mini, int code);
+void	sig_init(t_mini *mini);
 
 // lexer
+void		expand_join(t_mini *mini);
+int			lexer(t_mini *mini, char *str);
 int			is_spechar(char c);
 int			is_space(int c);
 int			is_spe_expand(char c);
@@ -233,7 +217,6 @@ char		*random_file(void);
 void	heredoc(t_mini *mini);
 char	*expand_line(t_mini *mini, char *str, int fd);
 char	*expand_token(t_mini *mini, char *str);
-void	readline_setup(char **rl, char *str);
 
 //parser
 void	parser(t_mini *mini);
@@ -243,5 +226,6 @@ char	**add_args(t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str);
 void	path_finder(t_mini *mini, t_cmd *cmd, char *str);
 void	free_array(char **list);
+
 
 #endif

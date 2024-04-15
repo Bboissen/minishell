@@ -6,24 +6,11 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/15 14:34:44 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:09:12 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	readline_setup(char **rl, char *str)
-{
-	char	*prompt;
-
-	prompt = ft_strjoin(str, " > ");
-	if (!prompt)
-		exit(MALLOC);
-	*rl = readline(prompt);
-	add_history(*rl);
-	rl_on_new_line();
-	free(prompt);
-}
 
 int	odd_quote(char *str)
 {
@@ -92,42 +79,42 @@ int	lexer(t_mini *mini, char *str)
 	return (mini->sig.status);
 }
 
-int	main(void)
-{
-	char *rl = NULL;
-	t_mini	*mini;
+// int	main(void)
+// {
+// 	char *rl = NULL;
+// 	t_mini	*mini;
 
-	mini = malloc(sizeof(t_mini));
-	while (!rl || rl[0] != 'z')
-	{
-		readline_setup(&rl, "Michel");
-		mini->sig.status = lexer(mini, rl);
-		heredoc(mini);
-		printf("\n------------------------------------------\n");
-		printf("|type\t|%-20s|join|expand|\n", "string");
-		printf("------------------------------------------\n");
-		mini->token	= mini->h_token;
-		while (mini->token)
-		{
-			dprintf(1, "|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
-			mini->token = mini->token->next;
-		}
+// 	mini = malloc(sizeof(t_mini));
+// 	while (!rl || rl[0] != 'z')
+// 	{
+// 		readline_setup(&rl, "Michel");
+// 		mini->sig.status = lexer(mini, rl);
+// 		heredoc(mini);
+// 		printf("\n------------------------------------------\n");
+// 		printf("|type\t|%-20s|join|expand|\n", "string");
+// 		printf("------------------------------------------\n");
+// 		mini->token	= mini->h_token;
+// 		while (mini->token)
+// 		{
+// 			dprintf(1, "|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
+// 			mini->token = mini->token->next;
+// 		}
 
-		parser(mini);
-		getchar();
-		printf("\n------------------------------------------\n");
-		printf("|cmd\t|builtin|infile|outfile|\n");
-		printf("------------------------------------------\n");
-		mini->cmd	= mini->h_cmd;
-		while (mini->cmd)
-		{
-			dprintf(1, "|%s\t|%d|%s|%s|\n", mini->cmd->args[0], mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
-			mini->token = mini->token->next;
-		}
-		rl_on_new_line();
-		free(rl);
-		rl = NULL;
-		printf("\n\n\n");
-	}
-	return (mini->sig.status);
-}
+// 		parser(mini);
+// 		getchar();
+// 		printf("\n------------------------------------------\n");
+// 		printf("|cmd\t|builtin|infile|outfile|\n");
+// 		printf("------------------------------------------\n");
+// 		mini->cmd	= mini->h_cmd;
+// 		while (mini->cmd)
+// 		{
+// 			dprintf(1, "|%s\t|%d|%s|%s|\n", mini->cmd->args[0], mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
+// 			mini->token = mini->token->next;
+// 		}
+// 		rl_on_new_line();
+// 		free(rl);
+// 		rl = NULL;
+// 		printf("\n\n\n");
+// 	}
+// 	return (mini->sig.status);
+// }
