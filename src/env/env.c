@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 12:52:46 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 15:54:28 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static char	*append_name_value(t_env *env_lst)
  * @param {t_env*} env - The environment list.
  * @return {char**} - Returns an array of strings, each string being a name-value pair from the environment list.
  */
-static char	**env_to_tab(t_env *env)
+char	**env_to_tab(t_env *env)
 {
 	t_env	*tmp;
 	char	**tab;
@@ -137,7 +137,7 @@ static int	env_cpy(t_mini *mini, char **env_array, t_env *env, int *i)
  * @return {int} - Returns ERROR if memory allocation fails, 
  * otherwise returns SUCCESS.
  */
-int	init_env(t_mini *mini, char **env_array)
+int	init_env(t_mini **mini, char **env_array)
 {
 	t_env	*env;
 	int		i;

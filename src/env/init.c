@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 14:58:58 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 15:53:39 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * reads a line from the terminal,
  * adds the line to the history, and then frees the prompt string.
  */
-void	readline_setup(char *rl, t_mini *mini, char *str)
+void	readline_setup(char *rl, char *str)
 {
 	char	*prompt;
 
@@ -39,19 +39,21 @@ void	readline_setup(char *rl, t_mini *mini, char *str)
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char**} env - The environment for the shell.
  */
-void	init_mini(t_mini *mini, char **env, char *name)
+void	init_mini(t_mini **mini, char **env, char *name)
 {
-	mini->name = name;
-	mini = malloc(sizeof(t_mini));
-	if (!mini)
-		clean_exit(NULL);
-	mini->cmd = NULL;
-	mini->token = NULL;
-	mini->sig.status = 0;
-	mini->sig.exit = 0;
+	*mini = malloc(sizeof(t_mini));
+	(*mini)->name = name;
+	// if (!(*mini))
+	// 	clean_exit(NULL);
+	(*mini)->cmd = NULL;
+	(*mini)->token = NULL;
+	(*mini)->sig.status = 0;
+	(*mini)->sig.exit = 0;
 	init_env(mini, env);
-	increment_shell_level(mini);
-	sig_init(mini);
+	printf("%s\n", (*mini)->env->name);
+	getchar();
+	// increment_shell_level(mini);
+	sig_init(*mini);
 }
 
 /**

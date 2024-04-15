@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
+#    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/15 12:24:16 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/15 16:45:14 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,13 +29,13 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-BUILTINS	=	cd			\
-				echo		\
-				env			\
-				exit		\
-				export		\
-				pwd			\
-				unset
+# BUILTINS	=	cd			\
+# 				echo		\
+# 				env			\
+# 				exit		\
+# 				export		\
+# 				pwd			\
+# 				unset
 
 ENV			=	env			\
 				init		\

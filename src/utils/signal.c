@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 16:06:19 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 15:39:28 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	print_quit_message(int signo)
 	char	*nbr;
 
 	nbr = ft_itoa(signo);
-	ft_printfd(STDERR, "Quit: %s\n", nbr);
+	dprintf(STDERR, "Quit: %s\n", nbr);
 	ft_memdel(nbr);
 }
 

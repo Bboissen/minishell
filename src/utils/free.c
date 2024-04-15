@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/12 12:07:24 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 15:22:30 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ void	free_cmd(t_cmd *cmd)
 		if (cmd->out)
 			free(cmd->out);
 		if (cmd->fd[0] != -1)
-			free(cmd->fd[0]);
+			close(cmd->fd[0]);
 		if (cmd->fd[1] != -1)
-			free(cmd->fd[1]);
+			close(cmd->fd[1]);
 		free(cmd);
 		cmd = tmp;
 	}
@@ -100,27 +100,27 @@ void	free_env(t_env *env)
 }
 
 
-/**
- * @brief Frees all allocated memory and exits the program.
- * 
- * @param mini The main structure of the program.
- */
-void	clean_exit(t_mini *mini)
-{
-	int	status;
+// /**
+//  * @brief Frees all allocated memory and exits the program.
+//  * 
+//  * @param mini The main structure of the program.
+//  */
+// void	clean_exit(t_mini *mini)
+// {
+// 	int	status;
 
-	if (mini)
-		status = mini->sig.status;
-	else
-		exit(MALLOC);
-	if (mini->token)
-		free_token(mini->token);
-	if (mini->cmd)
-		free_cmd(mini->cmd);
-	if (mini->env)
-		free_env(mini->env);
-	if (mini->sig.exit == 1)
-		ft_putstr_fd("exit\n", 2);
-	free(mini);
-	exit(status);
-}
+// 	if (mini)
+// 		status = mini->sig.status;
+// 	else
+// 		exit(MALLOC);
+// 	if (mini->token)
+// 		free_token(mini->token);
+// 	if (mini->cmd)
+// 		free_cmd(mini->cmd);
+// 	if (mini->env)
+// 		free_env(mini->env);
+// 	if (mini->sig.exit == 1)
+// 		ft_putstr_fd("exit\n", 2);
+// 	free(mini);
+// 	exit(status);
+// }

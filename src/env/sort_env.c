@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 13:07:09 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 15:20:11 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	str_env_len(char **env_tab)
+{
+	int	i;
+
+	i = 0;
+	while (env_tab[i])
+		i++;
+	return (i);
+}
 
 /**
  * Sets or updates an environment variable in the environment list.

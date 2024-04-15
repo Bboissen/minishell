@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 16:14:37 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 15:21:25 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ void	ft_close(int fd)
 		close(fd);
 }
 
-/**
- * @brief Resets the standard input and output to the command's input and output.
- * 
- * @param mini The main structure of the program.
- */
-void	reset_std(t_mini *mini)
-{
-	dup2(mini->cmd->in, STDIN);
-	dup2(mini->cmd->out, STDOUT);
-}
+// /**
+//  * @brief Resets the standard input and output to the command's input and output.
+//  * 
+//  * @param mini The main structure of the program.
+//  */
+// void	reset_std(t_mini *mini)
+// {
+// 	dup2(mini->cmd->in, STDIN);
+// 	dup2(mini->cmd->out, STDOUT);
+// }
 
 /**
  * @brief Closes the file descriptors associated with the current command.
