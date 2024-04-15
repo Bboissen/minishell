@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/11 18:38:23 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 13:46:58 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,7 @@ static void	new_token(t_mini *mini, t_token **token,
 		new_token->prev = NULL;
 		*token = new_token;
 		mini->token = *token;
+		mini->h_token = *token;
 	}
 	else
 	{

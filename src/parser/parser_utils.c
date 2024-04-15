@@ -6,18 +6,20 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/12 16:28:00 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:59:52 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token *token)
+static char	*path_checker(char const *str, char	**cmd, char	**path);
+
+void	cmd_skip(t_mini *mini, t_token *token)
 {
 	mini->sig.status = errno;
-	printf_fd(2, "%s: %s: %s\n", mini->name,
-		strerror(errno), token->next->str);
-	free_cmd(*cmd);
+	// printf(2, "%s: %s: %s\n", mini->name,
+	// 	strerror(errno), token->next->str);
+	// free_cmd(*cmd);
 	while (token && token->type != PIPE)
 		token = token->next;
 }
@@ -26,8 +28,8 @@ void	new_cmd(t_mini *mini, t_cmd **cmd, int *arg_flag)
 {
 	if (!mini->cmd)
 	{
-		mini->cmd_h = *cmd;
-		mini->cmd = mini->cmd_h;
+		mini->h_cmd = *cmd;
+		mini->cmd = mini->h_cmd;
 	}
 	else
 	{
@@ -63,7 +65,7 @@ char	**add_args(t_cmd **cmd, char *str)
 	return (new_cmd);
 }
 
-void	check_blt(t_mini *mini, t_cmd **cmd, char *str)
+t_builtin	check_blt(t_cmd **cmd, char *str)
 {
 	if (ft_strcmp(str, "echo") == 0)
 		(*cmd)->builtin = ECHO;
@@ -81,23 +83,54 @@ void	check_blt(t_mini *mini, t_cmd **cmd, char *str)
 		(*cmd)->builtin = EXIT;
 	else
 		(*cmd)->builtin = NONE;
+	return ((*cmd)->builtin);
+}
+
+
+
+static char	*path_checker(char const *str, char	**cmd, char	**path, int *err)
+{
+	char	*buff;
+	int		i;
+
+	i = -1;
+	while (path[++i] && *err == -1)
+	{
+		*err = 0;
+		buff = ft_strjoin(path[i], "/");
+		if (buff == NULL)
+			return (NULL);
+		cmd = ft_strjoin(buff, str);
+		if (cmd == NULL)
+		{
+			free(buff);
+			return (NULL);
+		}
+		*err = access(cmd, X_OK);
+		if (*err == -1)
+			free(cmd);
+		free(buff);
+	}
+	if (err == -1)
+		return (NULL);
+	return (cmd);
 }
 
 void	path_finder(t_mini *mini, t_cmd *cmd, char *str)
 {
 	t_env	*local_env;
 	int		err;
-	char	*cmd;
+	char	*args;
 	char	**path;
 
-	cmd = NULL;
+	args = NULL;
 	local_env = mini->h_env;
 	while (local_env && !ft_strcmp(local_env->name, "PATH"))
 		local_env = local_env->next;
-	path = ft_split(str + 5, ':');
+	path = ft_split(local_env->value, ':');
 	if (path)
 	{
-		err = path_checker(str, &cmd, path);
+		args = path_checker(str, &args, path, &err);
 		free_array(path);
 	}
 	if (path == NULL || (cmd == NULL && err == 0))
@@ -107,37 +140,20 @@ void	path_finder(t_mini *mini, t_cmd *cmd, char *str)
 	else
 	{
 		cmd->args = malloc(sizeof(char *) * 2);
-		cmd->args[0] = cmd;
+		cmd->args[0] = args;
 		cmd->args[1] = NULL;
 	}
 }
 
-static char	*path_checker(char const *str, char	**cmd, char	**path)
+void	free_array(char **list)
 {
-	char	*buff;
-	int		i;
-	int		err;
+	int	i;
 
-	i = -1;
-	err = -1;
-	while (path[++i] && err == -1)
+	i = 0;
+	while (list[i])
 	{
-		// err = 0;
-		buff = ft_strjoin(path[i], "/");
-		if (buff == NULL)
-			return (NULL);
-		str = ft_strjoin(buff, str);
-		if (str == NULL)
-		{
-			free(buff);
-			return (NULL);
-		}
-		err = access(str, X_OK);
-		if (err == -1)
-			free(str);
-		free(buff);
+		free(list[i]);
+		i++;
 	}
-	if (err != -1)
-		*cmd = str;
-	return (err);
+	free(list);
 }

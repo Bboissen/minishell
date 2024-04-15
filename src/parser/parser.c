@@ -6,13 +6,16 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/12 15:53:41 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:47:07 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void	check_read(t_mini *mini, t_cmd **cmd, t_token *token);
+static void	check_write(t_mini *mini, t_cmd **cmd, t_token *token);
+static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token *token, int *arg_flag);
+static void	init_cmd(t_cmd **cmd, int *pipe, t_mini *mini, t_token *token);
 
 void	parser(t_mini *mini)
 {
@@ -23,7 +26,7 @@ void	parser(t_mini *mini)
 
 	arg_flag = 0;
 	pipe = 0;
-	token = mini->token_h;
+	token = mini->h_token;
 	init_cmd(&cmd, &pipe, mini, token);
 	// if (!cmd)
 	// 	return (error_manager);
@@ -37,7 +40,7 @@ void	parser(t_mini *mini)
 			check_cmd(mini, &cmd, token, &arg_flag);
 		else if (token->type == PIPE)
 		{
-			new_cmd(mini, cmd, &arg_flag);
+			new_cmd(mini, &cmd, &arg_flag);
 			init_cmd(&cmd, &pipe, mini, token);
 		}
 	}
@@ -46,7 +49,7 @@ void	parser(t_mini *mini)
 static void	check_read(t_mini *mini, t_cmd **cmd, t_token *token)
 {
 	if (access(token->next->str, R_OK) == -1)
-		cmd_skip(mini, cmd, token);
+		cmd_skip(mini, token);
 	else
 		(*cmd)->in = token->next->str;
 	token = token->next;
@@ -63,7 +66,7 @@ static void	check_write(t_mini *mini, t_cmd **cmd, t_token *token)
 	if (fd >= 0)
 		close(fd);
 	if (fd < 0 || access(token->next->str, W_OK) == -1)
-		cmd_skip(mini, cmd, token);
+		cmd_skip(mini, token);
 	else
 		(*cmd)->out = token->next->str;
 	token = token->next;
@@ -73,9 +76,9 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token *token, int *arg_flag)
 {
 	if (arg_flag)
 	{
-		if (pipe && (*cmd)->builtin == EXPORT)
+		if (PIPE && (*cmd)->builtin == EXPORT)
 		{
-			cmd_skip(mini, cmd, token);
+			cmd_skip(mini, token);
 			return ;
 		}
 		(*cmd)->args = add_args(cmd, token->str);
@@ -83,12 +86,12 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token *token, int *arg_flag)
 		return ;
 	}
 	if (!check_blt(cmd, token->next->str) && !ft_strchr(token->next->str, '/'))
-		path_finder(mini, cmd, token->next->str);
+		path_finder(mini, *cmd, token->next->str);
 	if (((*cmd)->builtin && (*cmd)->builtin != CD)
 		|| access((*cmd)->args[0], X_OK))
 		token = token->next;
 	else
-		cmd_skip(mini, cmd, token);
+		cmd_skip(mini, token);
 }
 
 static void	init_cmd(t_cmd **cmd, int *pipe, t_mini *mini, t_token *token)
@@ -101,7 +104,7 @@ static void	init_cmd(t_cmd **cmd, int *pipe, t_mini *mini, t_token *token)
 				(*pipe)++;
 			token = token->next;
 		}
-		token = mini->token_h;
+		token = mini->h_token;
 		mini->cmd = NULL;
 	}
 	*cmd = malloc(sizeof(t_cmd));

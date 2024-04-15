@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 13:27:07 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/09 14:06:57 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/15 13:37:30 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,6 +95,8 @@ STR_SRC =	ft_split	\
 			ft_strjoin	\
 			ft_strlcat	\
 			ft_strlcpy	\
+			ft_strcat	\
+			ft_strcpy	\
 			ft_strlen	\
 			ft_strmapi	\
 			ft_strncmp	\

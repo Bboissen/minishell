@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/12 15:57:44 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:46:33 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,11 +130,11 @@ typedef struct s_cmd
 typedef struct s_mini
 {
 	char			*name;
-	t_token			*token_h;
+	t_token			*h_token;
 	t_token			*token;
 	t_env			*h_env;
 	t_env			*env;
-	t_cmd			*cmd_h;
+	t_cmd			*h_cmd;
 	t_cmd			*cmd;
 	t_sig			sig;
 }	t_mini;
@@ -228,4 +228,20 @@ char		*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
 char		*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
 char		*var_handler(t_mini *mini, t_token **token, char *str, int *quote);
 char		*random_file(void);
+
+//heredoc
+void	heredoc(t_mini *mini);
+char	*expand_line(t_mini *mini, char *str, int fd);
+char	*expand_token(t_mini *mini, char *str);
+void	readline_setup(char **rl, char *str);
+
+//parser
+void	parser(t_mini *mini);
+void	cmd_skip(t_mini *mini, t_token *token);
+void	new_cmd(t_mini *mini, t_cmd **cmd, int *arg_flag);
+char	**add_args(t_cmd **cmd, char *str);
+t_builtin	check_blt(t_cmd **cmd, char *str);
+void	path_finder(t_mini *mini, t_cmd *cmd, char *str);
+void	free_array(char **list);
+
 #endif
