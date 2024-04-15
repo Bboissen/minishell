@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/15 12:24:16 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/15 16:16:02 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,31 +29,30 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-BUILTINS	=	cd			\
-				echo		\
-				env			\
-				exit		\
-				export		\
-				pwd			\
-				unset
+# BUILTINS	=	cd			\
+# 				echo		\
+# 				env			\
+# 				exit		\
+# 				export		\
+# 				pwd			\
+# 				unset
 
 ENV			=	env			\
 				init		\
 				shlvl		\
 				sort_env
 
-ERROR		=	error_manager	\
-				errors			\
-				print_messages
+# ERROR		=	error_manager	\
+# 				errors			\
+# 				print_messages
 
-EXEC		=	bin		\
-				builtin	\
-				exec
+# EXEC		=	bin		\
+# 				builtin	\
+# 				exec
 
 LEXER		=	lexer
 
-PARSER		=	parser		\
-				expansions
+PARSER		=	expansions
 
 UTILS		=	fd			\
 				free		\
@@ -61,12 +60,8 @@ UTILS		=	fd			\
 
 MAIN		=	minishell
 
-SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
-				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
-				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
-				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))			\
-				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(PARSING)))		\
-				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
+SRCS		=	$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
+				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSER)))		\
 				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 

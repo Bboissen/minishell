@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 18:46:22 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 16:35:41 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,26 @@ static int	get_lvl(const char *str)
  * Increment the shell level in the environment.
  * @param {t_env*} env - The environment to increment the shell level in.
  */
-void	increment_shell_level(t_mini *mini)
+void	increment_shell_level(t_mini **mini)
 {
 	char	*shell_level_value;
 	int		shell_level;
 	char	*shlvl;
 
 	shell_level_value = expand_token(mini, "SHLVL");
-	if (!ft_strcmp(shell_level_value, ""))
-		free(shell_level_value);
 	shell_level = get_lvl(shell_level_value) + 1;
-	ft_memdel(shell_level_value);
-	while (mini->env && mini->env->name)
+	if (shell_level_value)
+		ft_memdel(shell_level_value);
+	while ((*mini)->env && (*mini)->env->name)
 	{
-		if (!ft_strcmp(mini->env->name, "SHLVL"))
+		if (!ft_strcmp((*mini)->env->name, "SHLVL"))
 		{
-			ft_memdel(mini->env->value);
+			ft_memdel((*mini)->env->value);
 			shlvl = ft_itoa(shell_level);
-			mini->env->value = ft_strdup(shlvl);
+			(*mini)->env->value = ft_strdup(shlvl);
 			ft_memdel(shlvl);
 			return ;
 		}
-		mini->env = mini->env->next;
+		(*mini)->env = (*mini)->env->next;
 	}
 }

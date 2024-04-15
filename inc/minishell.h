@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 13:46:54 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 16:21:46 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ typedef enum e_error
 	STX = 2,
 	DIRECTORY = 126,
 	CMD = 127,
+	MALLOC = 128,
 	INTERUPT = 130,
-	QUIT = 131,
-	MALLOC = 256
+	QUIT = 131
 }	t_error;
 
 /* Structures */
@@ -155,17 +155,21 @@ int		mini_unset(t_mini *mini);
 
 /* Env */
 
-int		init_env(t_mini *mini, char **env_array);
-void	increment_shell_level(t_mini *mini);
-char	*env_to_tab(t_env *env_lst);
+int		init_env(t_mini **mini, char **env_array);
+void	increment_shell_level(t_mini **mini);
+char	**env_to_tab(t_env *env_lst);
 char	*get_env(t_env *env, char *name);
 void	set_env(t_env **env, char *name, char *value);
 void	print_sorted_env(t_env *env);
 void	sort_env(char **tab, int env_len);
+void	expand_join(t_mini **mini);
+char	*expand_token(t_mini **mini, char *str);
+t_token	*list_join(t_token *token);
 
 /* Init */
 
-void	init_mini(t_mini *mini, char **env, char *name);
+void	readline_setup(char *rl, char *str);
+void	init_mini(t_mini **mini, char **env, char *name);
 void	reinit(t_mini *mini, char *rl);
 
 /* Exec */
@@ -188,7 +192,7 @@ void	free_token(t_token *start);
 void	free_env(t_env *env);
 void	free_tab(char **tab);
 void	free_cmd(t_cmd *cmd);
-void	clean_exit(t_mini *mini);
+int		clean_exit(t_mini *mini);
 
 /* Signals */
 

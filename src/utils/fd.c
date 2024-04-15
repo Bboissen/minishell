@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 16:14:37 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 15:21:37 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	ft_close(int fd)
  */
 void	reset_std(t_mini *mini)
 {
-	dup2(mini->cmd->in, STDIN);
-	dup2(mini->cmd->out, STDOUT);
+	dup2(mini->cmd->fd[0], STDIN);
+	dup2(mini->cmd->fd[1], STDOUT);
 }
 
 /**

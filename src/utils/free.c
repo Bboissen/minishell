@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/12 12:07:24 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 16:13:38 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ void	free_cmd(t_cmd *cmd)
 		if (cmd->out)
 			free(cmd->out);
 		if (cmd->fd[0] != -1)
-			free(cmd->fd[0]);
+			close(cmd->fd[0]);
 		if (cmd->fd[1] != -1)
-			free(cmd->fd[1]);
+			close(cmd->fd[1]);
 		free(cmd);
 		cmd = tmp;
 	}
@@ -105,7 +105,7 @@ void	free_env(t_env *env)
  * 
  * @param mini The main structure of the program.
  */
-void	clean_exit(t_mini *mini)
+int	clean_exit(t_mini *mini)
 {
 	int	status;
 
@@ -123,4 +123,5 @@ void	clean_exit(t_mini *mini)
 		ft_putstr_fd("exit\n", 2);
 	free(mini);
 	exit(status);
+	return (status);
 }

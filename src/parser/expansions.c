@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 18:47:16 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 16:22:52 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,29 @@
  * Expands and joins tokens in the shell.
  * @param {t_mini*} mini - The main structure of the shell.
  */
-void	expand_join(t_mini *mini)
+void	expand_join(t_mini **mini)
 {
 	char	*tmp;
 
-	mini->token = mini->h_token;
-	while (mini->token)
+	(*mini)->token = (*mini)->h_token;
+	while ((*mini)->token)
 	{
-		if (mini->token->expand)
+		if ((*mini)->token->expand)
 		{
-			tmp = expand_token(mini, mini->token->str);
-			free(mini->token->str);
-			mini->token->str = tmp;
-			mini->token->expand = 0;
+			tmp = expand_token(mini, (*mini)->token->str);
+			free((*mini)->token->str);
+			(*mini)->token->str = tmp;
+			(*mini)->token->expand = 0;
 		}
-		mini->token = mini->token->next;
+		(*mini)->token = (*mini)->token->next;
 	}
-	mini->token = mini->h_token;
-	while (mini->token)
+	(*mini)->token = (*mini)->h_token;
+	while ((*mini)->token)
 	{
-		if (mini->token->join)
-			mini->token = list_join(mini->token);
+		if ((*mini)->token->join)
+			(*mini)->token = list_join((*mini)->token);
 		else
-			mini->token = mini->token->next;
+			(*mini)->token = (*mini)->token->next;
 	}
 }
 
@@ -48,21 +48,21 @@ void	expand_join(t_mini *mini)
  * @param {char*} str - The string to be expanded.
  * @return {char*} - Returns the expanded string.
  */
-char	*expand_token(t_mini *mini, char *str)
+char	*expand_token(t_mini **mini, char *str)
 {
 	char	*env_val;
 
 	env_val = ft_strdup("");
 	if (!ft_strcmp(str, "?"))
-		return (ft_itoa(mini->sig.status));
-	while (mini->env && mini->env->name)
+		return (ft_itoa((*mini)->sig.status));
+	while ((*mini)->env && (*mini)->env->name)
 	{
-		if (!ft_strcmp(str, mini->env->name))
+		if (!ft_strcmp(str, (*mini)->env->name))
 		{
-			env_val = strdup(mini->env->value);
+			env_val = strdup((*mini)->env->value);
 			return (env_val);
 		}
-		mini->env = mini->env->next;
+		(*mini)->env = (*mini)->env->next;
 	}
 	return (env_val);
 }
