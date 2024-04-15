@@ -6,11 +6,21 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 15:19:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 17:23:35 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	str_env_len(char **env_tab)
+{
+	int	i;
+
+	i = 0;
+	while (env_tab[i])
+		i++;
+	return (i);
+}
 
 static int	str_env_len(char **env_tab)
 {

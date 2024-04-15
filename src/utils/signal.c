@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 15:46:40 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 17:25:51 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	print_quit_message(int signo)
 	char	*nbr;
 
 	nbr = ft_itoa(signo);
-	ft_printfd(STDERR, "Quit: %s\n", nbr);
+	dprintf(STDERR, "Quit: %s\n", nbr);
 	ft_memdel(nbr);
 }
 
