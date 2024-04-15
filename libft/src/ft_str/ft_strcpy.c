@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 14:58:11 by gdumas           ###   ########.fr       */
+/*   Created: 2024/04/15 13:52:14 by gdumas            #+#    #+#             */
+/*   Updated: 2024/04/15 13:52:46 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-
-int	main(int ac, char **av, char **env)
+char	*ft_strcpy(char *dest, const char *src)
 {
-	t_mini	*mini;
-	char	*rl;
+	int	i;
 
-	if (ac != 1)
-		return (ERROR);
-	init_mini(mini, env, av[0]);
-	while (!mini->sig.exit)
+	i = 0;
+	while (src[i] != '\0')
 	{
-		readline_setup(&rl, &mini, av[0]);
-		heredoc(mini);
-		lexer(mini, rl);
-		expand_join(mini);
-		parser(mini);
-		if (mini->cmd)
-			exec_cmd(mini);
-		reinit(mini, rl);
+		dest[i] = src[i];
+		i++;
 	}
-	return (clean_exit(&mini));
+	dest[i] = '\0';
+	return (dest);
 }

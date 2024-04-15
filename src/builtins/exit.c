@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 18:26:29 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 13:50:14 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,38 +49,31 @@ static long long	ft_atoi_exit(const char *str, int i, int *pbm)
 }
 
 /**
- * Print an error message if the exit argument is not numeric.
- * @param {t_mini*} mini - The main structure of the shell.
- */
-static void	exit_error_numeric(t_mini *mini)
-{
-	ft_printfd(2,
-		"minishell: exit: '%s': numeric argument required\n",
-		mini->cmd->args[1]);
-	mini->sig.status = 2;
-	clean_exit(mini, 1);
-}
-
-/**
  * Check the arguments of the exit command.
  * @param {t_mini*} mini - The main structure of the shell.
  */
 static void	exit_arg(t_mini *mini)
 {
+	char	*arg;
 	int		i;
-	char	**args;
 
-	i = 0;
-	args = mini->cmd->args;
-	if (args[i] == '-' || args[i] == '+')
-		i++;
-	while (args[i])
+	arg = mini->cmd->args[1];
+	if (arg && (arg[0] == '-' || arg[0] == '+'))
 	{
-		if (args[i] != '\f' && args[i] != '\t' && args[i] != '\r'
-			&& args[i] != '\v' && args[i] != ' ')
+		ft_printfd(2, "%s: exit: %s: numeric argument \
+			required\n", mini->name, arg);
+		mini->sig.status = 2;
+		return ;
+	}
+	i = 0;
+	while (arg && arg[i])
+	{
+		if (!isdigit(arg[i]))
 		{
-			if (args[i] < '0' || args[i] > '9')
-				exit_error_numeric(mini);
+			ft_printfd(2, "%s: exit: %s: numeric argument \
+				required\n", mini->name, arg);
+			mini->sig.status = 2;
+			return ;
 		}
 		i++;
 	}
@@ -90,31 +83,28 @@ static void	exit_arg(t_mini *mini)
  * Execute the exit command.
  * @param {t_mini*} mini - The main structure of the shell.
  */
-void	mini_exit(t_mini *mini)
+int	mini_exit(t_mini *mini)
 {
-	size_t		i;
 	int			pbm;
 	long long	code;
 
-	pbm = 0;
-	i = 1;
-	mini->sig.status = 0;
 	if (!mini->cmd->args[1])
-		clean_exit(mini, 1);
+	{
+		clean_exit(mini);
+		mini->sig.status = 0;
+	}
 	exit_arg(mini);
-	while (mini->cmd->args[i])
-		i++;
-	if (i > 2)
-	{
-		ft_printfd(2, "minishell: exit: too many arguments\n");
-		mini->sig.status = 1;
-	}
-	else
-	{
-		code = ft_atoi_exit(mini->cmd->args[1], 0, &pbm);
-		if (pbm == 1)
-			exit_error_numeric(mini);
-		mini->sig.status = code % 256;
-	}
-	clean_exit(mini, 1);
+	if (mini->sig.status == 2)
+		return (mini->sig.status);
+	if (mini->cmd->args[2])
+		return (ft_printfd(2, "%s: exit: too many arguments\n",
+				mini->name), mini->sig.status = 1);
+	pbm = 0;
+	code = ft_atoi_exit(mini->cmd->args[1], 0, &pbm);
+	if (pbm == 1)
+		return (ft_printfd(2, "%s: exit: %s: numeric argument required\n",
+				mini->name, mini->cmd->args[1]), mini->sig.status = 2);
+	mini->sig.status = code % 256;
+	clean_exit(mini);
+	return (mini->sig.status);
 }

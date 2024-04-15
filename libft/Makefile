@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 13:27:07 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/10 14:39:02 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/15 13:55:11 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,8 +92,10 @@ SKIP_SRC =	ft_skip_char	\
 			ft_skip_spacenl
 
 STR_SRC =	ft_split	\
+			ft_strcat	\
 			ft_strchr	\
 			ft_strcmp	\
+			ft_strcpy	\
 			ft_strdup	\
 			ft_strequ	\
 			ft_strisnum	\

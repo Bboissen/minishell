@@ -1,36 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 14:58:11 by gdumas           ###   ########.fr       */
+/*   Created: 2024/04/15 13:51:59 by gdumas            #+#    #+#             */
+/*   Updated: 2024/04/15 13:54:12 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-
-int	main(int ac, char **av, char **env)
+char	*ft_strcat(char *dest, const char *src)
 {
-	t_mini	*mini;
-	char	*rl;
+	int	i;
+	int	j;
 
-	if (ac != 1)
-		return (ERROR);
-	init_mini(mini, env, av[0]);
-	while (!mini->sig.exit)
+	i = 0;
+	j = 0;
+	while (dest[i] != '\0')
+		i++;
+	while (src[j] != '\0')
 	{
-		readline_setup(&rl, &mini, av[0]);
-		heredoc(mini);
-		lexer(mini, rl);
-		expand_join(mini);
-		parser(mini);
-		if (mini->cmd)
-			exec_cmd(mini);
-		reinit(mini, rl);
+		dest[i + j] = src[j];
+		j++;
 	}
-	return (clean_exit(&mini));
+	dest[i + j] = '\0';
+
+	return (dest);
 }

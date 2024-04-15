@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/12 12:40:51 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/15 12:24:16 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,44 +33,42 @@ BUILTINS	=	cd			\
 				echo		\
 				env			\
 				exit		\
-				exp_handler	\
-				exp_print	\
+				export		\
 				pwd			\
 				unset
 
 ENV			=	env			\
-				get_env		\
 				init		\
-				sort_env	\
-				shlvl
+				shlvl		\
+				sort_env
+
+ERROR		=	error_manager	\
+				errors			\
+				print_messages
 
 EXEC		=	bin		\
 				builtin	\
-				exec	\
-				pipe
+				exec
 
-MAIN		=	minishell	\
-				redir		\
+LEXER		=	lexer
+
+PARSER		=	parser		\
+				expansions
+
+UTILS		=	fd			\
+				free		\
 				signal
 
-PARSING		=	expansions	\
-				line		\
-				tokens
-
-UTILS		=	expansions	\
-				fd			\
-				free		\
-				parsing		\
-				token		\
-				type		\
-				update_tokens
+MAIN		=	minishell
 
 SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
 				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
-				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))		\
-				$(addprefix $(SRC_DIR)main/, $(addsuffix .c, $(MAIN)))			\
-				$(addprefix $(SRC_DIR)parsing/, $(addsuffix .c, $(PARSING)))	\
-				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))
+				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
+				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))			\
+				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(PARSING)))		\
+				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
+				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
+				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
 

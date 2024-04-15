@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/27 18:46:50 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 13:15:04 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@
  * @param {char*} path - The path to add the home path to.
  * @return {char*} - Returns the new path with the home path added.
  */
-static char	*add_home_path(char *path)
+static char	*add_home_path(t_mini *mini, char *path)
 {
 	char	*tmp1;
 	char	*tmp2;
 
 	if (!ft_strncmp(path, "~/", 2))
 	{
-		tmp1 = get_env("HOME");
+		tmp1 = get_env(mini->h_env, "HOME");
 		if (tmp1)
 		{
 			tmp2 = ft_substr(path, 1, ft_strlen(path));
@@ -44,7 +44,7 @@ static char	*add_home_path(char *path)
  * @return {int} - Returns ERROR if the directory change was successful, 
  * SUCCESS otherwise.
  */
-static int	change(char *path, int home)
+static int	change(t_mini *mini, char *path, int home)
 {
 	char	*pwd;
 
@@ -53,13 +53,13 @@ static int	change(char *path, int home)
 	{
 		if (pwd)
 		{
-			set_env("OLDPWD", pwd);
+			set_env(&mini->h_env, "OLDPWD", pwd);
 			free(pwd);
 		}
 		pwd = getcwd(NULL, 0);
 		if (pwd)
 		{
-			set_env("PWD", pwd);
+			set_env(&mini->h_env, "PWD", pwd);
 			free(pwd);
 		}
 		if (home)
@@ -82,7 +82,7 @@ static int	set_directory(t_mini *mini, char *path, int home)
 {
 	struct stat	st;
 
-	if (change(path, home))
+	if (change(mini, path, home))
 		return (ERROR);
 	ft_printfd(2, "minishell: cd: %s", path);
 	mini->sig.status = ERROR;
@@ -98,7 +98,7 @@ static int	set_directory(t_mini *mini, char *path, int home)
 	}
 	else
 		ft_printfd(2, ": Not a directory");
-	ft_printfd(2, '\n');
+	ft_printfd(2, "\n");
 	if (home)
 		free(path);
 	return (SUCCESS);
@@ -119,13 +119,13 @@ static int	s_path(t_mini *mini)
 	args = mini->cmd->args;
 	if (ft_strequ(args[1], "-"))
 	{
-		tmp = get_env("OLDPWD");
+		tmp = get_env(mini->h_env, "OLDPWD");
 		if (tmp)
 		{
 			set_directory(mini, tmp, 0);
 			free(tmp);
 		}
-		tmp = get_env("PWD");
+		tmp = get_env(mini->h_env, "PWD");
 		if (tmp)
 		{
 			ft_printfd(1, "%s\n", tmp);
@@ -152,19 +152,19 @@ int	mini_cd(t_mini *mini)
 	args = mini->cmd->args;
 	if (args && args[1] && args[2])
 	{
-		ft_printfd(2, "minishell: cd: too many arguments\n");
+		ft_printfd(2, "%s: cd: too many arguments\n", mini->name);
 		return (ERROR);
 	}
 	if (!args[1] || ft_strequ(args[1], "~") || ft_strequ(args[1], "--"))
 	{
-		home = get_env("HOME");
+		home = get_env(mini->h_env, "HOME");
 		if (!home)
 		{
-			ft_printfd(2, "minishell: cd: HOME not set\n");
+			ft_printfd(2, "%s: cd: HOME not set\n", mini->name);
 			return (ERROR);
 		}
 		return (set_directory(mini, home, 1));
 	}
-	args[1] = add_home_path(args[1]);
-	return (s_path(args));
+	args[1] = add_home_path(mini, args[1]);
+	return (s_path(mini));
 }

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 11:05:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/10 14:38:29 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 13:54:49 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,10 @@ void	ft_skip_spacenl(const char *str, int *i);
 
 /*ft_str*/
 char	**ft_split(char const *s, char c);
+char	*ft_strcat(char *dest, const char *src);
 char	*ft_strchr(char const *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strdup(const char *str);
 int		ft_strequ(const char *s1, const char *s2);
 int		ft_strisnum(const char *str);

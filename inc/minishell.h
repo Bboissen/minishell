@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/12 12:41:57 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 13:46:54 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void	exec_builtin(char **args, t_mini *mini);
 int		mini_cd(t_mini *mini);
 int		mini_echo(t_mini *mini);
 int		mini_env(t_mini *mini);
-void	mini_exit(t_mini *mini);
+int		mini_exit(t_mini *mini);
 int		mini_export(char **args, t_env *env, t_env *secret);
 int		mini_pwd(void);
 int		mini_unset(t_mini *mini);
@@ -158,8 +158,10 @@ int		mini_unset(t_mini *mini);
 int		init_env(t_mini *mini, char **env_array);
 void	increment_shell_level(t_mini *mini);
 char	*env_to_tab(t_env *env_lst);
-void	sort_env(char **tab, int env_len);
+char	*get_env(t_env *env, char *name);
+void	set_env(t_env **env, char *name, char *value);
 void	print_sorted_env(t_env *env);
+void	sort_env(char **tab, int env_len);
 
 /* Init */
 

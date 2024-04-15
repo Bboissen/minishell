@@ -6,11 +6,59 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/12 11:58:03 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 13:07:09 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/**
+ * Sets or updates an environment variable in the environment list.
+ * @param {t_env**} env - The pointer to the environment list.
+ * @param {char*} name - The name of the environment variable to set.
+ * @param {char*} value - The value to set the environment variable to.
+ * If the environment variable already exists, its value is updated.
+ * If it does not exist, a new environment variable is created.
+ */
+void	set_env(t_env **env, char *name, char *value)
+{
+	t_env	*tmp;
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (strcmp(tmp->name, name) == 0)
+		{
+			free(tmp->value);
+			tmp->value = strdup(value);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	tmp = malloc(sizeof(t_env));
+	tmp->name = strdup(name);
+	tmp->value = strdup(value);
+	tmp->next = *env;
+	*env = tmp;
+}
+
+/**
+ * Retrieves the value of an environment variable by its name.
+ * @param {t_env*} env - The environment list.
+ * @param {char*} name - The name of the environment variable.
+ * @return {char*} - Returns the value of the environment variable if
+ * found, NULL otherwise.
+ */
+char	*get_env(t_env *env, char *name)
+{
+	while (env != NULL)
+	{
+		if (strcmp(env->name, name) == 0)
+			return (env->value);
+		env = env->next;
+	}
+	return (NULL);
+}
 
 /**
  * Sort an array of strings in ascending order.
@@ -41,7 +89,6 @@ void	sort_env(char **tab, int env_len)
 	}
 }
 
-/*plutot faire env_to_tab*/
 /**
  * Print the environment variables in sorted order.
  * @param {t_env*} env - The environment to print.
@@ -50,12 +97,9 @@ void	print_sorted_env(t_env *env)
 {
 	int		i;
 	char	**tab;
-	char	*str_env;
 
-	str_env = env_to_str(env);
-	tab = ft_split(str_env, '\n');
-	ft_memdel(str_env);
-	sort_env(tab, str_env_len(tab)); //tab
+	tab = env_to_tab(env);
+	sort_env(tab, str_env_len(tab));
 	i = 0;
 	while (tab[i])
 	{
