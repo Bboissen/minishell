@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_messages.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:05:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 00:10:01 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/16 17:56:15 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,18 @@
  * 
  * @param code The exit code to print.
  */
-void	print_quit_message(int signo)
+void	print_sigquit_message(int code)
 {
 	char	*nbr;
+	t_sig	*sig;
 
-	nbr = ft_itoa(signo);
-	ft_printfd(STDERR, "Quit: %s\n", nbr);
-	ft_memdel(nbr);
+	sig = get_sig();
+	if (sig->sig == 2)
+	{
+		nbr = ft_itoa(code);
+		ft_printfd(STDERR, "Quit: %s\n", nbr);
+		ft_memdel(nbr);
+	}
+	else
+		ft_putstr_fd("\b\b  \b\b", STDERR);
 }

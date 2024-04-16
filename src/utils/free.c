@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 00:07:14 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/16 16:40:43 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,12 @@ void	free_env(t_env *env)
  */
 int	clean_exit(t_mini *mini)
 {
-	int	status;
+	int		status;
+	t_sig	*sig;
 
+	sig = get_sig();
 	if (mini)
-		status = mini->sig.status;
+		status = sig->status;
 	else
 		exit(MALLOC);
 	if (mini->token)
@@ -116,7 +118,7 @@ int	clean_exit(t_mini *mini)
 		free_cmd(mini->cmd);
 	if (mini->env)
 		free_env(mini->env);
-	if (mini->sig.exit == 1)
+	if (sig->exit == 1)
 		ft_putstr_fd("exit\n", 2);
 	free(mini);
 	exit(status);

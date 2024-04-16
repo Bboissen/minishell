@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 00:13:26 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/16 17:52:50 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,7 @@ typedef struct s_env
 typedef struct s_sig
 {
 	int				status;
-	int				sigint;
-	int				sigquit;
+	int				sig;
 	int				exit;
 }	t_sig;
 
@@ -112,7 +111,6 @@ typedef struct s_token
 	int				type;
 	int				expand;
 	int				join;
-	int				skip;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
@@ -138,7 +136,6 @@ typedef struct s_mini
 	t_env			*env;
 	t_cmd			*h_cmd;
 	t_cmd			*cmd;
-	t_sig			sig;
 }	t_mini;
 
 /* Builtin */
@@ -166,12 +163,12 @@ t_token	*list_join(t_token *token);
 
 /* Init */
 
-t_mini	*get_mini(void);
+t_sig	*get_sig(void);
 void	init_mini(t_mini **mini, char **env, char *name);
 int		init_env(t_mini **mini, char **env_array);
 void	increment_shell_level(t_mini **mini);
-void	sig_init(t_mini *mini);
-void	readline_setup(char *rl, char *str);
+void	sig_init(void);
+void	readline_setup(char **rl, char *str);
 void	reinit(t_mini *mini, char *rl);
 
 /* Exec */
@@ -198,11 +195,10 @@ int		clean_exit(t_mini *mini);
 
 /* Signals */
 
-void	sig_int(int code);
-void	sig_quit(int code);
+void	sig_handler(int code);
 
 /* Errors */
 
-void	print_quit_message(int signo);
+void	print_sigquit_message(int code);
 
 #endif

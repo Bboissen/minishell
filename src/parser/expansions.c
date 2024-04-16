@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 16:22:52 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/16 16:39:43 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	expand_join(t_mini **mini)
 
 /**
  * Expands a token in the shell.
+ * 
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be expanded.
  * @return {char*} - Returns the expanded string.
@@ -51,10 +52,12 @@ void	expand_join(t_mini **mini)
 char	*expand_token(t_mini **mini, char *str)
 {
 	char	*env_val;
+	t_sig	*sig;
 
+	sig = get_sig();
 	env_val = ft_strdup("");
 	if (!ft_strcmp(str, "?"))
-		return (ft_itoa((*mini)->sig.status));
+		return (ft_itoa(sig->status));
 	while ((*mini)->env && (*mini)->env->name)
 	{
 		if (!ft_strcmp(str, (*mini)->env->name))
@@ -69,6 +72,7 @@ char	*expand_token(t_mini **mini, char *str)
 
 /**
  * Joins a list of tokens in the shell.
+ * 
  * @param {t_token*} token - The token to be joined.
  * @return {t_token*} - Returns the joined token.
  */
@@ -83,10 +87,6 @@ t_token	*list_join(t_token *token)
 	ft_strcat(new_str, token->next->str);
 	free(token->next->str);
 	token->next->str = new_str;
-	if (token->type)
-		token->next->type = token->type;
-	if (token->skip)
-		token->next->skip = token->skip;
 	to_free = token;
 	token = token->next;
 	if (to_free->prev)
@@ -96,3 +96,21 @@ t_token	*list_join(t_token *token)
 	free(to_free);
 	return (token);
 }
+
+// t_token	*list_join(t_token *token)
+// {
+// 	char	*new_str;
+
+// 	new_str = malloc(ft_strlen(token->str)
+// 			+ ft_strlen(token->next->str) + 1);
+// 	ft_strcpy(new_str, token->str);
+// 	ft_strcat(new_str, token->next->str);
+// 	free(token->str);
+// 	free(token->next->str);
+// 	token->next->str = new_str;
+// 	token->next->prev = token->prev;
+// 	if (token->prev)
+// 		token->prev->next = token->next;
+// 	free(token);
+// 	return (token);
+// }

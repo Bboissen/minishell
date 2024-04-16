@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:44:03 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/12 12:05:42 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/16 13:59:46 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,3 +98,5 @@ static int	error_message(char *path)
 	else
 		return (ft_putendl_fd(": command not found", STDERR), CMD);
 }
+
+//ft_error("minishell: ", token->str, strerror(errno), ERROR);

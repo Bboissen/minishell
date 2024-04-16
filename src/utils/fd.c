@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 00:07:02 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/16 13:59:24 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,13 @@ void	close_fds(int *fd)
  */
 void	delete_heredoc(t_mini *mini)
 {
-	t_token	*current;
+	t_token	*token;
 
-	current = mini->h_token;
-
-	while (current != NULL)
+	token = mini->h_token;
+	while (token)
 	{
-		if (current->type == HEREDOC)
-			if (unlink(current->str) == -1)
-				//ft_error("minishell: ", current->str, strerror(errno), ERROR);
-		current = current->next;
+		if (token->type == HEREDOC)
+			unlink(token->str);
+		token = token->next;
 	}
 }
