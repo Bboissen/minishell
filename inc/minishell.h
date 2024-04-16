@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 16:21:46 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/16 00:13:26 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,6 @@ int		mini_unset(t_mini *mini);
 
 /* Env */
 
-int		init_env(t_mini **mini, char **env_array);
-void	increment_shell_level(t_mini **mini);
 char	**env_to_tab(t_env *env_lst);
 char	*get_env(t_env *env, char *name);
 void	set_env(t_env **env, char *name, char *value);
@@ -168,8 +166,12 @@ t_token	*list_join(t_token *token);
 
 /* Init */
 
-void	readline_setup(char *rl, char *str);
+t_mini	*get_mini(void);
 void	init_mini(t_mini **mini, char **env, char *name);
+int		init_env(t_mini **mini, char **env_array);
+void	increment_shell_level(t_mini **mini);
+void	sig_init(t_mini *mini);
+void	readline_setup(char *rl, char *str);
 void	reinit(t_mini *mini, char *rl);
 
 /* Exec */
@@ -183,8 +185,8 @@ pid_t	exec(t_mini *mini);
 
 void	ft_close(int fd);
 void	close_fds(int *fd);
-void	reset_fds(t_mini *mini);
 void	reset_std(t_mini *mini);
+void	delete_heredoc(t_mini *mini);
 
 /* Free */
 
@@ -196,8 +198,11 @@ int		clean_exit(t_mini *mini);
 
 /* Signals */
 
-void	sig_int(t_mini *mini, int code);
-void	sig_quit(t_mini *mini, int code);
-void	sig_init(t_mini *mini);
+void	sig_int(int code);
+void	sig_quit(int code);
+
+/* Errors */
+
+void	print_quit_message(int signo);
 
 #endif

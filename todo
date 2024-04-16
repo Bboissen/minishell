@@ -1,12 +1,11 @@
-/*
-
 pipex42 exec part to adapter
-delete heredoc function, navigate t_token->type=HEREDOC, unlink token->next->str
+
+reinit with singleton or rework sig as a global/singleton
 
 builtin exit, numeric argument only if, return 2
-builtin export
+builtin export with set and add
 remake verif env variable not starting with a number
 
-recheck commentaries
 error manager
 norminette
+recheck commentaries

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 17:25:44 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/16 00:07:14 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ void	free_cmd(t_cmd *cmd)
 			free(cmd->in);
 		if (cmd->out)
 			free(cmd->out);
-		if (cmd->fd[0] != -1)
-			close(cmd->fd[0]);
-		if (cmd->fd[1] != -1)
-			close(cmd->fd[1]);
+		close_fds(cmd->fd);
 		free(cmd);
 		cmd = tmp;
 	}

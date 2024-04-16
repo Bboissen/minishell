@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_messages.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:05:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/12 12:05:53 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/16 00:10:01 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * 
  * @param code The exit code to print.
  */
-static void	print_quit_message(int signo)
+void	print_quit_message(int signo)
 {
 	char	*nbr;
 

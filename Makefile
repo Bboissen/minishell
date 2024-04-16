@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
+#    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/15 17:26:00 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/16 00:19:00 by talibabtou       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,15 +42,13 @@ ENV			=	env			\
 				shlvl		\
 				sort_env
 
-# ERROR		=	error_manager	\
-# 				errors			\
-# 				print_messages
+ERROR		=	print_messages
 
 # EXEC		=	bin		\
 # 				builtin	\
 # 				exec
 
-LEXER		=	lexer
+# LEXER		=	lexer
 
 PARSER		=	expansions
 
@@ -61,6 +59,7 @@ UTILS		=	fd			\
 MAIN		=	minishell
 
 SRCS		=	$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
+				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
 				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSER)))		\
 				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shlvl.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 16:35:41 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 23:30:31 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Check if a string represents a valid shell level.
+ * 
  * @param {const char*} str - The string to check.
  * @return {int} - Returns SUCCESS if the string is a valid shell level, ERROR otherwise.
  */
@@ -30,6 +31,7 @@ static int	invalid_lvl(const char *str)
 
 /**
  * Get the shell level from a string.
+ * 
  * @param {const char*} str - The string to get the level from.
  * @return {int} - Returns the shell level.
  */
@@ -56,6 +58,7 @@ static int	get_lvl(const char *str)
 
 /**
  * Increment the shell level in the environment.
+ * 
  * @param {t_env*} env - The environment to increment the shell level in.
  */
 void	increment_shell_level(t_mini **mini)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 17:19:55 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/15 23:30:13 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Calculates the size of the environment list.
+ * 
  * @param {t_env*} env_lst - The environment list.
  * @return {size_t} - Returns the number of nodes in the list.
  */
@@ -32,6 +33,7 @@ static size_t	size_env_tab(t_env *env_lst)
 
 /**
  * Appends the name and value of an environment variable into a string.
+ * 
  * @param {t_env*} env_lst - The node of the environment list.
  * @return {char*} - Returns a string with the format "name=value".
  */
@@ -66,8 +68,10 @@ static char	*append_name_value(t_env *env_lst)
 
 /**
  * Converts the environment list into an array of strings.
+ * 
  * @param {t_env*} env - The environment list.
- * @return {char**} - Returns an array of strings, each string being a name-value pair from the environment list.
+ * @return {char**} - Returns an array of strings, each string 
+ * being a name-value pair from the environment list.
  */
 char	**env_to_tab(t_env *env)
 {
@@ -95,6 +99,7 @@ char	**env_to_tab(t_env *env)
 
 /**
  * Copies an environment variable from an array to a linked list.
+ * 
  * @param {t_mini*} mini - The mini structure.
  * @param {char**} env_array - The array of environment variables.
  * @param {t_env*} env - The current node in the environment linked list.
@@ -127,6 +132,7 @@ static int	env_cpy(char **env_array, t_env **env, int *i)
 /**
  * Initializes the environment linked list from an 
  * array of environment variables.
+ * 
  * @param {t_mini*} mini - The mini structure.
  * @param {char**} env_array - The array of environment variables.
  * @return {int} - Returns ERROR if memory allocation fails, 
