@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 15:51:42 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/16 00:13:26 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* Includes */
 
-# include "../libft/includes/libft.h"
+# include "libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -35,6 +35,8 @@
 # define BUFF_SIZE 4096
 # define PATH_MAX 4096
 
+# define ERROR_LEX "" //to define, etc..
+
 typedef enum e_type
 {
 	EMPTY = 0,
@@ -53,13 +55,13 @@ typedef enum e_type
 typedef enum e_builtin
 {
 	NONE = 0,
-	CD, //skip when pipe
-	ECHO, //work with pipe
-	ENV, //work with pipe
-	EXIT, //work with pipe but output devnull
-	EXPORT, //work with pipe without args
-	PWD, //work with pipe
-	UNSET, //skip when pipe
+	CD,
+	ECHO,
+	ENV,
+	EXIT,
+	EXPORT,
+	PWD,
+	UNSET,
 }	t_builtin;
 
 typedef enum e_io
@@ -79,17 +81,15 @@ typedef enum e_error
 {
 	SUCCESS = 0,
 	ERROR = 1,
+	STX = 2,
 	DIRECTORY = 126,
-	EXE = 127,
+	CMD = 127,
 	MALLOC = 128,
-	QUOTE = 129,
 	INTERUPT = 130,
-	QUIT = 131,
-	PARSE = 132
+	QUIT = 131
 }	t_error;
 
 /* Structures */
-
 
 typedef struct s_env
 {
@@ -109,10 +109,10 @@ typedef struct s_sig
 typedef struct s_token
 {
 	char			*str;
-	t_type			join;
-	t_type			type;
-	t_type			expand;
-	int				quote;
+	int				type;
+	int				expand;
+	int				join;
+	int				skip;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
@@ -141,7 +141,6 @@ typedef struct s_mini
 	t_sig			sig;
 }	t_mini;
 
-/* Functions */
 /* Builtin */
 
 int		is_builtin(t_mini *mini);
@@ -156,17 +155,22 @@ int		mini_unset(t_mini *mini);
 
 /* Env */
 
-int		init_env(t_mini **mini, char **env_array);
-void	increment_shell_level(t_mini *mini);
 char	**env_to_tab(t_env *env_lst);
 char	*get_env(t_env *env, char *name);
 void	set_env(t_env **env, char *name, char *value);
 void	print_sorted_env(t_env *env);
 void	sort_env(char **tab, int env_len);
+void	expand_join(t_mini **mini);
+char	*expand_token(t_mini **mini, char *str);
+t_token	*list_join(t_token *token);
 
 /* Init */
 
+t_mini	*get_mini(void);
 void	init_mini(t_mini **mini, char **env, char *name);
+int		init_env(t_mini **mini, char **env_array);
+void	increment_shell_level(t_mini **mini);
+void	sig_init(t_mini *mini);
 void	readline_setup(char *rl, char *str);
 void	reinit(t_mini *mini, char *rl);
 
@@ -181,8 +185,8 @@ pid_t	exec(t_mini *mini);
 
 void	ft_close(int fd);
 void	close_fds(int *fd);
-void	reset_fds(t_mini *mini);
 void	reset_std(t_mini *mini);
+void	delete_heredoc(t_mini *mini);
 
 /* Free */
 
@@ -194,38 +198,11 @@ int		clean_exit(t_mini *mini);
 
 /* Signals */
 
-void	sig_int(t_mini *mini, int code);
-void	sig_quit(t_mini *mini, int code);
-void	sig_init(t_mini *mini);
+void	sig_int(int code);
+void	sig_quit(int code);
 
-// lexer
-void		expand_join(t_mini *mini);
-int			lexer(t_mini *mini, char *str);
-int			is_spechar(char c);
-int			is_space(int c);
-int			is_spe_expand(char c);
-char		*ft_strdup(const char *str);
-int			lexer_err(int err, char c);
-char		*syntax_check(t_mini *mini, t_token **token, char *str, int *quote);
-char		*string_handler(t_mini *mini, t_token **token, char *str, int *quote);
-char		*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
-char		*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
-char		*var_handler(t_mini *mini, t_token **token, char *str, int *quote);
-char		*random_file(void);
+/* Errors */
 
-//heredoc
-void	heredoc(t_mini *mini);
-char	*expand_line(t_mini *mini, char *str, int fd);
-char	*expand_token(t_mini *mini, char *str);
-
-//parser
-void	parser(t_mini *mini);
-void	cmd_skip(t_mini *mini, t_token *token);
-void	new_cmd(t_mini *mini, t_cmd **cmd, int *arg_flag);
-char	**add_args(t_cmd **cmd, char *str);
-t_builtin	check_blt(t_cmd **cmd, char *str);
-void	path_finder(t_mini *mini, t_cmd *cmd, char *str);
-void	free_array(char **list);
-
+void	print_quit_message(int signo);
 
 #endif

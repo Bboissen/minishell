@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/15 15:35:27 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/16 10:53:32 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	heredoc(t_mini *mini)
 				free(file);
 				return ;
 			}
-			readline_setup(line, "heredoc");
+			readline_setup(&line, "heredoc");
 			while (ft_strcmp(line, token->next->str))
 			{
 				while (*line)
@@ -89,7 +89,7 @@ void	heredoc(t_mini *mini)
 						write(fd, line++, 1);
 				}
 				write(fd, "\n", 1);
-				readline_setup(line, "heredoc");
+				readline_setup(&line, "heredoc");
 			}
 			close(fd);
 			token->str = file;
@@ -109,7 +109,7 @@ char	*expand_line(t_mini *mini, char *str, int fd)
 		str++;
 	end = *str;
 	*str = '\0';
-	var = expand_token(mini, start);
+	var = expand_token(&mini, start);
 	write(fd, var, ft_strlen(var));
 	*str = end;
 	return (str++);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/11 16:14:37 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/16 00:07:02 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	ft_close(int fd)
  */
 void	reset_std(t_mini *mini)
 {
-	dup2(mini->cmd->in, STDIN);
-	dup2(mini->cmd->out, STDOUT);
+	dup2(mini->cmd->fd[0], STDIN);
+	dup2(mini->cmd->fd[1], STDOUT);
 }
 
 /**
@@ -42,20 +42,34 @@ void	reset_std(t_mini *mini)
 void	close_fds(int *fd)
 {
 	if (fd[0] != -1)
+	{
 		ft_close(fd[0]);
+		fd[0] = -1;
+	}
 	if (fd[1] != -1)
+	{
 		ft_close(fd[1]);
+		fd[1] = -1;
+	}
 }
 
 /**
- * @brief Resets the file descriptors associated with the current command to -1.
+ * @brief Closes the file descriptors associated with the current 
+ * command and resets them to -1.
  * 
  * @param mini The main structure of the program.
  */
-void	reset_fds(t_mini *mini)
+void	delete_heredoc(t_mini *mini)
 {
-	mini->cmd->fd[0] = -1;
-	mini->cmd->fd[1] = -1;
-}
+	t_token	*current;
 
-/*delete heredoc function, navigate t_token->type=HEREDOC, unlink token->next->str*/
+	current = mini->h_token;
+
+	while (current != NULL)
+	{
+		if (current->type == HEREDOC)
+			if (unlink(current->str) == -1)
+				//ft_error("minishell: ", current->str, strerror(errno), ERROR);
+		current = current->next;
+	}
+}

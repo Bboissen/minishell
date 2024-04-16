@@ -3,17 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 13:07:09 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/16 08:44:06 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	str_env_len(char **env_tab)
+{
+	int	i;
+
+	i = 0;
+	while (env_tab[i])
+		i++;
+	return (i);
+}
+
 /**
  * Sets or updates an environment variable in the environment list.
+ * 
  * @param {t_env**} env - The pointer to the environment list.
  * @param {char*} name - The name of the environment variable to set.
  * @param {char*} value - The value to set the environment variable to.
@@ -44,6 +55,7 @@ void	set_env(t_env **env, char *name, char *value)
 
 /**
  * Retrieves the value of an environment variable by its name.
+ * 
  * @param {t_env*} env - The environment list.
  * @param {char*} name - The name of the environment variable.
  * @return {char*} - Returns the value of the environment variable if
@@ -62,6 +74,7 @@ char	*get_env(t_env *env, char *name)
 
 /**
  * Sort an array of strings in ascending order.
+ * 
  * @param {char**} tab - The array to sort.
  * @param {int} env_len - The length of the array.
  */
@@ -91,13 +104,16 @@ void	sort_env(char **tab, int env_len)
 
 /**
  * Print the environment variables in sorted order.
+ * 
  * @param {t_env*} env - The environment to print.
  */
-void	print_sorted_env(t_env *env)
+void	print_sorted_env(t_env *h_env)
 {
 	int		i;
 	char	**tab;
+	t_env	*env;
 
+	env = h_env;
 	tab = env_to_tab(env);
 	sort_env(tab, str_env_len(tab));
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/15 15:09:12 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/16 11:02:23 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ int	lexer(t_mini *mini, char *str)
 	token = NULL;
 	mini->token = token;
 	quote = 0;
-
-	while (str && *str /*&& mini->sig.exit == 0*/)
+	while (str && *str != 0 /*&& mini->sig.exit == 0*/)
 	{
 		while (str && quote == 0 && *str && ft_isspace(*str))
 			str++;

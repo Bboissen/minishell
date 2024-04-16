@@ -6,13 +6,13 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:39:32 by gdumas            #+#    #+#             */
-/*   Updated: 2023/11/14 14:36:11 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/03/19 12:07:28 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putendl_fd(char *str, int fd)
+int	ft_putendl_fd(char *str, int fd)
 {
 	int	i;
 
@@ -22,5 +22,6 @@ void	ft_putendl_fd(char *str, int fd)
 		write(fd, &str[i], 1);
 		i++;
 	}
-	write(fd, "\n", 1);
+	i += write(fd, "\n", 1);
+	return (i);
 }
