@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/15 14:47:07 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:04:41 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	check_write(t_mini *mini, t_cmd **cmd, t_token *token)
 
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token *token, int *arg_flag)
 {
-	if (arg_flag)
+	if (*arg_flag)
 	{
 		if (PIPE && (*cmd)->builtin == EXPORT)
 		{
@@ -85,8 +85,8 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token *token, int *arg_flag)
 		token = token->next;
 		return ;
 	}
-	if (!check_blt(cmd, token->next->str) && !ft_strchr(token->next->str, '/'))
-		path_finder(mini, *cmd, token->next->str);
+	if (!check_blt(cmd, token->str) && !ft_strchr(token->str, '/'))
+		path_finder(mini, cmd, token->str);
 	if (((*cmd)->builtin && (*cmd)->builtin != CD)
 		|| access((*cmd)->args[0], X_OK))
 		token = token->next;

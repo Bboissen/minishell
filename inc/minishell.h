@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 00:13:26 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/16 10:53:40 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ typedef enum e_type
 typedef enum e_builtin
 {
 	NONE = 0,
-	CD,
-	ECHO,
-	ENV,
-	EXIT,
-	EXPORT,
-	PWD,
-	UNSET,
+	CD, //skip when pipe
+	ECHO, //work with pipe
+	ENV, //work with pipe
+	EXIT, //work with pipe but output devnull
+	EXPORT, //work with pipe without args
+	PWD, //work with pipe
+	UNSET, //skip when pipe
 }	t_builtin;
 
 typedef enum e_io
@@ -81,12 +81,13 @@ typedef enum e_error
 {
 	SUCCESS = 0,
 	ERROR = 1,
-	STX = 2,
 	DIRECTORY = 126,
-	CMD = 127,
+	EXE = 127,
 	MALLOC = 128,
+	QUOTE = 129,
 	INTERUPT = 130,
-	QUIT = 131
+	QUIT = 131,
+	PARSE = 132
 }	t_error;
 
 /* Structures */
@@ -171,7 +172,7 @@ void	init_mini(t_mini **mini, char **env, char *name);
 int		init_env(t_mini **mini, char **env_array);
 void	increment_shell_level(t_mini **mini);
 void	sig_init(t_mini *mini);
-void	readline_setup(char *rl, char *str);
+void	readline_setup(char **rl, char *str);
 void	reinit(t_mini *mini, char *rl);
 
 /* Exec */
@@ -205,4 +206,32 @@ void	sig_quit(int code);
 
 void	print_quit_message(int signo);
 
+
+// lexer
+int			lexer(t_mini *mini, char *str);
+int			is_spechar(char c);
+int			is_space(int c);
+int			is_spe_expand(char c);
+char		*ft_strdup(const char *str);
+int			lexer_err(int err, char c);
+char		*syntax_check(t_mini *mini, t_token **token, char *str, int *quote);
+char		*string_handler(t_mini *mini, t_token **token, char *str, int *quote);
+char		*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
+char		*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
+char		*var_handler(t_mini *mini, t_token **token, char *str, int *quote);
+char		*random_file(void);
+
+//heredoc
+void	heredoc(t_mini *mini);
+char	*expand_line(t_mini *mini, char *str, int fd);
+void	delete_heredoc(t_mini *mini);
+
+//parser
+void	parser(t_mini *mini);
+void	cmd_skip(t_mini *mini, t_token *token);
+void	new_cmd(t_mini *mini, t_cmd **cmd, int *arg_flag);
+char	**add_args(t_cmd **cmd, char *str);
+t_builtin	check_blt(t_cmd **cmd, char *str);
+void	path_finder(t_mini *mini, t_cmd *cmd, char *str);
+void	free_array(char **list);
 #endif

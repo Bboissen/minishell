@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/15 15:39:03 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/16 11:28:50 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ ENV			=	env			\
 
 UTILS		=	fd			\
 				free		\
-				signal
+				# signal
 
 MAIN		=	minishell
 
@@ -61,7 +61,7 @@ LEXER		=	lexer		\
 				heredoc
 
 PARSING		=	expansions		\
-# 				parser	\
+ 				parser	\
 				parser_utils
 	
 ERROR		=	lexer_err

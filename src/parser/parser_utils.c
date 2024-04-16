@@ -6,13 +6,13 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/15 14:59:52 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:04:59 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*path_checker(char const *str, char	**cmd, char	**path);
+static char	*path_checker(char *str, char *cmd, char **path, int *err);
 
 void	cmd_skip(t_mini *mini, t_token *token)
 {
@@ -88,12 +88,13 @@ t_builtin	check_blt(t_cmd **cmd, char *str)
 
 
 
-static char	*path_checker(char const *str, char	**cmd, char	**path, int *err)
+static char	*path_checker(char *str, char	*cmd, char	**path, int *err)
 {
 	char	*buff;
 	int		i;
 
 	i = -1;
+	*err = -1;
 	while (path[++i] && *err == -1)
 	{
 		*err = 0;
@@ -111,12 +112,12 @@ static char	*path_checker(char const *str, char	**cmd, char	**path, int *err)
 			free(cmd);
 		free(buff);
 	}
-	if (err == -1)
+	if (*err == -1)
 		return (NULL);
 	return (cmd);
 }
 
-void	path_finder(t_mini *mini, t_cmd *cmd, char *str)
+void	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 {
 	t_env	*local_env;
 	int		err;
@@ -125,23 +126,24 @@ void	path_finder(t_mini *mini, t_cmd *cmd, char *str)
 
 	args = NULL;
 	local_env = mini->h_env;
-	while (local_env && !ft_strcmp(local_env->name, "PATH"))
+	while (local_env && ft_strcmp(local_env->name, "PATH"))
 		local_env = local_env->next;
 	path = ft_split(local_env->value, ':');
 	if (path)
 	{
-		args = path_checker(str, &args, path, &err);
+		printf("str = %s\n", path[0]);
+		args = path_checker(str, args, path, &err);
 		free_array(path);
 	}
-	if (path == NULL || (cmd == NULL && err == 0))
+	if (path == NULL || ((*cmd) == NULL && err == 0))
 		mini->sig.status = MALLOC;
 	else if (err == -1)
 		mini->sig.status = errno;
 	else
 	{
-		cmd->args = malloc(sizeof(char *) * 2);
-		cmd->args[0] = args;
-		cmd->args[1] = NULL;
+		(*cmd)->args = malloc(sizeof(char *) * 2);
+		(*cmd)->args[0] = args;
+		(*cmd)->args[1] = NULL;
 	}
 }
 

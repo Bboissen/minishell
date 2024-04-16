@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 16:22:52 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/16 15:53:17 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,21 @@ void	expand_join(t_mini **mini)
  */
 char	*expand_token(t_mini **mini, char *str)
 {
+	t_env *env;
 	char	*env_val;
 
+	env = (*mini)->h_env;
 	env_val = ft_strdup("");
 	if (!ft_strcmp(str, "?"))
 		return (ft_itoa((*mini)->sig.status));
-	while ((*mini)->env && (*mini)->env->name)
+	while (env && env->name)
 	{
-		if (!ft_strcmp(str, (*mini)->env->name))
+		if (!ft_strcmp(str, env->name))
 		{
-			env_val = strdup((*mini)->env->value);
+			env_val = strdup(env->value);
 			return (env_val);
 		}
-		(*mini)->env = (*mini)->env->next;
+		env = env->next;
 	}
 	return (env_val);
 }
@@ -83,10 +85,6 @@ t_token	*list_join(t_token *token)
 	ft_strcat(new_str, token->next->str);
 	free(token->next->str);
 	token->next->str = new_str;
-	if (token->type)
-		token->next->type = token->type;
-	if (token->skip)
-		token->next->skip = token->skip;
 	to_free = token;
 	token = token->next;
 	if (to_free->prev)

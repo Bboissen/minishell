@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 00:24:37 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/16 10:55:29 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be used as the base of the prompt.
  */
-void	readline_setup(char *rl, char *str)
+void	readline_setup(char **rl, char *str)
 {
 	char	*prompt;
 
 	prompt = ft_strjoin(str, " > ");
 	if (!prompt)
 		exit(MALLOC);
-	rl = readline(prompt);
-	add_history(rl);
+	*rl = readline(prompt);
+	add_history(*rl);
 	rl_on_new_line();
 	free(prompt);
 }
@@ -50,7 +50,7 @@ void	init_mini(t_mini **mini, char **env, char *name)
 	(*mini)->sig.exit = 0;
 	init_env(mini, env);
 	increment_shell_level(mini);
-	sig_init(*mini);
+	// sig_init(*mini);
 }
 
 /**
