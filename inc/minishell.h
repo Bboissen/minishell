@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 17:52:50 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/17 11:32:29 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,13 +140,11 @@ typedef struct s_mini
 
 /* Builtin */
 
-int		is_builtin(t_mini *mini);
-void	exec_builtin(char **args, t_mini *mini);
 int		mini_cd(t_mini *mini);
 int		mini_echo(t_mini *mini);
 int		mini_env(t_mini *mini);
 int		mini_exit(t_mini *mini);
-int		mini_export(char **args, t_env *env, t_env *secret);
+int		mini_export(char **args, t_env *env);
 int		mini_pwd(void);
 int		mini_unset(t_mini *mini);
 
@@ -172,11 +170,7 @@ void	readline_setup(char **rl, char *str);
 void	reinit(t_mini *mini, char *rl);
 
 /* Exec */
-
 int		cmd_exec(t_mini *mini);
-void	pipex(t_mini *mini);
-void	fd_handler(t_mini *mini);
-pid_t	exec(t_mini *mini);
 
 /* Stds & fds */
 

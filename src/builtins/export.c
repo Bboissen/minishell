@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/12 15:13:30 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/17 11:27:51 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	is_in_env(t_env *env, char *args)
 	return (FALSE);
 }
 
-int	mini_export(char **args, t_env *env, t_env *secret)
+int	mini_export(char **args, t_env *env)
 {
 	int	new_env;
 	int	error;

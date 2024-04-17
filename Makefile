@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
+#    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/16 00:19:00 by talibabtou       ###   ########.fr        #
+#    Updated: 2024/04/17 11:25:46 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,7 @@ ENV			=	env			\
 
 ERROR		=	print_messages
 
-# EXEC		=	bin		\
-# 				builtin	\
-# 				exec
+EXEC		=	pipe
 
 # LEXER		=	lexer
 
@@ -60,6 +58,7 @@ MAIN		=	minishell
 
 SRCS		=	$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
 				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
+				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))			\
 				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSER)))		\
 				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))

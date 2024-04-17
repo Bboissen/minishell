@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 16:44:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/17 11:25:16 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int	main(int ac, char **av, char **env)
 		// lexer(mini, rl);
 		// expand_join(mini);
 		// parser(mini);
-		//if (mini->cmd)
-		//	exec_cmd(mini);
+		if (mini->cmd)
+			cmd_exec(mini);
 		reinit(mini, rl);
 	}
 	return (clean_exit(mini));
