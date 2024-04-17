@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 10:55:29 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 14:34:20 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,25 @@ void	init_mini(t_mini **mini, char **env, char *name)
  * @param {t_mini*} mini - The mini structure to reinitialize.
  * @param {char*} rl - The readline string to free.
  */
-void	reinit(t_mini *mini, char *rl)
+void	reinit(t_mini **mini, char **rl)
 {
-	free_token(mini->token);
-	free_cmd(mini->cmd);
-	free(rl);
-	delete_heredoc(mini);
-	mini->sig.sigint = 0;
-	mini->sig.sigquit = 0;
+	(*mini)->token = (*mini)->h_token;
+	(*mini)->cmd = (*mini)->h_cmd;
+	if ((*mini)->token)
+	{
+		free_token(&((*mini)->token));
+		(*mini)->token = NULL;
+		(*mini)->h_token = NULL;
+	}
+	if ((*mini)->cmd)
+	{
+		(*mini)->cmd = (*mini)->h_cmd;
+		free_cmd(&((*mini)->cmd));
+		(*mini)->cmd = NULL;
+		(*mini)->h_cmd = NULL;
+	}
+	free(*rl);
+	delete_heredoc((*mini));
+	(*mini)->sig.sigint = 0;
+	(*mini)->sig.sigquit = 0;
 }
