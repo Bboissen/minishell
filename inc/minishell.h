@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 10:53:40 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 15:39:54 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ int		init_env(t_mini **mini, char **env_array);
 void	increment_shell_level(t_mini **mini);
 void	sig_init(t_mini *mini);
 void	readline_setup(char **rl, char *str);
-void	reinit(t_mini *mini, char *rl);
+void	reinit(t_mini **mini, char **rl);
 
 /* Exec */
 
@@ -191,10 +191,10 @@ void	delete_heredoc(t_mini *mini);
 
 /* Free */
 
-void	free_token(t_token *start);
+void	free_token(t_token **token);
 void	free_env(t_env *env);
 void	free_tab(char **tab);
-void	free_cmd(t_cmd *cmd);
+void	free_cmd(t_cmd **cmd);
 int		clean_exit(t_mini *mini);
 
 /* Signals */
@@ -227,11 +227,11 @@ char	*expand_line(t_mini *mini, char *str, int fd);
 void	delete_heredoc(t_mini *mini);
 
 //parser
-void	parser(t_mini *mini);
-void	cmd_skip(t_mini *mini, t_token *token);
-void	new_cmd(t_mini *mini, t_cmd **cmd, int *arg_flag);
-char	**add_args(t_cmd **cmd, char *str);
-t_builtin	check_blt(t_cmd **cmd, char *str);
-void	path_finder(t_mini *mini, t_cmd *cmd, char *str);
-void	free_array(char **list);
+void		parser(t_mini *mini);
+void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
+void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
+char		**add_args(t_cmd **cmd, char *str);
+t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
+void		path_finder(t_mini *mini, t_cmd **cmd, char *str);
+void		free_array(char **list);
 #endif

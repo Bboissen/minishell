@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 15:56:22 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 15:27:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_mini	*mini;
 	char	*rl;
+	int		i;
 
 	rl = NULL;
 	// mini = get_mini();
@@ -65,21 +66,30 @@ int	main(int ac, char **av, char **env)
 			dprintf(1, "|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
 			mini->token = mini->token->next;
 		}
-		parser(mini);
-		getchar();
-		// printf("\n------------------------------------------\n");
-		// printf("|cmd\t|builtin|infile|outfile|\n");
-		// printf("------------------------------------------\n");
-		// mini->cmd	= mini->h_cmd;
-		// while (mini->cmd)
-		// {
-		// 	dprintf(1, "|%s\t|%d|%s|%s|\n", mini->cmd->args[0], mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
-		// 	mini->token = mini->token->next;
-		// }
-
+		if (mini->h_token)
+			parser(mini);
+		printf("\n-----------------------------------------------\n");
+		printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
+		printf("-----------------------------------------------\n");
+		mini->cmd = mini->h_cmd;
+		while (mini->cmd)
+		{
+			i = 0;
+			if (mini->cmd->args)
+			{
+				while(mini->cmd->args[i])
+					dprintf(1, "%s ", mini->cmd->args[i++]);
+				dprintf(1, "%-5s ", " ");
+			}
+			else
+				dprintf(1, "|%-10s\t|", "NULL");
+			dprintf(1, "|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
+			mini->cmd = mini->cmd->next;
+		}
+		printf("\n\n");
 		//if (mini->cmd)
 		//	exec_cmd(mini);
-		// reinit(mini, rl);
+		reinit(&mini, &rl);
 	}
 	return (clean_exit(mini));
 }

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/16 16:04:59 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 15:39:41 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,29 @@
 
 static char	*path_checker(char *str, char *cmd, char **path, int *err);
 
-void	cmd_skip(t_mini *mini, t_token *token)
+//builtin not working
+//all cmd skip bug
+//
+void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token)
 {
 	mini->sig.status = errno;
-	// printf(2, "%s: %s: %s\n", mini->name,
-	// 	strerror(errno), token->next->str);
-	// free_cmd(*cmd);
-	while (token && token->type != PIPE)
-		token = token->next;
+	while ((*token) && (*token)->type != PIPE)
+		(*token) = (*token)->next;
+	free_cmd(cmd);
 }
 
-void	new_cmd(t_mini *mini, t_cmd **cmd, int *arg_flag)
+void	new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag)
 {
-	if (!mini->cmd)
+	if (!(*mini)->cmd)
 	{
-		mini->h_cmd = *cmd;
-		mini->cmd = mini->h_cmd;
+		(*mini)->h_cmd = *cmd;
+		(*mini)->cmd = (*mini)->h_cmd;
 	}
 	else
 	{
-		mini->cmd->next = *cmd;
-		(*cmd)->prev = mini->cmd;
-		mini->cmd = mini->cmd->next;
+		(*mini)->cmd->next = *cmd;
+		(*cmd)->prev = (*mini)->cmd;
+		(*mini)->cmd = (*mini)->cmd->next;
 	}
 	*arg_flag = 0;
 }
@@ -47,25 +48,25 @@ char	**add_args(t_cmd **cmd, char *str)
 	char	**new_cmd;
 
 	i = 0;
-	while ((*cmd)->args[i])
+	while ((*cmd)->args && (*cmd)->args[i])
 		i++;
 	new_cmd = malloc(sizeof(char *) * (i + 2));
 	j = 0;
-	while (j <= i)
+	while (j < i)
 	{
 		new_cmd[j] = ft_strdup((*cmd)->args[j]);
-		if (!new_cmd[j++])
-			return (NULL);
+		j++;
 	}
 	new_cmd[j] = ft_strdup(str);
 	if (!new_cmd[j])
 		return (NULL);
 	new_cmd[j + 1] = NULL;
-	free((*cmd)->args);
+	if ((*cmd)->args)
+		free((*cmd)->args);
 	return (new_cmd);
 }
 
-t_builtin	check_blt(t_cmd **cmd, char *str)
+t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag)
 {
 	if (ft_strcmp(str, "echo") == 0)
 		(*cmd)->builtin = ECHO;
@@ -83,10 +84,10 @@ t_builtin	check_blt(t_cmd **cmd, char *str)
 		(*cmd)->builtin = EXIT;
 	else
 		(*cmd)->builtin = NONE;
+	if ((*cmd)->builtin != NONE)
+		*arg_flag = 1;
 	return ((*cmd)->builtin);
 }
-
-
 
 static char	*path_checker(char *str, char	*cmd, char	**path, int *err)
 {
@@ -131,7 +132,6 @@ void	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 	path = ft_split(local_env->value, ':');
 	if (path)
 	{
-		printf("str = %s\n", path[0]);
 		args = path_checker(str, args, path, &err);
 		free_array(path);
 	}
