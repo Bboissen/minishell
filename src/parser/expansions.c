@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 15:53:17 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:04:50 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,13 @@ char	*expand_token(t_mini **mini, char *str)
 {
 	t_env *env;
 	char	*env_val;
+	t_sig	*sig;
 
+	sig = get_sig();
 	env = (*mini)->h_env;
 	env_val = ft_strdup("");
 	if (!ft_strcmp(str, "?"))
-		return (ft_itoa((*mini)->sig.status));
+		return (ft_itoa(sig->status));
 	while (env && env->name)
 	{
 		if (!ft_strcmp(str, env->name))

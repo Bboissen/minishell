@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 14:02:58 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:03:11 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	heredoc(t_mini *mini)
 			file = random_file();
 			if (!file)
 			{
-				mini->sig.status = MALLOC;
 				return ;
 			}
 			fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0777);

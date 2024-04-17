@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 15:39:41 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:07:08 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ static char	*path_checker(char *str, char *cmd, char **path, int *err);
 //builtin not working
 //all cmd skip bug
 //
-void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token)
+void	cmd_skip(t_cmd **cmd, t_token **token)
 {
-	mini->sig.status = errno;
 	while ((*token) && (*token)->type != PIPE)
 		(*token) = (*token)->next;
 	free_cmd(cmd);
@@ -136,9 +135,9 @@ void	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 		free_array(path);
 	}
 	if (path == NULL || ((*cmd) == NULL && err == 0))
-		mini->sig.status = MALLOC;
+		err = MALLOC;
 	else if (err == -1)
-		mini->sig.status = errno;
+		err = errno;
 	else
 	{
 		(*cmd)->args = malloc(sizeof(char *) * 2);

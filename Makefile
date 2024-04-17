@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/16 11:28:50 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/17 16:16:33 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,17 +42,15 @@ ENV			=	env			\
 				shlvl		\
 				sort_env
 
-# ERROR		=	error_manager	\
+ERROR		=	print_messages	\
 # 				errors			\
 # 				print_messages
 
-# EXEC		=	bin		\
-# 				builtin	\
-# 				exec
+EXEC		=	pipe		
 
 UTILS		=	fd			\
 				free		\
-				# signal
+				signal
 
 MAIN		=	minishell
 
@@ -69,8 +67,9 @@ ERROR		=	lexer_err
 SRCS		=	$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
 				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
 				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
-				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
+				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))		\
+				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))

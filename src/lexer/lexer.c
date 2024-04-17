@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/16 11:02:23 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:01:39 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ int	lexer(t_mini *mini, char *str)
 	int		quote;
 	t_token	*token;
 
-	mini->sig.status = odd_quote(str);
-	if (mini->sig.status)
+	if (odd_quote(str))
 		return (lexer_err(QUOTE, 0));
 	token = NULL;
 	mini->token = token;
@@ -75,7 +74,7 @@ int	lexer(t_mini *mini, char *str)
 	// 	return (printf("bash: syntax error near unexpected token `newline'\n"));
 	if (token && (token)->join == JOIN)
 			(token)->join = 0;
-	return (mini->sig.status);
+	return (0);
 }
 
 // int	main(void)

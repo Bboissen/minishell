@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 14:34:20 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:02:10 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	readline_setup(char **rl, char *str)
 	prompt = ft_strjoin(str, " > ");
 	if (!prompt)
 		exit(MALLOC);
+	//
 	*rl = readline(prompt);
 	add_history(*rl);
 	rl_on_new_line();
@@ -46,11 +47,9 @@ void	init_mini(t_mini **mini, char **env, char *name)
 		clean_exit(NULL);
 	(*mini)->cmd = NULL;
 	(*mini)->token = NULL;
-	(*mini)->sig.status = 0;
-	(*mini)->sig.exit = 0;
 	init_env(mini, env);
 	increment_shell_level(mini);
-	// sig_init(*mini);
+	sig_init();
 }
 
 /**
@@ -78,6 +77,11 @@ void	reinit(t_mini **mini, char **rl)
 	}
 	free(*rl);
 	delete_heredoc((*mini));
-	(*mini)->sig.sigint = 0;
-	(*mini)->sig.sigquit = 0;
+}
+
+t_sig	*get_sig(void)
+{
+	static t_sig	sig;
+
+	return (&sig);
 }

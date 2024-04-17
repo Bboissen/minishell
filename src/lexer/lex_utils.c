@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/16 11:04:34 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:02:53 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
 					|| (*token)->type == INPUT || (*token)->type == HEREDOC
 					|| (*token)->type == PIPE))))
 	{
-		mini->sig.exit = lexer_err(PARSE, *str);
+		lexer_err(PARSE, *str);
 		return (NULL);
 	}
 	str = token_typer(options, str);
@@ -206,20 +206,21 @@ static char	*token_typer(t_type type[3], char *str)
 static void	new_token(t_mini *mini, t_token **token,
 	char *str, t_type options[3])
 {
+	int			err;
 	t_token	*new_token;
 
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
-		mini->sig.exit = MALLOC;
-	if (str && (mini->sig.exit != MALLOC))
+		err = MALLOC;
+	if (str && (err != MALLOC))
 	{
 		new_token->str = ft_strdup(str);
 		if (!new_token->str)
-			mini->sig.exit = MALLOC;
+			err = MALLOC;
 	}
 	else
 		new_token->str = NULL;
-	if (mini->sig.exit == MALLOC)
+	if (err == MALLOC)
 		return ;
 	new_token->type = options[0];
 	new_token->join = options[1];

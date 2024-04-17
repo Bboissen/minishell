@@ -3,69 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 17:25:51 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/17 16:22:44 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * @brief Prints a quit message with the given exit code.
- * 
- * @param code The exit code to print.
- */
-static void	print_quit_message(int signo)
+void	sig_handler(int code)
 {
-	char	*nbr;
+	t_sig	*sig;
 
-	nbr = ft_itoa(signo);
-	dprintf(STDERR, "Quit: %s\n", nbr);
-	ft_memdel(nbr);
-}
-
-/*crtl-c*/
-/**
- * @brief Handles the SIGINT signal.
- * 
- * @param mini The main structure of the program.
- * @param code The signal code.
- */
-void	sig_int(t_mini *mini, int signo)
-{
-	(void)signo;
-	if (mini->cmd->pid == 0)
+	sig = get_sig();
+	if (code == SIGINT)
 	{
-		mini->sig.status = 1;
-	}
-	else
-	{
+		sig->status = INTERUPT;
+		sig->sig = 1;
 		ft_putstr_fd("\n", STDERR);
-		mini->sig.status = INTERUPT;
+		rl_on_new_line();
+		rl_redisplay();
 	}
-	mini->sig.sigint = 1;
-}
-
-/*crtl-\*/
-/**
- * @brief Handles the SIGQUIT signal.
- * 
- * @param mini The main structure of the program.
- * @param code The signal code.
- */
-void	sig_quit(t_mini *mini, int signo)
-{
-	print_quit_message(signo);
-	mini->sig.status = QUIT;
-	mini->sig.sigquit = 1;
-	while (mini->cmd->pid != 0)
+	else if (code == SIGQUIT)
 	{
-		kill(mini->cmd->pid, SIGKILL);
-		mini->cmd = mini->cmd->next;
+		sig->status = QUIT;
+		//print_sigquit_message(code);
+		sig->sig = 1;
 	}
-	ft_putstr_fd("\b\b  \b\b", STDERR);
 }
 
 /**
@@ -73,10 +38,14 @@ void	sig_quit(t_mini *mini, int signo)
  * 
  * @param mini The main structure of the program.
  */
-void	sig_init(t_mini *mini)
+void	sig_init(void)
 {
-	mini->sig.status = 0;
-	mini->sig.sigint = 0;
-	mini->sig.sigquit = 0;
-	mini->sig.exit = 0;
+	t_sig	*sig;
+
+	sig = get_sig();
+	sig->status = 0;
+	sig->sig = 0;
+	sig->exit = 0;
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 }

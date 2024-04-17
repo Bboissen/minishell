@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 15:39:54 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:14:29 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,7 @@ typedef struct s_env
 typedef struct s_sig
 {
 	int				status;
-	int				sigint;
-	int				sigquit;
+	int				sig;
 	int				exit;
 }	t_sig;
 
@@ -139,13 +138,10 @@ typedef struct s_mini
 	t_env			*env;
 	t_cmd			*h_cmd;
 	t_cmd			*cmd;
-	t_sig			sig;
 }	t_mini;
 
 /* Builtin */
 
-int		is_builtin(t_mini *mini);
-void	exec_builtin(char **args, t_mini *mini);
 int		mini_cd(t_mini *mini);
 int		mini_echo(t_mini *mini);
 int		mini_env(t_mini *mini);
@@ -156,6 +152,7 @@ int		mini_unset(t_mini *mini);
 
 /* Env */
 
+t_sig	*get_sig(void);
 char	**env_to_tab(t_env *env_lst);
 char	*get_env(t_env *env, char *name);
 void	set_env(t_env **env, char *name, char *value);
@@ -167,20 +164,16 @@ t_token	*list_join(t_token *token);
 
 /* Init */
 
-t_mini	*get_mini(void);
 void	init_mini(t_mini **mini, char **env, char *name);
 int		init_env(t_mini **mini, char **env_array);
 void	increment_shell_level(t_mini **mini);
-void	sig_init(t_mini *mini);
+void	sig_init(void);
 void	readline_setup(char **rl, char *str);
 void	reinit(t_mini **mini, char **rl);
 
 /* Exec */
 
 int		cmd_exec(t_mini *mini);
-void	pipex(t_mini *mini);
-void	fd_handler(t_mini *mini);
-pid_t	exec(t_mini *mini);
 
 /* Stds & fds */
 
@@ -199,12 +192,11 @@ int		clean_exit(t_mini *mini);
 
 /* Signals */
 
-void	sig_int(int code);
-void	sig_quit(int code);
+void	sig_handler(int code);
 
 /* Errors */
 
-void	print_quit_message(int signo);
+void	print_sigquit_message(int code);
 
 
 // lexer
@@ -228,7 +220,7 @@ void	delete_heredoc(t_mini *mini);
 
 //parser
 void		parser(t_mini *mini);
-void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
+void		cmd_skip(t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);

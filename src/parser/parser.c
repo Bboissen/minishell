@@ -6,13 +6,16 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/17 15:50:31 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:35:40 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//TODO
+//crash a.out
+
 #include "minishell.h"
 
-static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
+static void	check_file(t_cmd **cmd, t_token **token);
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 static void	init_cmd(t_cmd **cmd, int *pipe, t_mini *mini, t_token **token);
 
@@ -34,7 +37,7 @@ void	parser(t_mini *mini)
 		// printf("token->str: %s\n", token->str);
 		if (token && (token->type == INPUT || token->type == HEREDOC
 			|| token->type == APPEND || token->type == TRUNC))
-			check_file(mini, &cmd, &token);
+			check_file(&cmd, &token);
 		if (token && token->type == STR)
 			check_cmd(mini, &cmd, &token, &arg_flag);
 		if (token && token->type == PIPE)
@@ -49,14 +52,14 @@ void	parser(t_mini *mini)
 		new_cmd(&mini, &cmd, &arg_flag); // add last element, need if
 }
 
-static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
+static void	check_file(t_cmd **cmd, t_token **token)
 {
 	int	fd;
 	
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
 		if (access((*token)->next->str, R_OK) == -1)
-			return (cmd_skip(mini, cmd, token));
+			return (cmd_skip(cmd, token));
 		else
 			(*cmd)->in = (*token)->next->str;
 	}
@@ -69,7 +72,7 @@ static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		if (fd >= 0)
 			close(fd);
 		if (fd < 0 || access((*token)->next->str, W_OK) == -1)
-			return (cmd_skip(mini, cmd, token));
+			return (cmd_skip(cmd, token));
 		else
 			(*cmd)->out = (*token)->next->str;
 	}
@@ -82,7 +85,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	{
 		if ((*cmd)->builtin == EXPORT) //list cmmd !=0
 		{
-			return (cmd_skip(mini, cmd, token));
+			return (cmd_skip(cmd, token));
 			return ;
 		}
 		(*cmd)->args = add_args(cmd, (*token)->str);
@@ -97,7 +100,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	if ((*cmd)->builtin != NONE || access((*cmd)->args[0], X_OK) == 0)
 		(*arg_flag)++;
 	else
-		return (cmd_skip(mini, cmd, token));
+		return (cmd_skip(cmd, token));
 	(*token) = (*token)->next;
 }
 

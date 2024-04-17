@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 14:26:47 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:09:25 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,12 @@ void	free_env(t_env *env)
  */
 int	clean_exit(t_mini *mini)
 {
-	int	status;
+		int		status;
+	t_sig	*sig;
 
+	sig = get_sig();
 	if (mini)
-		status = mini->sig.status;
+		status = sig->status;
 	else
 		exit(MALLOC);
 	if (mini->token)
@@ -121,7 +123,7 @@ int	clean_exit(t_mini *mini)
 		free_cmd(&(mini->cmd));
 	if (mini->env)
 		free_env(mini->env);
-	if (mini->sig.exit == 1)
+	if (sig->exit == 1)
 		ft_putstr_fd("exit\n", 2);
 	free(mini);
 	exit(status);

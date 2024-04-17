@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 15:27:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:23:37 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 int	main(int ac, char **av, char **env)
 {
 	t_mini	*mini;
+	t_sig	*sig;
 	char	*rl;
 	int		i;
 
@@ -49,8 +50,9 @@ int	main(int ac, char **av, char **env)
 	// mini = get_mini();
 	if (ac != 1)
 		return (ERROR);
+	sig = get_sig();
 	init_mini(&mini, env, av[0]);
-	while (!mini->sig.exit)
+	while (!sig->exit)
 	{
 		readline_setup(&rl, mini->name);
 		lexer(mini, rl);
@@ -87,8 +89,9 @@ int	main(int ac, char **av, char **env)
 			mini->cmd = mini->cmd->next;
 		}
 		printf("\n\n");
-		//if (mini->cmd)
-		//	exec_cmd(mini);
+		mini->cmd = mini->h_cmd;
+		if (mini->cmd)
+			cmd_exec(mini);
 		reinit(&mini, &rl);
 	}
 	return (clean_exit(mini));
