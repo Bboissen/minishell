@@ -6,12 +6,13 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 16:01:39 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:07:21 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//invalid read of size 1
 int	odd_quote(char *str)
 {
 	int		i;

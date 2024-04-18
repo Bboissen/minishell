@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 17:03:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:57:15 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ void	reset_std(t_mini *mini)
  */
 void	close_fds(int *fd)
 {
-	if (fd[0] != -1 && fd[0] != 0)
+	if (fd[0] != -1)
 	{
 		ft_close(fd[0]);
 		fd[0] = -1;
 	}
-	if (fd[1] != -1 && fd[0] != 1)
+	if (fd[1] != -1)
 	{
 		ft_close(fd[1]);
 		fd[1] = -1;
@@ -68,8 +68,7 @@ void	delete_heredoc(t_mini *mini)
 	while (current != NULL)
 	{
 		if (current->type == HEREDOC)
-			if (unlink(current->next->str) == -1)
-				current = current->next;
+			if (unlink(current->str) == -1)
 				//ft_error("minishell: ", current->str, strerror(errno), ERROR);
 		current = current->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 16:23:37 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:41:44 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ int	main(int ac, char **av, char **env)
 		}
 		printf("\n\n");
 		mini->cmd = mini->h_cmd;
-		if (mini->cmd)
-			cmd_exec(mini);
+		// if (mini->cmd)
+		// 	cmd_exec(mini);
 		reinit(&mini, &rl);
 	}
 	return (clean_exit(mini));

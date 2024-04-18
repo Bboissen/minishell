@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 17:08:12 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 18:02:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,9 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (cmd->fd[0] != -1)
-		{
-			close(cmd->fd[0]);
-			cmd->fd[0] = -1;
-			dup2(cmd->fd[1], 1);
-			close(cmd->fd[1]);
-			cmd->fd[1] = -1;
-		}
+		close(cmd->fd[0]);
+		dup2(cmd->fd[1], 1);
+		close(cmd->fd[1]);
 		if (cmd->builtin == NONE)
 			execve(cmd->args[0], cmd->args, env_to_tab(mini->h_env));
 		else
@@ -73,14 +68,9 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd)
 	}
 	else if (pid > 0)
 	{
-		if (cmd->fd[1] != -1)
-		{
-			close(cmd->fd[1]);
-			cmd->fd[1] = -1;
-			dup2(cmd->fd[0], 0);
-			// close(cmd->fd[0]);
-			// cmd->fd[0] = -1;
-		}
+		close(cmd->fd[1]);
+		dup2(cmd->fd[0], 0);
+		close(cmd->fd[0]);
 	}
 	return (pid);
 }
@@ -128,10 +118,7 @@ static void	pipex(t_mini *mini, t_cmd *cmd)
 			if (!cmd->in)
 				cmd->fd[0] = pipefd[0];
 			else
-			{
 				close(pipefd[0]);
-				cmd->fd[0] = -1;	
-			}
 			cmd->fd[1] = pipefd[1];
 		}
 		nxt = cmd->next;

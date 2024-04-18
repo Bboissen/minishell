@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 16:14:29 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:46:08 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,6 @@ int		cmd_exec(t_mini *mini);
 
 void	ft_close(int fd);
 void	close_fds(int *fd);
-void	reset_std(t_mini *mini);
 void	delete_heredoc(t_mini *mini);
 
 /* Free */
