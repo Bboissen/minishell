@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 16:07:08 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:54:34 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 	if (path)
 	{
 		args = path_checker(str, args, path, &err);
-		free_array(path);
+		free_tab(path);
 	}
 	if (path == NULL || ((*cmd) == NULL && err == 0))
 		err = MALLOC;
@@ -144,17 +144,4 @@ void	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 		(*cmd)->args[0] = args;
 		(*cmd)->args[1] = NULL;
 	}
-}
-
-void	free_array(char **list)
-{
-	int	i;
-
-	i = 0;
-	while (list[i])
-	{
-		free(list[i]);
-		i++;
-	}
-	free(list);
 }
