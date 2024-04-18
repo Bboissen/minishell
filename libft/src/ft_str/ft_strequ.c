@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strequ.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 13:52:14 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 13:52:46 by gdumas           ###   ########.fr       */
+/*   Created: 2024/03/20 13:37:59 by gdumas            #+#    #+#             */
+/*   Updated: 2024/03/20 13:40:04 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strcpy(char *dest, const char *src)
+int	ft_strequ(const char *s1, const char *s2)
 {
-	int	i;
-
-	i = 0;
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	if (!s1 || !s2)
+		return (0);
+	if (!ft_strcmp(s1, s2))
+		return (1);
+	else
+		return (0);
 }
