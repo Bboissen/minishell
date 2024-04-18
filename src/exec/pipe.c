@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 11:41:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/18 09:40:09 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,14 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd)
 	}
 	else if (pid > 0)
 	{
-		close(cmd->fd[1]);
 		dup2(cmd->fd[0], 0);
 		close(cmd->fd[0]);
+		cmd->fd[0] = -1;
+		close(cmd->fd[1]);
+		cmd->fd[1] = -1;
 	}
 	return (pid);
 }
-
 
 static void	fd_handler(t_mini *mini, t_cmd *cmd)
 {
@@ -85,16 +86,16 @@ static void	fd_handler(t_mini *mini, t_cmd *cmd)
 		//if (cmd->fd[0] == -1)
 			//return (error_manager(mini, FD));
 	}
-	else
-		cmd->fd[0] = 0;
+	// else
+	// 	cmd->fd[0] = 0;
 	if (cmd->out != NULL)
 	{
 		cmd->fd[1] = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		//if (cmd->fd[1] == -1)
 			//return (error_manager(mini, FD));
 	}
-	else
-		cmd->fd[1] = 1;
+	// else
+	// 	cmd->fd[1] = 1;
 }
 
 /**
