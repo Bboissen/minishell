@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/18 10:41:20 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:16:54 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	check_file(t_cmd **cmd, t_token **token)
 		if (access((*token)->next->str, R_OK) == -1)
 			return (cmd_skip(cmd, token));
 		else
-			(*cmd)->in = (*token)->next->str;
+			(*cmd)->in = ft_strdup((*token)->next->str);
 	}
 	else if ((*token)->type == APPEND || (*token)->type == TRUNC)
 	{
@@ -72,7 +72,7 @@ static void	check_file(t_cmd **cmd, t_token **token)
 		if (fd < 0 || access((*token)->next->str, W_OK) == -1)
 			return (cmd_skip(cmd, token));
 		else
-			(*cmd)->out = (*token)->next->str;
+			(*cmd)->out = ft_strdup((*token)->next->str);
 	}
 	(*token) = (*token)->next->next;
 }

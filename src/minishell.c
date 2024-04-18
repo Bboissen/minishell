@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 10:02:57 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/18 11:31:35 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	main(int ac, char **av, char **env)
 	init_mini(&mini, env, av[0]);
 	while (!sig->exit)
 	{
+		
 		readline_setup(&rl, mini->name);
 		lexer(mini, rl);
 		heredoc(mini);
@@ -78,7 +79,9 @@ int	main(int ac, char **av, char **env)
 		mini->cmd = mini->h_cmd;*/
 		if (mini->cmd)
 			cmd_exec(mini);
+		sig->exit = 1;
 		reinit(&mini, &rl);
+		printf("%d\n", sig->exit);
 	}
 	return (clean_exit(mini));
 }
