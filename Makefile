@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/17 16:16:33 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/18 16:11:29 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,8 +43,7 @@ ENV			=	env			\
 				sort_env
 
 ERROR		=	print_messages	\
-# 				errors			\
-# 				print_messages
+ 				error_manager	
 
 EXEC		=	pipe		
 
@@ -56,13 +55,12 @@ MAIN		=	minishell
 
 LEXER		=	lexer		\
 				lex_utils	\
-				heredoc
+				heredoc		\
+				lexer_err
 
 PARSING		=	expansions		\
  				parser	\
 				parser_utils
-	
-ERROR		=	lexer_err
 				
 SRCS		=	$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
 				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\

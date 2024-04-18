@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_messages.c                                   :+:      :+:    :+:   */
+/*   lexer_err.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/12 12:05:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 16:19:11 by bboissen         ###   ########.fr       */
+/*   Created: 2024/04/01 10:34:17 by bboissen          #+#    #+#             */
+/*   Updated: 2024/04/18 16:05:48 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * @brief Prints a quit message with the given exit code.
- * 
- * @param code The exit code to print.
- */
-void	print_sigquit_message(int code)
+//bash: export: `te@st=2': not a valid identifier
+//verif heredoc consecutif
+int	lexer_err(int err, char c)
 {
-	char	*nbr;
-	t_sig	*sig;
-
-	sig = get_sig();
-	if (sig->sig == 2)
+	if (err == QUOTE)
 	{
-		nbr = ft_itoa(code);
-		dprintf(STDERR, "Quit: %s\n", nbr);
-		ft_memdel(nbr);
+		dprintf(STDERR, "minishell: odd number of quotes\n");
+		return (QUOTE);
 	}
-	else
-		ft_putstr_fd("\b\b  \b\b", STDERR);
+	else if(err == PARSE)
+	{
+		dprintf(STDERR, "minishell: syntax error near unexpected token '%c'\n", c);
+		return (PARSE);
+	}
+	return (0);
 }

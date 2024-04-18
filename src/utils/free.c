@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 16:09:25 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:18:36 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	free_env(t_env *env)
  */
 int	clean_exit(t_mini *mini)
 {
-		int		status;
+	int		status;
 	t_sig	*sig;
 
 	sig = get_sig();

@@ -6,25 +6,11 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 10:41:44 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:48:15 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// t_mini	*get_mini(void)
-// {
-// 	static t_mini	*mini;
-
-// 	mini = NULL;
-// 	if (mini == NULL)
-// 	{
-// 		mini = malloc(sizeof(t_mini));
-// 		if (mini == NULL)
-// 			exit(ERROR);
-// 	}
-// 	return (mini);
-// }
 
 /**
  * @brief The main function of the program.
@@ -47,7 +33,6 @@ int	main(int ac, char **av, char **env)
 	int		i;
 
 	rl = NULL;
-	// mini = get_mini();
 	if (ac != 1)
 		return (ERROR);
 	sig = get_sig();

@@ -6,13 +6,12 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/18 10:07:21 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:54:00 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//invalid read of size 1
 int	odd_quote(char *str)
 {
 	int		i;
@@ -22,13 +21,16 @@ int	odd_quote(char *str)
 	i = 0;
 	s_quote = 0;
 	d_quote = 0;
-	while (str[i])
+	if (str)
 	{
-		if (str[i] == '\'' && d_quote != 1)
-			s_quote = (s_quote + 1) % 2;
-		else if (str[i] == '"' && s_quote != 1)
-			d_quote = (d_quote + 1) % 2;
-		i++;
+		while (str[i])
+		{
+			if (str[i] == '\'' && d_quote != 1)
+				s_quote = (s_quote + 1) % 2;
+			else if (str[i] == '"' && s_quote != 1)
+				d_quote = (d_quote + 1) % 2;
+			i++;
+		}
 	}
 	return (s_quote % 2 || d_quote % 2);
 }
@@ -57,11 +59,11 @@ int	lexer(t_mini *mini, char *str)
 	t_token	*token;
 
 	if (odd_quote(str))
-		return (lexer_err(QUOTE, 0));
+		return (lexer_err(QUOTE, 0)); //error manager
 	token = NULL;
 	mini->token = token;
 	quote = 0;
-	while (str && *str != 0 /*&& mini->sig.exit == 0*/)
+	while (str && *str != 0)
 	{
 		while (str && quote == 0 && *str && ft_isspace(*str))
 			str++;
@@ -77,43 +79,3 @@ int	lexer(t_mini *mini, char *str)
 			(token)->join = 0;
 	return (0);
 }
-
-// int	main(void)
-// {
-// 	char *rl = NULL;
-// 	t_mini	*mini;
-
-// 	mini = malloc(sizeof(t_mini));
-// 	while (!rl || rl[0] != 'z')
-// 	{
-// 		readline_setup(&rl, "Michel");
-// 		mini->sig.status = lexer(mini, rl);
-// 		heredoc(mini);
-// 		printf("\n------------------------------------------\n");
-// 		printf("|type\t|%-20s|join|expand|\n", "string");
-// 		printf("------------------------------------------\n");
-// 		mini->token	= mini->h_token;
-// 		while (mini->token)
-// 		{
-// 			dprintf(1, "|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
-// 			mini->token = mini->token->next;
-// 		}
-
-// 		parser(mini);
-// 		getchar();
-// 		printf("\n------------------------------------------\n");
-// 		printf("|cmd\t|builtin|infile|outfile|\n");
-// 		printf("------------------------------------------\n");
-// 		mini->cmd	= mini->h_cmd;
-// 		while (mini->cmd)
-// 		{
-// 			dprintf(1, "|%s\t|%d|%s|%s|\n", mini->cmd->args[0], mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
-// 			mini->token = mini->token->next;
-// 		}
-// 		rl_on_new_line();
-// 		free(rl);
-// 		rl = NULL;
-// 		printf("\n\n\n");
-// 	}
-// 	return (mini->sig.status);
-// }

@@ -6,14 +6,14 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 16:02:53 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:20:53 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static char	*token_typer(t_type type[3], char *str);
-static void	new_token(t_mini *mini, t_token **token,
+static int	new_token(t_mini *mini, t_token **token,
 				char *str, t_type options[3]);
 
 char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
@@ -28,10 +28,9 @@ char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
 	}
 	if (*quote != 0 || !*str || is_spechar(*str) != 2)
 		return (str);
-	if (((*str == '|' && !(*token))
-			|| ((*token) && ((*token)->type == APPEND || (*token)->type == TRUNC
-					|| (*token)->type == INPUT || (*token)->type == HEREDOC
-					|| (*token)->type == PIPE))))
+	if (((*str == '|' && !(*token)) || ((*token) && ((*token)->type == APPEND
+					|| (*token)->type == TRUNC || (*token)->type == INPUT
+					|| (*token)->type == HEREDOC || (*token)->type == PIPE))))
 	{
 		lexer_err(PARSE, *str);
 		return (NULL);
@@ -39,7 +38,8 @@ char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
 	str = token_typer(options, str);
 	options[1] = 0;
 	options[2] = 0;
-	new_token(mini, token, NULL, options);
+	if (new_token(mini, token, NULL, options))
+		return (NULL);
 	return (++str);
 }
 
@@ -203,25 +203,22 @@ static char	*token_typer(t_type type[3], char *str)
 	return (str);
 }
 
-static void	new_token(t_mini *mini, t_token **token,
+static int	new_token(t_mini *mini, t_token **token,
 	char *str, t_type options[3])
 {
-	int			err;
 	t_token	*new_token;
 
-	new_token = malloc(sizeof(t_token));
+	new_token = /malloc(sizeof(t_token));
 	if (!new_token)
-		err = MALLOC;
-	if (str && (err != MALLOC))
+		return (error_manager(mini, MALLOC));
+	if (str)
 	{
 		new_token->str = ft_strdup(str);
 		if (!new_token->str)
-			err = MALLOC;
+			return (error_manager(mini, MALLOC));
 	}
 	else
 		new_token->str = NULL;
-	if (err == MALLOC)
-		return ;
 	new_token->type = options[0];
 	new_token->join = options[1];
 	new_token->expand = options[2];
@@ -239,6 +236,5 @@ static void	new_token(t_mini *mini, t_token **token,
 		(*token)->next = new_token;
 		*token = (*token)->next;
 	}
-	return ;
+	return (SUCCESS);
 }
-
