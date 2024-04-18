@@ -6,30 +6,28 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/17 16:35:40 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:41:20 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //TODO
 //crash a.out
-
+// strdup instead of = 
 #include "minishell.h"
 
 static void	check_file(t_cmd **cmd, t_token **token);
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
-static void	init_cmd(t_cmd **cmd, int *pipe, t_mini *mini, t_token **token);
+static void	init_cmd(t_cmd **cmd);
 
 void	parser(t_mini *mini)
 {
 	t_token	*token;
 	t_cmd	*cmd;
 	int		arg_flag;
-	int		pipe;
 
 	arg_flag = 0;
-	pipe = 0;
 	token = mini->h_token;
-	init_cmd(&cmd, &pipe, mini, &token);
+	init_cmd(&cmd);
 	// if (!cmd)
 	// 	return (error_manager);
 	while (token)
@@ -43,12 +41,12 @@ void	parser(t_mini *mini)
 		if (token && token->type == PIPE)
 		{
 			new_cmd(&mini, &cmd, &arg_flag);
-			init_cmd(&cmd, &pipe, mini, &token);
+			init_cmd(&cmd);
 			arg_flag = 0;
 			token = token->next;
 		}
 	}
-	if (cmd && (cmd->args || cmd->builtin || cmd->in || cmd->out))
+	if (cmd)
 		new_cmd(&mini, &cmd, &arg_flag); // add last element, need if
 }
 
@@ -86,7 +84,6 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 		if ((*cmd)->builtin == EXPORT) //list cmmd !=0
 		{
 			return (cmd_skip(cmd, token));
-			return ;
 		}
 		(*cmd)->args = add_args(cmd, (*token)->str);
 		(*token) = (*token)->next;
@@ -97,26 +94,15 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 		path_finder(mini, cmd, (*token)->str);
 	else if (ft_strchr((*token)->str, '/'))
 		(*cmd)->args = add_args(cmd, (*token)->str);
-	if ((*cmd)->builtin != NONE || access((*cmd)->args[0], X_OK) == 0)
+	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0))
 		(*arg_flag)++;
 	else
 		return (cmd_skip(cmd, token));
 	(*token) = (*token)->next;
 }
 
-static void	init_cmd(t_cmd **cmd, int *pipe, t_mini *mini, t_token **token)
+static void	init_cmd(t_cmd **cmd)
 {
-	if (*pipe == 0)
-	{
-		while ((*token))
-		{
-			if ((*token)->type == PIPE)
-				(*pipe)++;
-			(*token) = (*token)->next;
-		}
-		(*token) = mini->h_token;
-		mini->cmd = NULL;
-	}
 	*cmd = malloc(sizeof(t_cmd));
 	if (!*cmd)
 		return ;
