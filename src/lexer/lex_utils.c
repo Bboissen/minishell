@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 16:02:53 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:42:55 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,8 +207,9 @@ static void	new_token(t_mini *mini, t_token **token,
 	char *str, t_type options[3])
 {
 	int			err;
-	t_token	*new_token;
+	t_token		*new_token;
 
+	err = 0;
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		err = MALLOC;
@@ -239,6 +240,5 @@ static void	new_token(t_mini *mini, t_token **token,
 		(*token)->next = new_token;
 		*token = (*token)->next;
 	}
-	return ;
 }
 

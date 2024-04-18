@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 16:04:50 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:34:28 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Expands and joins tokens in the shell.
+ * 
  * @param {t_mini*} mini - The main structure of the shell.
  */
 void	expand_join(t_mini **mini)
@@ -44,13 +45,14 @@ void	expand_join(t_mini **mini)
 
 /**
  * Expands a token in the shell.
+ * 
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be expanded.
  * @return {char*} - Returns the expanded string.
  */
 char	*expand_token(t_mini **mini, char *str)
 {
-	t_env *env;
+	t_env	*env;
 	char	*env_val;
 	t_sig	*sig;
 
@@ -73,6 +75,7 @@ char	*expand_token(t_mini **mini, char *str)
 
 /**
  * Joins a list of tokens in the shell.
+ * 
  * @param {t_token*} token - The token to be joined.
  * @return {t_token*} - Returns the joined token.
  */

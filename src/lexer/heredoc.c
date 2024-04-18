@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 16:03:11 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:40:20 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static unsigned int	my_rand(void);
 
 char	*random_file(void)
 {
-	char *file;
-	char *tmp;
-	unsigned int rand;
-	int i;
+	char			*file;
+	char			*tmp;
+	unsigned int	rand;
+	int				i;
 
 	i = 0;
 	rand = 0;
@@ -37,10 +37,10 @@ char	*random_file(void)
 static unsigned int	my_rand(void)
 {
 	static unsigned int	seed;
-	int	fd;
+	int					fd;
 
 	fd = open("/dev/urandom", O_RDONLY);
-	if (fd == -1) 
+	if (fd == -1)
 	{
 		perror("open");
 		exit(1);
@@ -79,17 +79,20 @@ void	heredoc(t_mini *mini)
 				return ;
 			}
 			readline_setup(&line, "heredoc");
-			while (ft_strcmp(line, token->next->str))
+			if (line)
 			{
-				while (*line)
+				while (ft_strcmp(line, token->next->str))
 				{
-					if (*line == '$')
-						line = expand_line(mini, line + 1, fd);
-					else
-						write(fd, line++, 1);
+					while (*line)
+					{
+						if (*line == '$')
+							line = expand_line(mini, line + 1, fd);
+						else
+							write(fd, line++, 1);
+					}
+					write(fd, "\n", 1);
+					readline_setup(&line, "heredoc");
 				}
-				write(fd, "\n", 1);
-				readline_setup(&line, "heredoc");
 			}
 			close(fd);
 			token->str = file;

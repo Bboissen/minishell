@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 17:08:12 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:36:44 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd)
 	return (pid);
 }
 
-
 static void	fd_handler(t_mini *mini, t_cmd *cmd)
 {
 	(void)mini;
@@ -130,7 +129,7 @@ static void	pipex(t_mini *mini, t_cmd *cmd)
 			else
 			{
 				close(pipefd[0]);
-				cmd->fd[0] = -1;	
+				cmd->fd[0] = -1;
 			}
 			cmd->fd[1] = pipefd[1];
 		}

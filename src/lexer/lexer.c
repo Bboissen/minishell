@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 16:01:39 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:35:16 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,16 @@ int	odd_quote(char *str)
 	i = 0;
 	s_quote = 0;
 	d_quote = 0;
-	while (str[i])
+	if (str)
 	{
-		if (str[i] == '\'' && d_quote != 1)
-			s_quote = (s_quote + 1) % 2;
-		else if (str[i] == '"' && s_quote != 1)
-			d_quote = (d_quote + 1) % 2;
-		i++;
+		while (str[i])
+		{
+			if (str[i] == '\'' && d_quote != 1)
+				s_quote = (s_quote + 1) % 2;
+			else if (str[i] == '"' && s_quote != 1)
+				d_quote = (d_quote + 1) % 2;
+			i++;
+		}
 	}
 	return (s_quote % 2 || d_quote % 2);
 }
@@ -54,13 +57,15 @@ int	lexer(t_mini *mini, char *str)
 {
 	int		quote;
 	t_token	*token;
+	t_sig	*sig;
 
+	sig = get_sig();
 	if (odd_quote(str))
 		return (lexer_err(QUOTE, 0));
 	token = NULL;
 	mini->token = token;
 	quote = 0;
-	while (str && *str != 0 /*&& mini->sig.exit == 0*/)
+	while (str && *str != 0 && sig->exit == 0)
 	{
 		while (str && quote == 0 && *str && ft_isspace(*str))
 			str++;

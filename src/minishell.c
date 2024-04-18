@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 16:23:37 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:02:57 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// t_mini	*get_mini(void)
-// {
-// 	static t_mini	*mini;
-
-// 	mini = NULL;
-// 	if (mini == NULL)
-// 	{
-// 		mini = malloc(sizeof(t_mini));
-// 		if (mini == NULL)
-// 			exit(ERROR);
-// 	}
-// 	return (mini);
-// }
 
 /**
  * @brief The main function of the program.
@@ -44,10 +31,9 @@ int	main(int ac, char **av, char **env)
 	t_mini	*mini;
 	t_sig	*sig;
 	char	*rl;
-	int		i;
+	/*int		i;*/
 
 	rl = NULL;
-	// mini = get_mini();
 	if (ac != 1)
 		return (ERROR);
 	sig = get_sig();
@@ -58,7 +44,7 @@ int	main(int ac, char **av, char **env)
 		lexer(mini, rl);
 		heredoc(mini);
 		expand_join(&mini);
-
+/*
 		printf("\n------------------------------------------\n");
 		printf("|type\t|%-20s|join|expand|\n", "string");
 		printf("------------------------------------------\n");
@@ -67,10 +53,10 @@ int	main(int ac, char **av, char **env)
 		{
 			dprintf(1, "|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
 			mini->token = mini->token->next;
-		}
+		}*/
 		if (mini->h_token)
 			parser(mini);
-		printf("\n-----------------------------------------------\n");
+		/*printf("\n-----------------------------------------------\n");
 		printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
 		printf("-----------------------------------------------\n");
 		mini->cmd = mini->h_cmd;
@@ -89,7 +75,7 @@ int	main(int ac, char **av, char **env)
 			mini->cmd = mini->cmd->next;
 		}
 		printf("\n\n");
-		mini->cmd = mini->h_cmd;
+		mini->cmd = mini->h_cmd;*/
 		if (mini->cmd)
 			cmd_exec(mini);
 		reinit(&mini, &rl);
