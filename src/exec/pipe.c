@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 10:36:44 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/18 11:10:26 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ static void	exec_builtin(char **args, t_mini *mini)
 
 	sig = get_sig();
 	(void)args;
-	(void)mini;
-	(void)sig;
 	/*if (mini->cmd->builtin == CD)
 		sig->status = mini_cd(mini);
 	else if (mini->cmd->builtin == ECHO)
@@ -39,6 +37,8 @@ static void	exec_builtin(char **args, t_mini *mini)
 		sig->status = mini_pwd();
 	else if (mini->cmd->builtin == UNSET)
 		sig->status = mini_unset(mini);*/
+	if (mini->cmd->builtin == EXIT)
+		sig->status = mini_exit(mini);
 }
 
 /**

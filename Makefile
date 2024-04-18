@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/18 09:58:12 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/18 11:01:16 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-# BUILTINS	=	cd			\
+ BUILTINS	=	exit			\
 # 				echo		\
 # 				env			\
 # 				exit		\
@@ -64,11 +64,12 @@ PARSING		=	expansions		\
 	
 ERROR		=	lexer_err
 				
-SRCS		=	$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
+SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
+				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
 				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
 				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
 				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
-				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))		\
+				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))			\
 				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 

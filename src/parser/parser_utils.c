@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/18 10:34:02 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/17 16:07:08 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 static char	*path_checker(char *str, char *cmd, char **path, int *err);
 
+//builtin not working
+//all cmd skip bug
+//
 void	cmd_skip(t_cmd **cmd, t_token **token)
 {
 	while ((*token) && (*token)->type != PIPE)
