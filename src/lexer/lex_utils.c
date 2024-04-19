@@ -6,44 +6,42 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/18 16:20:53 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:46:18 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static char	*token_typer(t_type type[3], char *str);
-static int	new_token(t_mini *mini, t_token **token,
-				char *str, t_type options[3]);
+static int	new_token(t_mini *mini, char *str, t_type options[3]);
 
-char	*syntax_check(t_mini *mini, t_token **token, char *str, int *quote)
+char	*syntax_check(t_mini *mini, char *str, int *quote)
 {
 	t_type	options[3];
 
 	while (str && *quote == 0 && *str && ft_isspace(*str))
 	{
 		str++;
-		if (*token && (*token)->join == JOIN)
-			(*token)->join = 0;
+		if (mini->token && (mini->token->join == JOIN))
+			mini->token->join = 0;
 	}
 	if (*quote != 0 || !*str || is_spechar(*str) != 2)
 		return (str);
-	if (((*str == '|' && !(*token)) || ((*token) && ((*token)->type == APPEND
-					|| (*token)->type == TRUNC || (*token)->type == INPUT
-					|| (*token)->type == HEREDOC || (*token)->type == PIPE))))
+	if (((*str == '|' && !mini->token) || (mini->token && (mini->token->type == APPEND
+					|| mini->token->type == TRUNC || mini->token->type == INPUT
+					|| mini->token->type == HEREDOC || mini->token->type == PIPE))))
 	{
-		lexer_err(PARSE, *str);
-		return (NULL);
+		lexer_err(mini, &str, PARSE, *str);
+		return (str);
 	}
 	str = token_typer(options, str);
 	options[1] = 0;
 	options[2] = 0;
-	if (new_token(mini, token, NULL, options))
-		return (NULL);
+	new_token(mini, NULL, options);
 	return (++str);
 }
 
-char	*string_handler(t_mini *mini, t_token **token, char *str, int *quote)
+char	*string_handler(t_mini *mini, char *str, int *quote)
 {
 	char	*start;
 	char	end;
@@ -63,13 +61,13 @@ char	*string_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	options[2] = 0;
 	if (is_spechar(end) == 1)
 		options[1] = JOIN;
-	new_token(mini, token, start, options);
+	new_token(mini, start, options);
 	if (end)
 		*str = end;
 	return (str);
 }
 
-char	*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
+char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 {
 	char	*start;
 	t_type	options[3];
@@ -92,12 +90,12 @@ char	*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	options[2] = 0;
 	if (*(str) && is_spechar(*(str)) != 2 && !ft_isspace(*(str)))
 		options[1] = JOIN;
-	new_token(mini, token, start, options);
+	new_token(mini, start, options);
 	*quote = 0;
 	return (str);
 }
 
-char	*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
+char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 {
 	char	*start;
 	char	end;
@@ -123,7 +121,7 @@ char	*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	if (end == '$' || ((*(str + 1) && is_spechar(*(str + 1)) != 2 && !ft_isspace(*(str + 1)))))
 		options[1] = JOIN;
 	if (strlen(start) > 0)
-		new_token(mini, token, start, options);
+		new_token(mini, start, options);
 	if (end == '"')
 	{
 		*quote = 0;
@@ -134,7 +132,7 @@ char	*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote)
 	return (str);
 }
 
-char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
+char	*var_handler(t_mini *mini, char *str, int *quote)
 {
 	char	*start;
 	char	end;
@@ -165,7 +163,7 @@ char	*var_handler(t_mini *mini, t_token **token, char *str, int *quote)
 		|| (*quote == 1 && end != '"'))
 		options[1] = JOIN;
 	if (*start)
-		new_token(mini, token, start, options);
+		new_token(mini, start, options);
 	if (end == '"' && *quote == 1)
 	{
 		*quote = 0;
@@ -203,12 +201,11 @@ static char	*token_typer(t_type type[3], char *str)
 	return (str);
 }
 
-static int	new_token(t_mini *mini, t_token **token,
-	char *str, t_type options[3])
+static int	new_token(t_mini *mini, char *str, t_type options[3])
 {
 	t_token	*new_token;
 
-	new_token = /malloc(sizeof(t_token));
+	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (error_manager(mini, MALLOC));
 	if (str)
@@ -226,15 +223,14 @@ static int	new_token(t_mini *mini, t_token **token,
 	if (!mini->token)
 	{
 		new_token->prev = NULL;
-		*token = new_token;
-		mini->token = *token;
-		mini->h_token = *token;
+		mini->token = new_token;
+		mini->h_token = mini->token;
 	}
 	else
 	{
-		new_token->prev = *token;
-		(*token)->next = new_token;
-		*token = (*token)->next;
+		new_token->prev = mini->token;
+		mini->token->next = new_token;
+		mini->token = mini->token->next;
 	}
 	return (SUCCESS);
 }

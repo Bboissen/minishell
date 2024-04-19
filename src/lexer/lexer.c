@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/18 14:54:00 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:55:19 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,29 +53,29 @@ int	is_spe_expand(char c)
 		return (0);
 }
 
-int	lexer(t_mini *mini, char *str)
+void	lexer(t_mini *mini)
 {
 	int		quote;
-	t_token	*token;
-
+	char	*str;
+	
+	str = mini->rl;
 	if (odd_quote(str))
-		return (lexer_err(QUOTE, 0)); //error manager
-	token = NULL;
-	mini->token = token;
+		return (lexer_err(mini, &str, QUOTE, 0)); //error manager
+	mini->token = NULL;
 	quote = 0;
 	while (str && *str != 0)
 	{
 		while (str && quote == 0 && *str && ft_isspace(*str))
 			str++;
-		str = syntax_check(mini, &token, str, &quote);
-		str = string_handler(mini, &token, str, &quote);
-		str = s_quote_handler(mini, &token, str, &quote);
-		str = d_quote_handler(mini, &token, str, &quote);
-		str = var_handler(mini, &token, str, &quote);
+		str = syntax_check(mini, str, &quote);
+		str = string_handler(mini, str, &quote);
+		str = s_quote_handler(mini, str, &quote);
+		str = d_quote_handler(mini, str, &quote);
+		str = var_handler(mini, str, &quote);
 	}
-	// if (token && !token->str)
-	// 	return (printf("bash: syntax error near unexpected token `newline'\n"));
-	if (token && (token)->join == JOIN)
-			(token)->join = 0;
-	return (0);
+	if (mini->token && mini->token->type != STR)
+		return (lexer_err(mini, &str, PARSE, 0));
+	if (mini->token && mini->token->join == JOIN)
+			mini->token->join = 0;
+	return ;
 }
