@@ -6,14 +6,14 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/19 13:46:18 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:49:53 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static char	*token_typer(t_type type[3], char *str);
-static int	new_token(t_mini *mini, char *str, t_type options[3]);
+static void	new_token(t_mini *mini, char *str, t_type options[3]);
 
 char	*syntax_check(t_mini *mini, char *str, int *quote)
 {
@@ -201,18 +201,19 @@ static char	*token_typer(t_type type[3], char *str)
 	return (str);
 }
 
-static int	new_token(t_mini *mini, char *str, t_type options[3])
+static void	new_token(t_mini *mini, char *str, t_type options[3])
 {
+	static int			i = 0;
 	t_token	*new_token;
 
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
-		return (error_manager(mini, MALLOC));
+		return (lexer_err(mini, &str, MALLOC, 0));
 	if (str)
 	{
 		new_token->str = ft_strdup(str);
 		if (!new_token->str)
-			return (error_manager(mini, MALLOC));
+			return (free(new_token), lexer_err(mini, &str, MALLOC, 0));
 	}
 	else
 		new_token->str = NULL;
@@ -232,5 +233,4 @@ static int	new_token(t_mini *mini, char *str, t_type options[3])
 		mini->token->next = new_token;
 		mini->token = mini->token->next;
 	}
-	return (SUCCESS);
 }
