@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/18 14:31:00 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:41:10 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,13 @@
 
 static char	*path_checker(char *str, char *cmd, char **path, int *err);
 
-//builtin not working
-//all cmd skip bug
-//
 void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token)
 {
-	(void) mini;
 	while ((*token) && (*token)->type != PIPE)
 		(*token) = (*token)->next;
 	free_cmd(cmd);
-	mini->cmd->out = ft_strdup("/dev/null");
+	if (mini->cmd)
+		mini->cmd->out = ft_strdup("/dev/null");
 
 }
 

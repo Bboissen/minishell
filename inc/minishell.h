@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 14:55:12 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 17:24:26 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,11 @@ typedef enum e_builtin
 	UNSET, //skip when pipe
 }	t_builtin;
 
-typedef enum e_io
-{
-	STDIN = 0,
-	STDOUT,
-	STDERR
-}	t_io;
-
 typedef enum e_bool
 {
 	FALSE = 0,
-	TRUE
+	TRUE,
+	SIG_RECEIVED
 }	t_bool;
 
 typedef enum e_error
@@ -102,7 +96,7 @@ typedef struct s_env
 typedef struct s_sig
 {
 	int				status;
-	int				sig;
+	int				working;
 	int				exit;
 }	t_sig;
 
@@ -168,7 +162,7 @@ void	init_mini(t_mini **mini, char **env, char *name);
 int		init_env(t_mini **mini, char **env_array);
 void	increment_shell_level(t_mini **mini);
 void	sig_init(void);
-void	readline_setup(char **rl, char *str);
+void	readline_setup(t_mini *mini, char **rl, char *str);
 void	reinit(t_mini **mini, char **rl);
 
 /* Exec */
@@ -177,9 +171,7 @@ int		cmd_exec(t_mini *mini);
 
 /* Stds & fds */
 
-void	ft_close(int fd);
 void	close_fds(int *fd);
-void	reset_std(t_mini *mini);
 void	delete_heredoc(t_mini *mini);
 
 /* Free */
@@ -188,7 +180,7 @@ void	free_token(t_token **token);
 void	free_env(t_env *env);
 void	free_tab(char **tab);
 void	free_cmd(t_cmd **cmd);
-int		clean_exit(t_mini *mini);
+int		clean_exit(t_mini *mini, char *rl);
 
 /* Signals */
 
@@ -196,7 +188,7 @@ void	sig_handler(int code);
 
 /* Errors */
 
-void	print_sigquit_message(int code);
+int		error_manager(t_mini *mini, int err);
 
 
 // lexer

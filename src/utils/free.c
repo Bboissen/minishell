@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 13:46:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 17:24:09 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	free_env(t_env *env)
  * 
  * @param mini The main structure of the program.
  */
-int	clean_exit(t_mini *mini)
+int	clean_exit(t_mini *mini, char *rl)
 {
 	int		status;
 	t_sig	*sig;

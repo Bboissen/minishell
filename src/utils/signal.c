@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 16:22:44 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 17:19:25 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,17 @@ void	sig_handler(int code)
 	if (code == SIGINT)
 	{
 		sig->status = INTERUPT;
-		sig->sig = 1;
-		ft_putstr_fd("\n", STDERR);
+		ft_putstr_fd("^C\n", STDERR_FILENO);
 		rl_on_new_line();
 		rl_redisplay();
 	}
 	else if (code == SIGQUIT)
 	{
-		sig->status = QUIT;
-		//print_sigquit_message(code);
-		sig->sig = 1;
+		if (sig->working == TRUE)
+		{
+			sig->status = QUIT;
+			ft_printfd(STDERR_FILENO, "Quit  (core dumped)\n");
+		}
 	}
 }
 
@@ -40,12 +41,17 @@ void	sig_handler(int code)
  */
 void	sig_init(void)
 {
+	int		i;
 	t_sig	*sig;
 
 	sig = get_sig();
-	sig->status = 0;
-	sig->sig = 0;
-	sig->exit = 0;
+	sig->status = SUCCESS;
+	sig->working = FALSE;
+	sig->exit = FALSE;
+	i = 0;
+	while (i < _NSIG)
+		signal(i++, SIG_IGN);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
+	rl_catch_signals = 0;
 }

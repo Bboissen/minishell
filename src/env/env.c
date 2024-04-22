@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 23:30:13 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/22 11:20:19 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,20 +111,26 @@ static int	env_cpy(char **env_array, t_env **env, int *i)
 {
 	char	*equals_pos;
 
-	*env = malloc(sizeof(t_env));
+	*env = malloc(sizeof(t_env)); //protected
 	if (!(*env))
 		return (ERROR);
 	equals_pos = strchr(env_array[*i], '=');
 	if (equals_pos != NULL)
 	{
-		(*env)->name = strndup(env_array[*i], equals_pos - env_array[*i]);
-		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1);
+		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]); //protected random index
+		if (!(*env)->name)
+			return (free(*env), ERROR);
+		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1); //protected
 	}
 	else
 	{
-		(*env)->name = ft_strdup(env_array[*i]);
-		(*env)->value = ft_strdup("");
+		(*env)->name = ft_strdup(env_array[*i]); //protected
+		if (!(*env)->name)
+			return (free(*env), ERROR);
+		(*env)->value = ft_strdup(""); //protected
 	}
+	if (!(*env)->value)
+		return (free(*env), free((*env)->name), ERROR);
 	(*env)->next = NULL;
 	return (SUCCESS);
 }
@@ -149,14 +155,16 @@ int	init_env(t_mini **mini, char **env_array)
 	i = -1;
 	while (env_array && env_array[++i])
 	{
-		if (env_cpy(env_array, &env, &i))
-			return (ERROR);
+		if (env_cpy(env_array, &env, &i)) //protected random index
+			error_manager(*mini, MALLOC);
 		if (prev)
 			prev->next = env;
 		else
+		{
 			(*mini)->env = env;
+			(*mini)->h_env = (*mini)->env;
+		}
 		prev = env;
 	}
-	(*mini)->h_env = (*mini)->env;
 	return (SUCCESS);
 }

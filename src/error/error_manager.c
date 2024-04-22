@@ -1,34 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_messages.c                                   :+:      :+:    :+:   */
+/*   error_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/12 12:05:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 17:56:15 by gdumas           ###   ########.fr       */
+/*   Created: 2024/04/18 15:51:27 by bboissen          #+#    #+#             */
+/*   Updated: 2024/04/22 17:24:52 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+//bash: export: `te@st=2': not a valid identifier
 
-/**
- * @brief Prints a quit message with the given exit code.
- * 
- * @param code The exit code to print.
- */
-void	print_sigquit_message(int code)
+int	error_manager(t_mini *mini, int err)
 {
-	char	*nbr;
-	t_sig	*sig;
-
-	sig = get_sig();
-	if (sig->sig == 2)
+	if (mini && err == MALLOC)
 	{
-		nbr = ft_itoa(code);
-		ft_printfd(STDERR, "Quit: %s\n", nbr);
-		ft_memdel(nbr);
+		dprintf(STDERR_FILENO, "%s: memory allocation failed\n", mini->name);
+		return (clean_exit(mini));
 	}
-	else
-		ft_putstr_fd("\b\b  \b\b", STDERR);
+	return (clean_exit(mini));
 }

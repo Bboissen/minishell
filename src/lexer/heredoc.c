@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/18 10:40:20 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 15:08:09 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	heredoc(t_mini *mini)
 				free(file);
 				return ;
 			}
-			readline_setup(&line, "heredoc");
+			readline_setup(mini, &line, "heredoc");
 			if (line)
 			{
 				while (ft_strcmp(line, token->next->str))
@@ -91,7 +91,7 @@ void	heredoc(t_mini *mini)
 							write(fd, line++, 1);
 					}
 					write(fd, "\n", 1);
-					readline_setup(&line, "heredoc");
+					readline_setup(mini, &line, "heredoc");
 				}
 			}
 			close(fd);

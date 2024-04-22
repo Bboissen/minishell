@@ -6,22 +6,11 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 13:45:50 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 17:12:33 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * @brief Resets the standard input and output to the command's input and output.
- * 
- * @param mini The main structure of the program.
- */
-void	reset_std(t_mini *mini)
-{
-	dup2(mini->cmd->fd[0], STDIN);
-	dup2(mini->cmd->fd[1], STDOUT);
-}
 
 /**
  * @brief Closes the file descriptors associated with the current command.
@@ -59,7 +48,6 @@ void	delete_heredoc(t_mini *mini)
 		if (current->type == HEREDOC)
 			if (unlink(current->next->str) == -1)
 				current = current->next;
-				//ft_error("minishell: ", current->str, strerror(errno), ERROR);
 		current = current->next;
 	}
 }
