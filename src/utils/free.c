@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 10:01:45 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 13:46:08 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	free_env(t_env *env)
 	}
 }
 
+
 /**
  * @brief Frees all allocated memory and exits the program.
  * 
@@ -126,4 +127,5 @@ int	clean_exit(t_mini *mini)
 		ft_putstr_fd("exit\n", 2);
 	free(mini);
 	exit(status);
+	return (status);
 }

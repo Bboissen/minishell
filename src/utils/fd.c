@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 17:03:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 13:45:50 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * @brief Closes a file descriptor if it is valid.
- * 
- * @param fd The file descriptor to close.
- */
-void	ft_close(int fd)
-{
-	if (fd > 0)
-		close(fd);
-}
 
 /**
  * @brief Resets the standard input and output to the command's input and output.
@@ -41,14 +30,14 @@ void	reset_std(t_mini *mini)
  */
 void	close_fds(int *fd)
 {
-	if (fd[0] != -1 && fd[0] != 0)
+	if (fd[0] != -1 && fd[0] != STDIN_FILENO)
 	{
-		ft_close(fd[0]);
+		close(fd[0]);
 		fd[0] = -1;
 	}
-	if (fd[1] != -1 && fd[0] != 1)
+	if (fd[1] != -1 && fd[1] != STDOUT_FILENO)
 	{
-		ft_close(fd[1]);
+		close(fd[1]);
 		fd[1] = -1;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 11:10:26 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 14:10:35 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,15 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (cmd->fd[0] != -1)
-		{
+		// if (cmd->fd[0] != -1)
+		// {
+			dup2(cmd->fd[0], 0);
 			close(cmd->fd[0]);
-			cmd->fd[0] = -1;
+			// cmd->fd[0] = -1;
 			dup2(cmd->fd[1], 1);
 			close(cmd->fd[1]);
-			cmd->fd[1] = -1;
-		}
+			// cmd->fd[1] = -1;
+		// }
 		if (cmd->builtin == NONE)
 			execve(cmd->args[0], cmd->args, env_to_tab(mini->h_env));
 		else
@@ -73,14 +74,15 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd)
 	}
 	else if (pid > 0)
 	{
-		if (cmd->fd[1] != -1)
-		{
+		// if (cmd->fd[1] != -1)
+		// {
 			close(cmd->fd[1]);
-			cmd->fd[1] = -1;
 			dup2(cmd->fd[0], 0);
+			close(cmd->fd[0]);
+			// cmd->fd[1] = -1;
 			// close(cmd->fd[0]);
 			// cmd->fd[0] = -1;
-		}
+		// }
 	}
 	return (pid);
 }
@@ -91,6 +93,7 @@ static void	fd_handler(t_mini *mini, t_cmd *cmd)
 	if (cmd->in != NULL)
 	{
 		cmd->fd[0] = open(cmd->in, O_RDONLY);
+		printf("cmd->in: %d\n", cmd->fd[0]);
 		//if (cmd->fd[0] == -1)
 			//return (error_manager(mini, FD));
 	}
@@ -123,6 +126,7 @@ static void	pipex(t_mini *mini, t_cmd *cmd)
 		fd_handler(mini, cmd);
 		if (!cmd->out && cmd->next && !cmd->next->in)
 		{
+			printf("pipe\n");
 			pipe(pipefd);
 			if (!cmd->in)
 				cmd->fd[0] = pipefd[0];
@@ -131,7 +135,8 @@ static void	pipex(t_mini *mini, t_cmd *cmd)
 				close(pipefd[0]);
 				cmd->fd[0] = -1;
 			}
-			cmd->fd[1] = pipefd[1];
+			if (!cmd->out)
+				cmd->fd[1] = pipefd[1];
 		}
 		nxt = cmd->next;
 		cmd->pid = exec(mini, cmd);
@@ -151,10 +156,14 @@ int	cmd_exec(t_mini *mini)
 {
 	t_cmd	*cmd;
 	t_sig	*sig;
+	int		in;
+	int 	out;
 
 	sig = get_sig();
 	sig->sig = 2;
 	cmd = mini->h_cmd;
+	in = dup(STDIN_FILENO);
+	out = dup(STDOUT_FILENO);
 	pipex(mini, cmd);
 	while (cmd)
 	{
@@ -162,7 +171,13 @@ int	cmd_exec(t_mini *mini)
 		close_fds(cmd->fd);
 		cmd = cmd->next;
 	}
+	mini->cmd->fd[0] = STDIN_FILENO;
+	mini->cmd->fd[1] = STDOUT_FILENO;
 	sig->status = WEXITSTATUS(sig->status);
 	sig->sig = 0;
+	dup2(in, STDIN_FILENO);
+	dup2(out, STDOUT_FILENO);
+	close(in);
+	close(out);
 	return (sig->status);
 }
