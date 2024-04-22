@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 10:53:53 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 14:55:12 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ void	delete_heredoc(t_mini *mini);
 
 //parser
 void		parser(t_mini *mini);
-void		cmd_skip(t_cmd **cmd, t_token **token);
+void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
