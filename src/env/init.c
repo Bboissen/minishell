@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 13:46:17 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 14:43:51 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	readline_setup(char **rl, char *str)
 	prompt = ft_strjoin(str, " > ");
 	if (!prompt)
 		exit(MALLOC);
-	//
 	*rl = readline(prompt);
 	add_history(*rl);
 	rl_on_new_line();
