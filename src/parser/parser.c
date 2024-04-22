@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/22 15:40:30 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 17:30:51 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	parser(t_mini *mini)
 	while (token)
 	{
 		if (token && (token->type == INPUT || token->type == HEREDOC
-			|| token->type == APPEND || token->type == TRUNC))
+				|| token->type == APPEND || token->type == TRUNC))
 			check_file(mini, &cmd, &token);
 		if (token && token->type == STR)
 			check_cmd(mini, &cmd, &token, &arg_flag);

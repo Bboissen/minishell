@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 16:55:49 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 18:30:55 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 void	readline_setup(t_mini *mini, char **rl, char *str)
 {
 	char	*prompt;
+
 	(void)str;
 	prompt = ft_strjoin(str, " > "); //protected
 	if (!prompt)
@@ -51,7 +52,7 @@ void	init_mini(t_mini **mini, char **env, char *name)
 	(*mini)->h_token = NULL;
 	(*mini)->env = NULL;
 	(*mini)->h_env = NULL;
-	init_env(mini, env); //protected random index	
+	init_env(mini, env); //protected random index
 	increment_shell_level(mini); //protected
 	sig_init();
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 16:04:50 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:53:56 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	expand_join(t_mini **mini)
  */
 char	*expand_token(t_mini **mini, char *str)
 {
-	t_env *env;
+	t_env	*env;
 	char	*env_val;
 	t_sig	*sig;
 
