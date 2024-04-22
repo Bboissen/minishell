@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 16:04:50 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 11:37:27 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	expand_join(t_mini **mini)
  * @param {char*} str - The string to be expanded.
  * @return {char*} - Returns the expanded string.
  */
+
 char	*expand_token(t_mini **mini, char *str)
 {
 	t_env *env;
@@ -56,18 +57,28 @@ char	*expand_token(t_mini **mini, char *str)
 
 	sig = get_sig();
 	env = (*mini)->h_env;
-	env_val = ft_strdup("");
+	env_val = NULL;
 	if (!ft_strcmp(str, "?"))
-		return (ft_itoa(sig->status));
+	{
+		env_val = ft_itoa(sig->status); //protection to test
+		if (!env_val)
+			error_manager(*mini, MALLOC);
+		return (env_val);
+	}
 	while (env && env->name)
 	{
 		if (!ft_strcmp(str, env->name))
 		{
-			env_val = strdup(env->value);
+			env_val = ft_strdup(env->value); //protected
+			if (!env_val)
+				error_manager(*mini, MALLOC);
 			return (env_val);
 		}
 		env = env->next;
 	}
+	env_val = ft_strdup(""); //protected
+	if (!env_val)
+		error_manager(*mini, MALLOC);
 	return (env_val);
 }
 

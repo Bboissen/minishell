@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_manager.c                                    :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 15:51:27 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/22 10:44:21 by bboissen         ###   ########.fr       */
+/*   Created: 2023/11/08 08:47:19 by gdumas            #+#    #+#             */
+/*   Updated: 2024/04/19 16:14:52 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-//bash: export: `te@st=2': not a valid identifier
+#include "libft.h"
 
-int	error_manager(t_mini *mini, int err)
+char	*ft_strndup(const char *str, int n)
 {
-	if (mini && err == MALLOC)
+	int		i;
+	int		len;
+	char	*out;
+
+	len = 0;
+	while (str[len])
+		len++;
+	if (n < len)
+		len = n;
+	out = (char *)malloc(sizeof(char) * (len + 1));
+	if (!out)
+		return (NULL);
+	i = 0;
+	while (i < len && str[i])
 	{
-		dprintf(STDERR, "%s: memory allocation failed\n", mini->name);
-		return (clean_exit(mini));
+		out[i] = str[i];
+		i++;
 	}
-	return (clean_exit(mini));
+	out[i] = '\0';
+	return (out);
 }

@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 13:27:07 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/15 13:37:30 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/19 16:08:08 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,6 +90,7 @@ STR_SRC =	ft_split	\
 			ft_strchr	\
 			ft_strcmp	\
 			ft_strdup	\
+			ft_strndup	\
 			ft_strisnum	\
 			ft_striteri	\
 			ft_strjoin	\

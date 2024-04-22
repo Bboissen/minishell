@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shlvl.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 23:30:31 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/22 11:47:20 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	increment_shell_level(t_mini **mini)
 	int		shell_level;
 	char	*shlvl;
 
-	shell_level_value = expand_token(mini, "SHLVL");
+	shell_level_value = expand_token(mini, "SHLVL"); //protected
 	shell_level = get_lvl(shell_level_value) + 1;
 	if (shell_level_value)
 		ft_memdel(shell_level_value);
@@ -76,8 +76,18 @@ void	increment_shell_level(t_mini **mini)
 		if (!ft_strcmp((*mini)->env->name, "SHLVL"))
 		{
 			ft_memdel((*mini)->env->value);
-			shlvl = ft_itoa(shell_level);
-			(*mini)->env->value = ft_strdup(shlvl);
+			shlvl = ft_itoa(shell_level); //protected
+			if (!shlvl)
+			{
+				(*mini)->env->value = NULL;
+				error_manager(*mini, MALLOC);
+			}
+			(*mini)->env->value = ft_strdup(shlvl); //protected
+			if (!(*mini)->env->value)
+			{
+				ft_memdel(shlvl);
+				error_manager(*mini, MALLOC);
+			}
 			ft_memdel(shlvl);
 			return ;
 		}

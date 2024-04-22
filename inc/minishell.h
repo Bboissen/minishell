@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 16:17:16 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:43:51 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ typedef struct s_cmd
 typedef struct s_mini
 {
 	char			*name;
+	char			*rl;
 	t_token			*h_token;
 	t_token			*token;
 	t_env			*h_env;
@@ -169,8 +170,8 @@ void	init_mini(t_mini **mini, char **env, char *name);
 int		init_env(t_mini **mini, char **env_array);
 void	increment_shell_level(t_mini **mini);
 void	sig_init(void);
-void	readline_setup(char **rl, char *str);
-void	reinit(t_mini **mini, char **rl);
+void	readline_setup(t_mini *mini, char **rl, char *str);
+void	reinit(t_mini **mini);
 
 /* Exec */
 
@@ -201,17 +202,16 @@ int		error_manager(t_mini *mini, int err);
 
 
 // lexer
-int			lexer(t_mini *mini, char *str);
+void		lexer(t_mini *mini);
 int			is_spechar(char c);
 int			is_space(int c);
 int			is_spe_expand(char c);
-char		*ft_strdup(const char *str);
-int			lexer_err(int err, char c);
-char		*syntax_check(t_mini *mini, t_token **token, char *str, int *quote);
-char		*string_handler(t_mini *mini, t_token **token, char *str, int *quote);
-char		*s_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
-char		*d_quote_handler(t_mini *mini, t_token **token, char *str, int *quote);
-char		*var_handler(t_mini *mini, t_token **token, char *str, int *quote);
+void		lexer_err(t_mini *mini, char **str, int err, char c);
+char		*syntax_check(t_mini *mini, char *str, int *quote);
+char		*string_handler(t_mini *mini, char *str, int *quote);
+char		*s_quote_handler(t_mini *mini, char *str, int *quote);
+char		*d_quote_handler(t_mini *mini, char *str, int *quote);
+char		*var_handler(t_mini *mini, char *str, int *quote);
 char		*random_file(void);
 
 //heredoc

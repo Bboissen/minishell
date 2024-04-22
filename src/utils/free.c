@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 16:18:36 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 11:41:37 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,10 @@ void	free_env(t_env *env)
 	while (env)
 	{
 		tmp = env->next;
-		ft_memdel(env->name);
-		ft_memdel(env->value);
+		if (env->name)
+			ft_memdel(env->name);
+		if (env->value)
+			ft_memdel(env->value);
 		ft_memdel(env);
 		env = tmp;
 	}
@@ -117,6 +119,7 @@ int	clean_exit(t_mini *mini)
 		status = sig->status;
 	else
 		exit(MALLOC);
+	mini->env = mini->h_env;
 	if (mini->token)
 		free_token(&(mini->token));
 	if (mini->cmd)
@@ -125,7 +128,8 @@ int	clean_exit(t_mini *mini)
 		free_env(mini->env);
 	if (sig->exit == 1)
 		ft_putstr_fd("exit\n", 2);
+	if (mini->rl)
+		free(mini->rl);
 	free(mini);
 	exit(status);
-	return (status);
 }

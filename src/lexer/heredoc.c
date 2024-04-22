@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/17 16:03:11 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:21:11 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	heredoc(t_mini *mini)
 				free(file);
 				return ;
 			}
-			readline_setup(&line, "heredoc");
+			readline_setup(mini, &line, "heredoc");
 			while (ft_strcmp(line, token->next->str))
 			{
 				while (*line)
@@ -89,7 +89,7 @@ void	heredoc(t_mini *mini)
 						write(fd, line++, 1);
 				}
 				write(fd, "\n", 1);
-				readline_setup(&line, "heredoc");
+				readline_setup(mini, &line, "heredoc");
 			}
 			close(fd);
 			token->str = file;

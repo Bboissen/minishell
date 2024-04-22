@@ -6,14 +6,14 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/18 16:11:29 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/19 16:03:00 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Aliases #
 
 NAME		=	minishell
-CC			=	gcc
+CC			=	cc
 FLAGS		=	-Werror -Wall -Wextra $(IFLAGS)
 IFLAGS		=	-I $(INCS) -I $(LIBFT_DIR)includes/
 LFLAGS		=	-L libft -lft -lreadline

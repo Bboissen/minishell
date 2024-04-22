@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 17:02:10 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 11:48:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be used as the base of the prompt.
  */
-void	readline_setup(char **rl, char *str)
+
+void	readline_setup(t_mini *mini, char **rl, char *str)
 {
 	char	*prompt;
-
-	prompt = ft_strjoin(str, " > ");
+	(void)str;
+	prompt = ft_strjoin(str, " > "); //protected
 	if (!prompt)
-		exit(MALLOC);
-	//
+		error_manager(mini, MALLOC);
 	*rl = readline(prompt);
 	add_history(*rl);
 	rl_on_new_line();
@@ -41,14 +41,19 @@ void	readline_setup(char **rl, char *str)
  */
 void	init_mini(t_mini **mini, char **env, char *name)
 {
-	(*mini) = malloc(sizeof(t_mini));
+	(*mini) = malloc(sizeof(t_mini)); //protected
+	if (!(*mini))
+		error_manager(NULL, MALLOC);
 	(*mini)->name = name + 2;
-	if (!mini)
-		clean_exit(NULL);
+	(*mini)->rl = NULL;
 	(*mini)->cmd = NULL;
+	(*mini)->h_cmd = NULL;
 	(*mini)->token = NULL;
-	init_env(mini, env);
-	increment_shell_level(mini);
+	(*mini)->h_token = NULL;
+	(*mini)->env = NULL;
+	(*mini)->h_env = NULL;
+	init_env(mini, env); //protected random index	
+	increment_shell_level(mini); //protected
 	sig_init();
 }
 
@@ -58,7 +63,7 @@ void	init_mini(t_mini **mini, char **env, char *name)
  * @param {t_mini*} mini - The mini structure to reinitialize.
  * @param {char*} rl - The readline string to free.
  */
-void	reinit(t_mini **mini, char **rl)
+void	reinit(t_mini **mini)
 {
 	(*mini)->token = (*mini)->h_token;
 	(*mini)->cmd = (*mini)->h_cmd;
@@ -75,7 +80,11 @@ void	reinit(t_mini **mini, char **rl)
 		(*mini)->cmd = NULL;
 		(*mini)->h_cmd = NULL;
 	}
-	free(*rl);
+	if ((*mini)->rl)
+	{
+		free((*mini)->rl);
+		(*mini)->rl = NULL;
+	}
 	delete_heredoc((*mini));
 }
 
