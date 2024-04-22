@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/19 15:26:33 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:31:38 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,12 +205,12 @@ static void	new_token(t_mini *mini, char *str, t_type options[3])
 {
 	t_token	*new_token;
 
-	new_token = malloc(sizeof(t_token));
+	new_token = malloc(sizeof(t_token)); //protected random iteration
 	if (!new_token)
 		return (lexer_err(mini, &str, MALLOC, 0));
 	if (str)
 	{
-		new_token->str = ft_strdup(str);
+		new_token->str = ft_strdup(str); //protected random iteration
 		if (!new_token->str)
 			return (free(new_token), lexer_err(mini, &str, MALLOC, 0));
 	}

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 10:43:51 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 17:28:44 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,9 @@ typedef enum e_error
 	QUOTE = 129,
 	INTERUPT = 130,
 	QUIT = 131,
-	PARSE = 132
+	PARSE = 132,
+	OPEN = 133,
+	READ = 134
 }	t_error;
 
 /* Structures */
@@ -162,7 +164,7 @@ void	print_sorted_env(t_env *env);
 void	sort_env(char **tab, int env_len);
 void	expand_join(t_mini **mini);
 char	*expand_token(t_mini **mini, char *str);
-t_token	*list_join(t_token *token);
+t_token	*list_join(t_mini *mini, t_token *token);
 
 /* Init */
 
@@ -198,7 +200,7 @@ void	sig_handler(int code);
 /* Errors */
 
 void	print_sigquit_message(int code);
-int		error_manager(t_mini *mini, int err);
+int		error_manager(t_mini *mini, int err, char *fct, char *str);
 
 
 // lexer
@@ -212,10 +214,10 @@ char		*string_handler(t_mini *mini, char *str, int *quote);
 char		*s_quote_handler(t_mini *mini, char *str, int *quote);
 char		*d_quote_handler(t_mini *mini, char *str, int *quote);
 char		*var_handler(t_mini *mini, char *str, int *quote);
-char		*random_file(void);
+char		*random_file(t_mini *mini);
 
 //heredoc
-void	heredoc(t_mini *mini);
+int	heredoc(t_mini *mini);
 char	*expand_line(t_mini *mini, char *str, int fd);
 void	delete_heredoc(t_mini *mini);
 

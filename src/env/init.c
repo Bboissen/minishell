@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 11:48:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:13:33 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
 	(void)str;
 	prompt = ft_strjoin(str, " > "); //protected
 	if (!prompt)
-		error_manager(mini, MALLOC);
+		error_manager(mini, MALLOC, NULL, NULL);
 	*rl = readline(prompt);
 	add_history(*rl);
 	rl_on_new_line();
@@ -43,7 +43,7 @@ void	init_mini(t_mini **mini, char **env, char *name)
 {
 	(*mini) = malloc(sizeof(t_mini)); //protected
 	if (!(*mini))
-		error_manager(NULL, MALLOC);
+		error_manager(NULL, MALLOC, NULL, NULL);
 	(*mini)->name = name + 2;
 	(*mini)->rl = NULL;
 	(*mini)->cmd = NULL;
@@ -73,9 +73,9 @@ void	reinit(t_mini **mini)
 		(*mini)->token = NULL;
 		(*mini)->h_token = NULL;
 	}
+	(*mini)->cmd = (*mini)->h_cmd;
 	if ((*mini)->cmd)
 	{
-		(*mini)->cmd = (*mini)->h_cmd;
 		free_cmd(&((*mini)->cmd));
 		(*mini)->cmd = NULL;
 		(*mini)->h_cmd = NULL;

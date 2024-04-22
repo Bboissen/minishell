@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 11:47:20 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:13:08 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,13 @@ void	increment_shell_level(t_mini **mini)
 			if (!shlvl)
 			{
 				(*mini)->env->value = NULL;
-				error_manager(*mini, MALLOC);
+				error_manager(*mini, MALLOC, NULL, NULL);
 			}
 			(*mini)->env->value = ft_strdup(shlvl); //protected
 			if (!(*mini)->env->value)
 			{
 				ft_memdel(shlvl);
-				error_manager(*mini, MALLOC);
+				error_manager(*mini, MALLOC, NULL, NULL);
 			}
 			ft_memdel(shlvl);
 			return ;

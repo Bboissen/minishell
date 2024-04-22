@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/19 14:50:54 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:06:01 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	lexer(t_mini *mini)
 	quote = 0;
 	while (str && *str != 0)
 	{
-		while (str && quote == 0 && *str && ft_isspace(*str))
+		while (quote == 0 && *str && ft_isspace(*str))
 			str++;
 		str = syntax_check(mini, str, &quote);
 		str = string_handler(mini, str, &quote);

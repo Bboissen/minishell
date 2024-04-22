@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/19 16:04:08 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:14:04 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd)
 {
 	*cmd = malloc(sizeof(t_cmd));
 	if (!*cmd)
-		return (error_manager(mini, MALLOC));
+		return (error_manager(mini, MALLOC, NULL, NULL));
 	(*cmd)->args = NULL;
 	(*cmd)->in = NULL;
 	(*cmd)->out = NULL;

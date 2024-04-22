@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 10:34:17 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/19 14:51:12 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:13:57 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ void	lexer_err(t_mini *mini, char **str, int err, char c)
 	else if(err == PARSE)
 		dprintf(STDERR, "%s: syntax error near unexpected token 'newline'\n", mini->name);
 	else
-		error_manager(mini, MALLOC);
+		error_manager(mini, MALLOC, NULL, NULL);
 }

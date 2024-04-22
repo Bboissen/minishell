@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/19 14:11:08 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:40:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@ static char	*path_checker(char *str, char *cmd, char **path, int *err);
 
 void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token)
 {
-	(void) mini;
 	while ((*token) && (*token)->type != PIPE)
 		(*token) = (*token)->next;
 	free_cmd(cmd);
-	mini->cmd->out = ft_strdup("/dev/null");
-
+	if(mini->cmd)
+		mini->cmd->out = ft_strdup("/dev/null");
 }
 
 void	new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag)

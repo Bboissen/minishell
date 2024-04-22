@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 11:20:19 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:13:08 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ int	init_env(t_mini **mini, char **env_array)
 	while (env_array && env_array[++i])
 	{
 		if (env_cpy(env_array, &env, &i)) //protected random index
-			error_manager(*mini, MALLOC);
+			error_manager(*mini, MALLOC, NULL, NULL);
 		if (prev)
 			prev->next = env;
 		else

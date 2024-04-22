@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 11:37:27 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/22 17:30:32 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	expand_join(t_mini **mini)
 	while ((*mini)->token)
 	{
 		if ((*mini)->token->join)
-			(*mini)->token = list_join((*mini)->token);
+			(*mini)->token = list_join((*mini), (*mini)->token);
 		else
 			(*mini)->token = (*mini)->token->next;
 	}
@@ -62,7 +62,7 @@ char	*expand_token(t_mini **mini, char *str)
 	{
 		env_val = ft_itoa(sig->status); //protection to test
 		if (!env_val)
-			error_manager(*mini, MALLOC);
+			error_manager(*mini, MALLOC, NULL, NULL); 
 		return (env_val);
 	}
 	while (env && env->name)
@@ -71,14 +71,14 @@ char	*expand_token(t_mini **mini, char *str)
 		{
 			env_val = ft_strdup(env->value); //protected
 			if (!env_val)
-				error_manager(*mini, MALLOC);
+				error_manager(*mini, MALLOC, NULL, NULL);
 			return (env_val);
 		}
 		env = env->next;
 	}
 	env_val = ft_strdup(""); //protected
 	if (!env_val)
-		error_manager(*mini, MALLOC);
+		error_manager(*mini, MALLOC, NULL, NULL);
 	return (env_val);
 }
 
@@ -87,13 +87,15 @@ char	*expand_token(t_mini **mini, char *str)
  * @param {t_token*} token - The token to be joined.
  * @return {t_token*} - Returns the joined token.
  */
-t_token	*list_join(t_token *token)
+t_token	*list_join(t_mini *mini, t_token *token)
 {
 	char	*new_str;
 	t_token	*to_free;
 
 	new_str = malloc(ft_strlen(token->str)
-			+ ft_strlen(token->next->str) + 1);
+				+ ft_strlen(token->next->str) + 1); //protected random iteration
+	if (!new_str)
+		error_manager(mini, MALLOC, NULL, NULL);
 	ft_strcpy(new_str, token->str);
 	ft_strcat(new_str, token->next->str);
 	free(token->next->str);
