@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 17:24:09 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/22 17:29:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	clean_exit(t_mini *mini, char *rl)
 		free_cmd(&(mini->cmd));
 	if (mini->env)
 		free_env(mini->env);
-	if (sig->exit == 1)
+	if (sig->exit == 1 || rl == NULL)
 		ft_putstr_fd("exit\n", 2);
 	free(mini);
 	exit(status);
