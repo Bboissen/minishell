@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 11:27:51 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/23 12:39:53 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	mini_export(char **args, t_env *env)
 
 	new_env = 0;
 	if (!args[1])
-		print_sorted_env(secret);
+		print_sorted_env(env);
 	else
 	{
 		error = is_valid_env(args[1]);
@@ -110,7 +110,6 @@ int	mini_export(char **args, t_env *env)
 		{
 			if (error == 1)
 				env_add(args[1], env);
-			env_add(args[1], secret);
 		}
 	}
 	return (SUCCESS);

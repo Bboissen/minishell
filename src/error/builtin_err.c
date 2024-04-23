@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_manager.c                                    :+:      :+:    :+:   */
+/*   builtin_err.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 15:51:27 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/23 12:43:36 by talibabtou       ###   ########.fr       */
+/*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
+/*   Updated: 2024/04/23 12:46:59 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	error_manager(t_mini *mini, int err)
+int	builtin_err(t_mini *mini, int error, char *arg)
 {
-	if (mini && err == MALLOC)
+	int	i;
+
+	if (error == -1)
+		ft_putstr_fd("export: not valid in this context: ", STDERR_FILENO);
+	else if (error == 0 || error == -3)
+		ft_putstr_fd("export: not a valid identifier: ", STDERR_FILENO);
+	i = 0;
+	while (arg[i] && (arg[i] != '=' || error == -3))
 	{
-		dprintf(STDERR_FILENO, "%s: memory allocation failed\n", mini->name);
-		return (clean_exit(mini, "NULL"));
+		write((STDERR_FILENO), &arg[i], 1);
+		i++;
 	}
-	return (clean_exit(mini, "NULL"));
+	write((STDERR_FILENO), "\n", 1);
+	return (ERROR);
 }

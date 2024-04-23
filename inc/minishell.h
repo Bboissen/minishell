@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 17:24:26 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/23 12:33:19 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int		mini_cd(t_mini *mini);
 int		mini_echo(t_mini *mini);
 int		mini_env(t_mini *mini);
 int		mini_exit(t_mini *mini);
-int		mini_export(char **args, t_env *env, t_env *secret);
+int		mini_export(char **args, t_env *env);
 int		mini_pwd(void);
 int		mini_unset(t_mini *mini);
 

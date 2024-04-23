@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 13:15:04 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/23 12:37:00 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,22 @@ static int	change(t_mini *mini, char *path, int home)
 static int	set_directory(t_mini *mini, char *path, int home)
 {
 	struct stat	st;
+	t_sig		*sig;
 
+	sig = get_sig();
 	if (change(mini, path, home))
 		return (ERROR);
 	ft_printfd(2, "minishell: cd: %s", path);
-	mini->sig.status = ERROR;
+	sig->status = ERROR;
 	if (stat(path, &st) == -1)
 	{
 		ft_printfd(2, ": No such file or directory");
-		mini->sig.status = DIRECTORY;
+		sig->status = DIRECTORY;
 	}
 	else if (!(st.st_mode & S_IXUSR))
 	{
 		ft_printfd(2, ": Permission denied");
-		mini->sig.status = CMD;
+		sig->status = EXE;
 	}
 	else
 		ft_printfd(2, ": Not a directory");
@@ -146,8 +148,10 @@ int	mini_cd(t_mini *mini)
 {
 	char	*home;
 	char	**args;
+	t_sig	*sig;
 
-	mini->sig.status = SUCCESS;
+	sig = get_sig();
+	sig->status = SUCCESS;
 	home = NULL;
 	args = mini->cmd->args;
 	if (args && args[1] && args[2])

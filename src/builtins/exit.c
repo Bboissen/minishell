@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 17:32:01 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/23 12:11:37 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Convert a string to a long long integer, checking for potential errors.
- * @param {const char*} str - The string to convert.
- * @param {int} i - The starting index in the string.
- * @param {int*} pbm - Pointer to an integer to store the error status.
- * @return {long long} - Returns the converted integer.
- */
+
 static long long	ft_atoi_exit(const char *str, int i, int *pbm)
 {
 	int			j;
@@ -48,10 +42,7 @@ static long long	ft_atoi_exit(const char *str, int i, int *pbm)
 	return (sum * neg);
 }
 
-/**
- * Check the arguments of the exit command.
- * @param {t_mini*} mini - The main structure of the shell.
- */
+
 static void	exit_arg(t_mini *mini)
 {
 	char	*arg;
@@ -59,13 +50,12 @@ static void	exit_arg(t_mini *mini)
 	t_sig	*sig;
 
 	sig = get_sig();
-	arg = mini->cmd->args[1];
+	arg = mini->cmd->args[0];
 	if (arg && (arg[0] == '-' || arg[0] == '+'))
 	{
 		ft_printfd(2, "%s: exit: %s: numeric argument \
 			required\n", mini->name, arg);
 		sig->status = 2;
-		return ;
 	}
 	i = 0;
 	while (arg && arg[i])
@@ -75,44 +65,37 @@ static void	exit_arg(t_mini *mini)
 			ft_printfd(2, "%s: exit: %s: numeric argument \
 				required\n", mini->name, arg);
 			sig->status = 2;
-			return ;
 		}
 		i++;
 	}
 }
 
-/**
- * Execute the exit command.
- * @param {t_mini*} mini - The main structure of the shell.
- */
+
 int	mini_exit(t_mini *mini)
 {
 	int			pbm;
 	long long	code;
 	t_sig		*sig;
 
-	(void)mini;
 	sig = get_sig();
-	if (!mini->cmd->args[1])
+	printf("enters exit fx\n");
+	if (mini->cmd->args[0])
 	{
-		clean_exit(mini, "NULL");
-		sig->status = 0;
-		sig->exit = 1;
+		exit_arg(mini);
+		if (mini->cmd->args[1])
+		{
+			ft_printfd(2, "%s: exit: too many arguments\n",
+				mini->name);
+			sig->status = 1;
+		}
+		pbm = 0;
+		code = ft_atoi_exit(mini->cmd->args[1], 0, &pbm);
+		if (pbm == 1)
+			return (ft_printfd(2, "%s: exit: %s: numeric argument required\n",
+					mini->name, mini->cmd->args[1]), sig->status = 2);
 	}
-	exit_arg(mini);
-	if (sig->status == 2)
-		return (sig->status);
-	if (mini->cmd->args[2])
-		return (ft_printfd(2, "%s: exit: too many arguments\n",
-				mini->name), sig->status = 1);
-	pbm = 0;
-	code = ft_atoi_exit(mini->cmd->args[1], 0, &pbm);
-	if (pbm == 1)
-		return (ft_printfd(2, "%s: exit: %s: numeric argument required\n",
-				mini->name, mini->cmd->args[1]), sig->status = 2);
-	sig->status = code % 256;
+	printf("is about to leave exit fx\n");
 	sig->exit = 1;
-	printf("%d\n", sig->exit);
+	sig->status = code % 256;
 	return (sig->status);
-	return (0);
 }

@@ -3,29 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 18:43:36 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/23 12:32:57 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Execute a built-in command.
- * 
- * @param {char**} args - The arguments for the command.
- * @param {t_mini*} mini - The main structure of the shell.
- * @return {int} - Returns the result of the command execution.
- */
+
 static void	exec_builtin(char **args, t_mini *mini)
 {
 	t_sig	*sig;
 
 	sig = get_sig();
-	(void)args;
-	/*if (mini->cmd->builtin == CD)
+	if (mini->cmd->builtin == CD)
 		sig->status = mini_cd(mini);
 	else if (mini->cmd->builtin == ECHO)
 		sig->status = mini_echo(mini);
@@ -36,22 +29,18 @@ static void	exec_builtin(char **args, t_mini *mini)
 	else if (mini->cmd->builtin == PWD)
 		sig->status = mini_pwd();
 	else if (mini->cmd->builtin == UNSET)
-		sig->status = mini_unset(mini);*/
+		sig->status = mini_unset(mini);
 	if (mini->cmd->builtin == EXIT)
 		sig->status = mini_exit(mini);
 }
 
-/**
- * Executes a command in a new process.
- * 
- * @param {t_mini*} mini - The main structure of the 
- * shell containing the command to be executed.
- * @return {pid_t} - Returns the process ID of the new process.
- */
-static pid_t	exec(t_mini *mini, t_cmd *cmd)
+
+static pid_t	exec(t_mini *mini, t_cmd *cmd, int *sigpipe_fd)
 {
 	pid_t	pid;
+	t_sig	*sig;
 
+	sig = get_sig();
 	pid = fork();
 	if (pid == 0)
 	{
@@ -63,7 +52,8 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd)
 		else
 		{
 			exec_builtin(cmd->args, mini);
-			write(sigpipe_fd[1], &sig, sizeof(t_sig));
+			printf("exit sig sent: %d\n", sig->exit);
+			write(sigpipe_fd[1], sig, sizeof(t_sig));
 			exit(0);
 		}
 	}
@@ -84,14 +74,8 @@ static void	fd_handler(t_mini *mini, t_cmd *cmd)
 		cmd->fd[1] = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 }
 
-/**
- * Sets up and manages pipes for command execution.
- * 
- * @param {t_mini*} mini - The main structure of the 
- * shell containing the commands to be executed.
- * @return {void}
- */
-static void	piper(t_mini *mini, t_cmd *cmd)
+
+static void	piper(t_mini *mini, t_cmd *cmd, int *sigpipe_fd)
 {
 	t_cmd	*nxt;
 	int		pipefd[2];
@@ -113,19 +97,12 @@ static void	piper(t_mini *mini, t_cmd *cmd)
 				cmd->fd[1] = pipefd[1];
 		}
 		nxt = cmd->next;
-		cmd->pid = exec(mini, cmd);
+		cmd->pid = exec(mini, cmd, sigpipe_fd);
 		cmd = nxt;
 	}
 }
 
-/**
- * Handles file descriptors for input and output redirection, 
- * and executes the commands.
- * 
- * @param {t_mini*} mini - The main structure of the shell containing 
- * the commands to be executed and the file descriptors.
- * @return {int} - Returns the exit status of the last command executed.
- */
+
 int	cmd_exec(t_mini *mini)
 {
 	t_cmd	*cmd;
@@ -138,12 +115,13 @@ int	cmd_exec(t_mini *mini)
 	cmd = mini->h_cmd;
 	initial_fds[0] = dup(STDIN_FILENO);
 	initial_fds[1] = dup(STDOUT_FILENO);
-	piper(mini, cmd);
+	piper(mini, cmd, sigpipe_fd);
 	while (cmd)
 	{
 		waitpid(cmd->pid, &(sig->status), 0);
 		sig->status = WEXITSTATUS(sig->status);
-		read(sigpipe_fd[0], &sig, sizeof(t_sig)); // a faire
+		read(sigpipe_fd[0], sig, sizeof(t_sig));
+		printf("exit sig received: %d\n", sig->exit);
 		close_fds(cmd->fd);
 		cmd = cmd->next;
 	}

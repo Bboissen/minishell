@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 17:29:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/23 11:22:59 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief Frees a null-terminated array of strings.
+ * @brief Frees a dynamically allocated 2D array.
  * 
- * @param tab The array of strings to free.
+ * @param tab The 2D array to be freed.
  */
 void	free_tab(char **tab)
 {
@@ -35,9 +35,9 @@ void	free_tab(char **tab)
 }
 
 /**
- * @brief Frees a linked list of commands.
+ * @brief Frees a dynamically allocated command structure.
  * 
- * @param cmd The head of the linked list of commands.
+ * @param cmd The command structure to be freed.
  */
 void	free_cmd(t_cmd **cmd)
 {
@@ -60,9 +60,9 @@ void	free_cmd(t_cmd **cmd)
 }
 
 /**
- * @brief Frees a linked list of tokens.
+ * @brief Frees a dynamically allocated token structure.
  * 
- * @param token The head of the linked list of tokens.
+ * @param token The token structure to be freed.
  */
 void	free_token(t_token **token)
 {
@@ -83,9 +83,9 @@ void	free_token(t_token **token)
 }
 
 /**
- * @brief Frees a linked list of environment variables.
+ * @brief Frees a dynamically allocated environment variable structure.
  * 
- * @param env The head of the linked list of environment variables.
+ * @param env The environment variable structure to be freed.
  */
 void	free_env(t_env *env)
 {
@@ -101,11 +101,14 @@ void	free_env(t_env *env)
 	}
 }
 
-
 /**
- * @brief Frees all allocated memory and exits the program.
+ * @brief Cleans up and exits the program.
  * 
- * @param mini The main structure of the program.
+ * This function frees all dynamically allocated memory, prints an exit message, and exits the program.
+ * 
+ * @param mini The main program structure.
+ * @param rl The readline buffer.
+ * @return The exit status of the program.
  */
 int	clean_exit(t_mini *mini, char *rl)
 {
