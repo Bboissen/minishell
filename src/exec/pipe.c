@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 12:32:57 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/23 17:36:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ static void	exec_builtin(char **args, t_mini *mini)
 {
 	t_sig	*sig;
 
+	(void)args;
 	sig = get_sig();
-	if (mini->cmd->builtin == CD)
+	/*if (mini->cmd->builtin == CD)
 		sig->status = mini_cd(mini);
 	else if (mini->cmd->builtin == ECHO)
 		sig->status = mini_echo(mini);
@@ -29,7 +30,7 @@ static void	exec_builtin(char **args, t_mini *mini)
 	else if (mini->cmd->builtin == PWD)
 		sig->status = mini_pwd();
 	else if (mini->cmd->builtin == UNSET)
-		sig->status = mini_unset(mini);
+		sig->status = mini_unset(mini);*/
 	if (mini->cmd->builtin == EXIT)
 		sig->status = mini_exit(mini);
 }
@@ -44,23 +45,24 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd, int *sigpipe_fd)
 	pid = fork();
 	if (pid == 0)
 	{
-		dup2(cmd->fd[0], 0);
-		dup2(cmd->fd[1], 1);
+		dup2(cmd->fd[0], STDIN_FILENO);
+		dup2(cmd->fd[1], STDOUT_FILENO);
 		close_fds(cmd->fd);
 		if (cmd->builtin == NONE)
 			execve(cmd->args[0], cmd->args, env_to_tab(mini->h_env));
 		else
 		{
 			exec_builtin(cmd->args, mini);
-			printf("exit sig sent: %d\n", sig->exit);
 			write(sigpipe_fd[1], sig, sizeof(t_sig));
-			exit(0);
+			close_fds(sigpipe_fd);
+			exit(sig->status);
 		}
 	}
 	else if (pid > 0)
 	{
 		dup2(cmd->fd[0], 0);
 		close_fds(cmd->fd);
+		close(sigpipe_fd[1]);
 	}
 	return (pid);
 }
@@ -115,13 +117,13 @@ int	cmd_exec(t_mini *mini)
 	cmd = mini->h_cmd;
 	initial_fds[0] = dup(STDIN_FILENO);
 	initial_fds[1] = dup(STDOUT_FILENO);
+	pipe(sigpipe_fd);
 	piper(mini, cmd, sigpipe_fd);
 	while (cmd)
 	{
+		read(sigpipe_fd[0], sig, sizeof(t_sig));
 		waitpid(cmd->pid, &(sig->status), 0);
 		sig->status = WEXITSTATUS(sig->status);
-		read(sigpipe_fd[0], sig, sizeof(t_sig));
-		printf("exit sig received: %d\n", sig->exit);
 		close_fds(cmd->fd);
 		cmd = cmd->next;
 	}

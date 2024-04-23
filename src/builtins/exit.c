@@ -3,17 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 12:11:37 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/23 18:34:09 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	cmdsize(t_cmd *h_cmd)
+{
+	t_cmd	*tmp;
+	int		i;
 
-static long long	ft_atoi_exit(const char *str, int i, int *pbm)
+	tmp = h_cmd;
+	i = 0;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	return (i);
+}
+
+/*static int	ft_atoi_exit(const char *str, int i, int *pbm)
 {
 	int			j;
 	long		neg;
@@ -42,7 +56,6 @@ static long long	ft_atoi_exit(const char *str, int i, int *pbm)
 	return (sum * neg);
 }
 
-
 static void	exit_arg(t_mini *mini)
 {
 	char	*arg;
@@ -54,7 +67,7 @@ static void	exit_arg(t_mini *mini)
 	if (arg && (arg[0] == '-' || arg[0] == '+'))
 	{
 		ft_printfd(2, "%s: exit: %s: numeric argument \
-			required\n", mini->name, arg);
+required\n", mini->name, arg);
 		sig->status = 2;
 	}
 	i = 0;
@@ -63,39 +76,61 @@ static void	exit_arg(t_mini *mini)
 		if (!isdigit(arg[i]))
 		{
 			ft_printfd(2, "%s: exit: %s: numeric argument \
-				required\n", mini->name, arg);
+required\n", mini->name, arg);
 			sig->status = 2;
 		}
 		i++;
 	}
 }
 
-
 int	mini_exit(t_mini *mini)
 {
 	int			pbm;
-	long long	code;
 	t_sig		*sig;
 
+	(void)mini;
 	sig = get_sig();
-	printf("enters exit fx\n");
-	if (mini->cmd->args[0])
+	if (mini->cmd->args && mini->cmd->args[0])
 	{
 		exit_arg(mini);
 		if (mini->cmd->args[1])
-		{
-			ft_printfd(2, "%s: exit: too many arguments\n",
-				mini->name);
-			sig->status = 1;
-		}
+			return (ft_printfd(2, "exit\n%s: exit: too many arguments\n",
+					mini->name), sig->status = 1);
 		pbm = 0;
-		code = ft_atoi_exit(mini->cmd->args[1], 0, &pbm);
+		sig->status = (ft_atoi_exit(mini->cmd->args[1], 0, &pbm)) % 256;
 		if (pbm == 1)
 			return (ft_printfd(2, "%s: exit: %s: numeric argument required\n",
 					mini->name, mini->cmd->args[1]), sig->status = 2);
 	}
-	printf("is about to leave exit fx\n");
-	sig->exit = 1;
-	sig->status = code % 256;
+	if (cmdsize(mini->h_cmd) == 1)
+		sig->exit = 1;
+	return (sig->status);
+}*/
+
+int	mini_exit(t_mini *mini)
+{
+	t_sig	*sig;
+	int		narg;
+
+	narg = ft_atoi(mini->cmd->args[0]);
+	sig = get_sig();
+	if (mini->cmd->args)
+	{
+		if (!ft_isdigit(narg))
+		{
+			ft_printfd(2, "%s: exit: %s: numeric argument required\n",
+				mini->name, mini->cmd->args[0]);
+			sig->status = 2;
+		}
+		else
+			sig->status = ft_atoi(mini->cmd->args[0]) % 256;
+	}
+	if (mini->cmd->args && mini->cmd->args[1])
+	{
+		ft_printfd(2, "exit\n%s: exit: too many arguments\n", mini->name);
+		sig->status = 1;
+	}
+	if (cmdsize(mini->h_cmd) == 1)
+		sig->exit = 1;
 	return (sig->status);
 }
