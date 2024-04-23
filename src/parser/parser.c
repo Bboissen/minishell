@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/23 10:25:30 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/23 15:00:08 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
+static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 static int	init_cmd(t_mini *mini, t_cmd **cmd);
 
+//protected
 void	parser(t_mini *mini)
 {
 	t_token	*token;
@@ -24,19 +25,19 @@ void	parser(t_mini *mini)
 
 	arg_flag = 0;
 	token = mini->h_token;
-	init_cmd(mini, &cmd);
+	init_cmd(mini, &cmd); //protected
 	while (token)
 	{
 		if (token && (token->type == INPUT || token->type == HEREDOC
 			|| token->type == APPEND || token->type == TRUNC))
-			check_file(mini, &cmd, &token);
+			check_file(mini, &cmd, &token); //protected
 		if (token && token->type == STR)
 			check_cmd(mini, &cmd, &token, &arg_flag);
 		if (token && token->type == PIPE)
 		{
 			if (cmd)
 				new_cmd(&mini, &cmd, &arg_flag);
-			init_cmd(mini, &cmd);
+			init_cmd(mini, &cmd); //protected
 			arg_flag = 0;
 			token = token->next;
 		}
@@ -45,7 +46,7 @@ void	parser(t_mini *mini)
 		new_cmd(&mini, &cmd, &arg_flag);
 }
 
-static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
+static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 {
 	int	fd;
 	
@@ -53,9 +54,15 @@ static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
 		if (access((*token)->next->str, R_OK) == -1)
-			return (cmd_skip(mini, cmd, token));
+			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
 		else
+		{
+			if ((*cmd)->in)
+				free((*cmd)->in);
 			(*cmd)->in = ft_strdup((*token)->next->str);
+			if (!(*cmd)->in)
+				return (error_manager(mini, MALLOC, NULL, NULL));
+		}
 	}
 	else if ((*token)->type == APPEND || (*token)->type == TRUNC)
 	{
@@ -66,11 +73,18 @@ static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		if (fd >= 0)
 			close(fd);
 		if (fd < 0 || access((*token)->next->str, W_OK) == -1)
-			return (cmd_skip(mini, cmd, token));
+			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
 		else
-			(*cmd)->out = ft_strdup((*token)->next->str);
+		{
+			if ((*cmd)->out)
+				free((*cmd)->out);
+			(*cmd)->out = ft_strdup((*token)->next->str); //protected
+			if (!(*cmd)->out)
+				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL));
+		}
 	}
 	(*token) = (*token)->next->next;
+	return (0);
 }
 
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
@@ -79,7 +93,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	{
 		if ((*cmd)->builtin == EXPORT)
 		{
-			return (cmd_skip(mini, cmd, token));
+			return (cmd_skip(mini, cmd, token)); //protected
 		}
 		(*cmd)->args = add_args(cmd, (*token)->str);
 		(*token) = (*token)->next;
@@ -93,7 +107,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0))
 		(*arg_flag)++;
 	else
-		return (parser_err(mini, (*token)->str, EXE, 0)); //WIP parser error and then skip
+		return (parser_err(mini, (*token)->str, EXE), cmd_skip(mini, cmd, token));
 	(*token) = (*token)->next;
 }
 

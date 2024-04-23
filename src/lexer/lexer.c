@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/22 15:06:01 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:10:50 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	odd_quote(char *str);
 
+//protected random iteration
 void	lexer(t_mini *mini)
 {
 	int		quote;
@@ -39,7 +40,6 @@ void	lexer(t_mini *mini)
 	if (mini->token && mini->token->join == JOIN)
 			mini->token->join = 0;
 	mini->token = mini->h_token;
-	return ;
 }
 
 static int	odd_quote(char *str)

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 16:13:33 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:08:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,15 @@
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be used as the base of the prompt.
  */
-
+//protected
 void	readline_setup(t_mini *mini, char **rl, char *str)
 {
 	char	*prompt;
-	(void)str;
-	prompt = ft_strjoin(str, " > "); //protected
+	static int i = 0;
+	if (i++ == 0)
+		prompt = ft_strjoin(str, " > "); //protected
+	else
+		prompt = NULL;
 	if (!prompt)
 		error_manager(mini, MALLOC, NULL, NULL);
 	*rl = readline(prompt);
@@ -39,12 +42,17 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char**} env - The environment for the shell.
  */
+//protected
 void	init_mini(t_mini **mini, char **env, char *name)
 {
 	(*mini) = malloc(sizeof(t_mini)); //protected
 	if (!(*mini))
+	{
+		dprintf(STDERR, "%s: memory allocation failed\n",
+			ft_strrchr(name, '/') + 1);
 		error_manager(NULL, MALLOC, NULL, NULL);
-	(*mini)->name = name + 2;
+	}
+	(*mini)->name = ft_strrchr(name, '/') + 1;
 	(*mini)->rl = NULL;
 	(*mini)->cmd = NULL;
 	(*mini)->h_cmd = NULL;
@@ -52,8 +60,8 @@ void	init_mini(t_mini **mini, char **env, char *name)
 	(*mini)->h_token = NULL;
 	(*mini)->env = NULL;
 	(*mini)->h_env = NULL;
-	init_env(mini, env); //protected random index	
-	increment_shell_level(mini); //protected
+	init_env(mini, env); //protected random iteration
+	increment_shell_level(mini); //protected random iteration
 	sig_init();
 }
 

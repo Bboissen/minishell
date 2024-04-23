@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/22 15:31:38 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:13:38 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,7 @@ static char	*token_typer(t_type type[3], char *str)
 	return (str);
 }
 
+//protected random iteration
 static void	new_token(t_mini *mini, char *str, t_type options[3])
 {
 	t_token	*new_token;

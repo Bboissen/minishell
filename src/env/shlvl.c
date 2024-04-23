@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 16:13:08 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:00:17 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,14 @@ static int	get_lvl(const char *str)
  * 
  * @param {t_env*} env - The environment to increment the shell level in.
  */
+//protected
 void	increment_shell_level(t_mini **mini)
 {
 	char	*shell_level_value;
 	int		shell_level;
 	char	*shlvl;
 
-	shell_level_value = expand_token(mini, "SHLVL"); //protected
+	shell_level_value = expand_token(mini, "SHLVL"); //protected random iteration
 	shell_level = get_lvl(shell_level_value) + 1;
 	if (shell_level_value)
 		ft_memdel(shell_level_value);

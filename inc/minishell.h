@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 17:28:44 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:06:49 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ typedef enum e_error
 {
 	SUCCESS = 0,
 	ERROR = 1,
+	MISSING = 2,
+	PERMISSION = 13,
 	DIRECTORY = 126,
 	EXE = 127,
 	MALLOC = 128,
@@ -217,7 +219,7 @@ char		*var_handler(t_mini *mini, char *str, int *quote);
 char		*random_file(t_mini *mini);
 
 //heredoc
-int	heredoc(t_mini *mini);
+void	heredoc(t_mini *mini);
 char	*expand_line(t_mini *mini, char *str, int fd);
 void	delete_heredoc(t_mini *mini);
 
@@ -227,6 +229,6 @@ void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
-void		path_finder(t_mini *mini, t_cmd **cmd, char *str);
-void		free_array(char **list);
+int		path_finder(t_mini *mini, t_cmd **cmd, char *str);
+void		parser_err(t_mini *mini, char *str, int err);
 #endif

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:03:28 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/23 10:25:02 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/23 11:03:19 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parser_err(t_mini *mini, char *str, int err, char c)
+void	parser_err(t_mini *mini, char *str, int err)
 {
 	t_sig	*sig;
 
@@ -20,11 +20,10 @@ void	parser_err(t_mini *mini, char *str, int err, char c)
 	sig->status = err;
 	if (err == EXE)
 		dprintf(STDERR, "%s: %s: command not found\n", mini->name, str);
-	else if(err == PARSE && c != 0)
-		dprintf(STDERR, "%s: syntax error near unexpected token '%c'\n", mini->name, c);
-	else if(err == PARSE)
-		dprintf(STDERR, "%s: syntax error near unexpected token 'newline'\n", mini->name);
+	else if(err == PERMISSION)
+		dprintf(STDERR, "%s: permission denied %s\n", mini->name, str);
+	else if(err == MISSING)
+		dprintf(STDERR, "%s: no such file or directory: %s\n", mini->name, str);
 	else
 		error_manager(mini, MALLOC, NULL, NULL);
-	cmd_skip(mini, &mini->cmd, &mini->token);
 }

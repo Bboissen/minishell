@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/23 10:25:15 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/23 15:13:42 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,14 @@ void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token)
 		(*token) = (*token)->next;
 	free_cmd(cmd);
 	if(mini->cmd)
+	{
+		if (mini->cmd->out)
+			free(mini->cmd->out);
 		mini->cmd->out = ft_strdup("/dev/null");
+		if (mini->cmd->out == NULL)
+			error_manager(mini, MALLOC, NULL, NULL);
+	}
+
 }
 
 void	new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag)
@@ -49,15 +56,19 @@ char	**add_args(t_cmd **cmd, char *str)
 	while ((*cmd)->args && (*cmd)->args[i])
 		i++;
 	new_cmd = malloc(sizeof(char *) * (i + 2));
+	if (!new_cmd)
+		return (error_manager(NULL, MALLOC, NULL, NULL), NULL);
 	j = 0;
 	while (j < i)
 	{
 		new_cmd[j] = ft_strdup((*cmd)->args[j]);
+		if (!new_cmd[j])
+			return (free_tab(new_cmd), error_manager(NULL, MALLOC, NULL, NULL), NULL);
 		j++;
 	}
 	new_cmd[j] = ft_strdup(str);
 	if (!new_cmd[j])
-		return (NULL);
+			return (free_tab(new_cmd), error_manager(NULL, MALLOC, NULL, NULL), NULL);
 	new_cmd[j + 1] = NULL;
 	if ((*cmd)->args)
 		free((*cmd)->args);
@@ -116,7 +127,7 @@ static char	*path_checker(char *str, char	*cmd, char	**path, int *err)
 	return (cmd);
 }
 
-void	path_finder(t_mini *mini, t_cmd **cmd, char *str)
+int	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 {
 	t_env	*local_env;
 	int		err;
@@ -133,14 +144,17 @@ void	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 		args = path_checker(str, args, path, &err);
 		free_tab(path);
 	}
-	if (path == NULL || ((*cmd) == NULL && err == 0))
-		err = MALLOC;
+	if (path == NULL || (args == NULL && err == 0))
+		return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL));
 	else if (err == -1)
 		err = errno;
 	else
 	{
 		(*cmd)->args = malloc(sizeof(char *) * 2);
+		if ((*cmd)->args == NULL)
+			return (free_cmd(cmd), free(args), error_manager(mini, MALLOC, NULL, NULL));
 		(*cmd)->args[0] = args;
 		(*cmd)->args[1] = NULL;
 	}
+	return (0);
 }

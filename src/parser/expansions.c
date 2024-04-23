@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 10:00:57 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/23 16:01:30 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
  * Expands and joins tokens in the shell.
  * @param {t_mini*} mini - The main structure of the shell.
  */
+//protected random iteration
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
@@ -25,7 +26,7 @@ void	expand_join(t_mini **mini)
 	{
 		if ((*mini)->token->expand)
 		{
-			tmp = expand_token(mini, (*mini)->token->str); //protection to test
+			tmp = expand_token(mini, (*mini)->token->str); //protected random iteration
 			free((*mini)->token->str);
 			(*mini)->token->str = tmp;
 			(*mini)->token->expand = 0;
@@ -48,7 +49,7 @@ void	expand_join(t_mini **mini)
  * @param {char*} str - The string to be expanded.
  * @return {char*} - Returns the expanded string.
  */
-
+//protected random iteration
 char	*expand_token(t_mini **mini, char *str)
 {
 	t_env *env;
@@ -60,7 +61,7 @@ char	*expand_token(t_mini **mini, char *str)
 	env_val = NULL;
 	if (!ft_strcmp(str, "?"))
 	{
-		env_val = ft_itoa(sig->status); //protection to test
+		env_val = ft_itoa(sig->status); //protected random iteration
 		if (!env_val)
 			error_manager(*mini, MALLOC, NULL, NULL); 
 		return (env_val);
@@ -69,14 +70,14 @@ char	*expand_token(t_mini **mini, char *str)
 	{
 		if (!ft_strcmp(str, env->name))
 		{
-			env_val = ft_strdup(env->value); //protected
+			env_val = ft_strdup(env->value); //protected random iteration
 			if (!env_val)
 				error_manager(*mini, MALLOC, NULL, NULL);
 			return (env_val);
 		}
 		env = env->next;
 	}
-	env_val = ft_strdup(""); //protected
+	env_val = ft_strdup(""); //protected random iteration
 	if (!env_val)
 		error_manager(*mini, MALLOC, NULL, NULL);
 	return (env_val);

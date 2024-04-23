@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 11:41:37 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:57:32 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ int	clean_exit(t_mini *mini)
 	else
 		exit(MALLOC);
 	mini->env = mini->h_env;
+	mini->token = mini->h_token;
+	mini->cmd = mini->h_cmd;
 	if (mini->token)
 		free_token(&(mini->token));
 	if (mini->cmd)

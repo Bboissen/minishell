@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 10:02:01 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/23 17:04:23 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+//TODO
+//ISSUE: empty var, CMD try to find path for empty
+//replace dprintf
+//check non ft_ function
+//leak parser pouet test | cat test | ls | grep Makefile - echo test | cat test
+//leak heredoc
+//no syntax error pouet test | << END'test' cat test | ls | grep Makefile
+//should quit when syntax error but still do heredoc
+//zsh: parse error near `|' instead of syntax error | << END
 
 /**
  * @brief The main function of the program.
@@ -34,15 +43,15 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (ERROR);
 	sig = get_sig();
-	init_mini(&mini, env, av[0]); //protected
+	init_mini(&mini, env, av[0]); //protected random iteration
 	while (!sig->exit)
 	{
-		readline_setup(mini, &(mini->rl), mini->name); //protected
-		lexer(mini); //protected random iteration
+		readline_setup(mini, &(mini->rl), mini->name);//protected
+		lexer(mini); //protected
 		if (mini->token)
 		{
-			heredoc(mini); //protected
-			expand_join(&mini); //protection to test
+			heredoc(mini);
+			expand_join(&mini);
 		}
 		mini->token = mini->h_token;
 		printf("\n------------------------------------------\n");

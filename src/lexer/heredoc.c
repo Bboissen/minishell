@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/23 10:02:06 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/23 17:18:01 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,16 @@ static unsigned int	my_rand(t_mini *mini)
 	static unsigned int	seed;
 	int					fd;
 
-	fd = open("/dev/random", O_RDONLY); // protected
+	fd = open("/dev/urandom", O_RDONLY); // protected
 	if (fd == -1) 
-		return (error_manager(mini, OPEN, "open", "/dev/random")); // protected
+		return (error_manager(mini, OPEN, "open", "/dev/urandom")); // protected
 	if (read(fd, &seed, sizeof(seed)) != sizeof(seed))
-		return (error_manager(mini, OPEN, "read", "/dev/random")); // protected
+		return (error_manager(mini, OPEN, "read", "/dev/urandom")); // protected
 	close(fd);
 	seed = (3565867 * seed + 12345) % (1U << 31);
 	return (seed % 10);
 }
-int	heredoc(t_mini *mini)
+void	heredoc(t_mini *mini)
 {
 	t_token	*token;
 	char	*file;
@@ -72,33 +72,33 @@ int	heredoc(t_mini *mini)
 				else
 					break;
 			}
-			file = random_file(mini);
+			file = random_file(mini); //protected
 			if (!file)
-				return (error_manager(mini, MALLOC, NULL, NULL));  // protected
+				error_manager(mini, MALLOC, NULL, NULL);
 			fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 			if (fd == -1)
-				return (error_manager(mini, OPEN, "open", file));  // protected
-			readline_setup(mini, &line, "heredoc");  // protected
+				error_manager(mini, OPEN, "open", file);
+			readline_setup(mini, &line, "heredoc"); //leak to manage in init_mini and here instead of readline
 			while (ft_strcmp(line, token->str))
 			{
 				while (*line)
 				{
 					if (*line == '$')
-						line = expand_line(mini, line + 1, fd);  // protected
+						line = expand_line(mini, line + 1, fd);
 					else
 						write(fd, line++, 1);
 				}
 				write(fd, "\n", 1);
-				readline_setup(mini, &line, "heredoc");  // protected
+				readline_setup(mini, &line, "heredoc");
 			}
-			close(fd);  // protected
+			close(fd);
+			free(token->str);
 			token->str = file;
 		}
 		token = token->next;
 	}
-	return (0);
 }
- // protected
+
 char	*expand_line(t_mini *mini, char *str, int fd)
 {
 	char	*start;
@@ -110,7 +110,7 @@ char	*expand_line(t_mini *mini, char *str, int fd)
 		str++;
 	end = *str;
 	*str = '\0';
-	var = expand_token(&mini, start);  // protected
+	var = expand_token(&mini, start);
 	write(fd, var, ft_strlen(var));
 	*str = end;
 	return (str++);
