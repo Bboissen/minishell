@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/22 17:28:52 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 10:02:06 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//ADAPT HEREDOC WITH JOIN
 #include "minishell.h"
 
 static unsigned int	my_rand(t_mini *mini);
@@ -67,7 +66,7 @@ int	heredoc(t_mini *mini)
 			token = token->next;
 			while (token && token->join == JOIN)
 			{
-				token = list_join(mini, token);
+				token = list_join(mini, token); //protected
 				if(token->next)
 					token = token->next;
 				else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 16:56:10 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 10:02:01 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	main(int ac, char **av, char **env)
 		lexer(mini); //protected random iteration
 		if (mini->token)
 		{
-			heredoc(mini);
-			expand_join(&mini);
+			heredoc(mini); //protected
+			expand_join(&mini); //protection to test
 		}
 		mini->token = mini->h_token;
 		printf("\n------------------------------------------\n");

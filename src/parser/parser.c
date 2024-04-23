@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/22 16:14:04 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 10:25:30 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0))
 		(*arg_flag)++;
 	else
-		return (cmd_skip(mini, cmd, token));
+		return (parser_err(mini, (*token)->str, EXE, 0)); //WIP parser error and then skip
 	(*token) = (*token)->next;
 }
 
@@ -101,7 +101,7 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd)
 {
 	*cmd = malloc(sizeof(t_cmd));
 	if (!*cmd)
-		return (error_manager(mini, MALLOC, NULL, NULL));
+		return (error_manager(mini, MALLOC, NULL, NULL)); //protected
 	(*cmd)->args = NULL;
 	(*cmd)->in = NULL;
 	(*cmd)->out = NULL;

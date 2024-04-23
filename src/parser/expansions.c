@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 17:30:32 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/23 10:00:57 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	expand_join(t_mini **mini)
 	{
 		if ((*mini)->token->expand)
 		{
-			tmp = expand_token(mini, (*mini)->token->str);
+			tmp = expand_token(mini, (*mini)->token->str); //protection to test
 			free((*mini)->token->str);
 			(*mini)->token->str = tmp;
 			(*mini)->token->expand = 0;
@@ -36,7 +36,7 @@ void	expand_join(t_mini **mini)
 	while ((*mini)->token)
 	{
 		if ((*mini)->token->join)
-			(*mini)->token = list_join((*mini), (*mini)->token);
+			(*mini)->token = list_join((*mini), (*mini)->token); //protection random iteration
 		else
 			(*mini)->token = (*mini)->token->next;
 	}
