@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 17:08:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 11:04:01 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,8 @@
 void	readline_setup(t_mini *mini, char **rl, char *str)
 {
 	char	*prompt;
-	static int i = 0;
-	if (i++ == 0)
-		prompt = ft_strjoin(str, " > "); //protected
-	else
-		prompt = NULL;
+
+	prompt = ft_strjoin(str, " > "); //protected
 	if (!prompt)
 		error_manager(mini, MALLOC, NULL, NULL);
 	*rl = readline(prompt);

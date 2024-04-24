@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 17:04:23 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 11:18:30 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 //no syntax error pouet test | << END'test' cat test | ls | grep Makefile
 //should quit when syntax error but still do heredoc
 //zsh: parse error near `|' instead of syntax error | << END
-
+// leak CTRD heredoc
 /**
  * @brief The main function of the program.
  * The function initializes minishell, then enters a loop where it 
@@ -46,11 +46,11 @@ int	main(int ac, char **av, char **env)
 	init_mini(&mini, env, av[0]); //protected random iteration
 	while (!sig->exit)
 	{
-		readline_setup(mini, &(mini->rl), mini->name);//protected
+		readline_setup(mini, &(mini->rl), mini->name); //protected
 		lexer(mini); //protected
 		if (mini->token)
 		{
-			heredoc(mini);
+			heredoc(mini); //protected random iteration
 			expand_join(&mini);
 		}
 		mini->token = mini->h_token;

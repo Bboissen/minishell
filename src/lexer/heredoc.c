@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/23 17:18:01 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 11:18:07 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static unsigned int	my_rand(t_mini *mini)
 void	heredoc(t_mini *mini)
 {
 	t_token	*token;
-	char	*file;
 	char	*line;
 	int		fd;
 
@@ -63,7 +62,6 @@ void	heredoc(t_mini *mini)
 	{
 		if (token->type == HEREDOC)
 		{
-			token = token->next;
 			while (token && token->join == JOIN)
 			{
 				token = list_join(mini, token); //protected
@@ -72,33 +70,35 @@ void	heredoc(t_mini *mini)
 				else
 					break;
 			}
-			file = random_file(mini); //protected
-			if (!file)
+			token->str = random_file(mini); //protected
+			if (!token->str)
 				error_manager(mini, MALLOC, NULL, NULL);
-			fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+			fd = open(token->str, O_CREAT | O_RDWR | O_TRUNC, 0644);
 			if (fd == -1)
-				error_manager(mini, OPEN, "open", file);
-			readline_setup(mini, &line, "heredoc"); //leak to manage in init_mini and here instead of readline
+				error_manager(mini, OPEN, "open", token->str);
+			token = token->next;
+			readline_setup(mini, &line, "heredoc"); //protected random iteration
 			while (ft_strcmp(line, token->str))
 			{
 				while (*line)
 				{
 					if (*line == '$')
-						line = expand_line(mini, line + 1, fd);
+						line = expand_line(mini, line + 1, fd); //protected random iteration
 					else
 						write(fd, line++, 1);
 				}
 				write(fd, "\n", 1);
 				readline_setup(mini, &line, "heredoc");
 			}
-			close(fd);
 			free(token->str);
-			token->str = file;
+			token->str = token->prev->str;
+			token->prev->str = NULL;
+			close(fd);
 		}
 		token = token->next;
 	}
 }
-
+//protected random iteration
 char	*expand_line(t_mini *mini, char *str, int fd)
 {
 	char	*start;
@@ -110,8 +110,9 @@ char	*expand_line(t_mini *mini, char *str, int fd)
 		str++;
 	end = *str;
 	*str = '\0';
-	var = expand_token(&mini, start);
+	var = expand_token(&mini, start); //protected random iteration
 	write(fd, var, ft_strlen(var));
+	free(var);
 	*str = end;
 	return (str++);
 }
