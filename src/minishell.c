@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 12:33:47 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:57:24 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 //zsh: parse error near `|' instead of syntax error | << END
 // leak CTRD heredoc
 // leak/error with any type of join
+//sudo permission vs not found
 
 /**
  * @brief The main function of the program.

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/24 12:32:52 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:10:26 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	parser(t_mini *mini)
 	if (cmd)
 		new_cmd(&mini, &cmd, &arg_flag);
 }
-
+//ready to test
 static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 {
 	int	fd;
@@ -61,7 +61,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 				free((*cmd)->in);
 			(*cmd)->in = ft_strdup((*token)->next->str);
 			if (!(*cmd)->in)
-				return (error_manager(mini, MALLOC, NULL, NULL));
+				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL)); 
 		}
 	}
 	else if ((*token)->type == APPEND || (*token)->type == TRUNC)
@@ -91,10 +91,10 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 {
 	if (*arg_flag)
 	{
-		if ((*cmd)->builtin == EXPORT)
-		{
-			return (cmd_skip(mini, cmd, token));
-		}
+		// if ((*cmd)->builtin == EXPORT) //add cmd size test
+		// {
+		// 	return (cmd_skip(mini, cmd, token));
+		// }
 		(*cmd)->args = add_args(cmd, (*token)->str);
 		(*token) = (*token)->next;
 		return ;
