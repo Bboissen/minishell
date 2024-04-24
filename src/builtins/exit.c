@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 18:34:09 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/24 08:58:20 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,23 @@ static int	cmdsize(t_cmd *h_cmd)
 		tmp = tmp->next;
 		i++;
 	}
+	ft_printfd(STDERR_FILENO, "cmdsize: %d\n", i);
 	return (i);
+}
+
+static int	arg_exists(char **args, int index)
+{
+	int	i;
+
+	i = 0;
+	if (args == NULL)
+		return (0);
+	while (args[i] != NULL)
+	{
+		ft_printfd(STDERR_FILENO, "args[%d]: %s\n", i, args[i]);
+		i++;
+	}
+	return (i > index);
 }
 
 /*static int	ft_atoi_exit(const char *str, int i, int *pbm)
@@ -112,25 +128,33 @@ int	mini_exit(t_mini *mini)
 	t_sig	*sig;
 	int		narg;
 
-	narg = ft_atoi(mini->cmd->args[0]);
 	sig = get_sig();
+	if (mini->cmd->args)
+		narg = ft_atoi(mini->cmd->args[0]);
 	if (mini->cmd->args)
 	{
 		if (!ft_isdigit(narg))
 		{
-			ft_printfd(2, "%s: exit: %s: numeric argument required\n",
-				mini->name, mini->cmd->args[0]);
+			ft_printfd(STDERR_FILENO,
+				"exit\n%s: exit: %s: numeric argument required\n",
+				mini->name, narg);
 			sig->status = 2;
+			sig->exit = 1;
+			return (sig->status);
 		}
 		else
-			sig->status = ft_atoi(mini->cmd->args[0]) % 256;
+			sig->status = narg % 256;
 	}
-	if (mini->cmd->args && mini->cmd->args[1])
+	if (mini->cmd->args && arg_exists(mini->cmd->args, 1))
 	{
-		ft_printfd(2, "exit\n%s: exit: too many arguments\n", mini->name);
+		ft_printfd(STDERR_FILENO,
+			"exit\n%s: exit: too many arguments\n", mini->name);
 		sig->status = 1;
 	}
 	if (cmdsize(mini->h_cmd) == 1)
+	{
 		sig->exit = 1;
+		ft_printfd(STDERR_FILENO, "exit\n");
+	}
 	return (sig->status);
 }

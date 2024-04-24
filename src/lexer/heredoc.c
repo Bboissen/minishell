@@ -3,29 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/22 15:08:09 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/24 07:44:38 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//ADAPT HEREDOC WITH JOIN
 #include "minishell.h"
 
-static unsigned int	my_rand(void);
+static unsigned int	my_rand(t_mini *mini);
 
-char	*random_file(void)
+ // protected
+char	*random_file(t_mini *mini)
 {
 	char			*file;
 	char			*tmp;
 	unsigned int	rand;
+	unsigned int	seed;
 	int				i;
 
 	i = 0;
 	rand = 0;
 	while (i++ < 9)
-		rand = rand * 10 + my_rand();
+	{
+		seed = my_rand(mini);
+		rand = rand * 10 + seed;
+	}
 	tmp = ft_itoa(rand);
 	if (!tmp)
 		return (NULL);
@@ -34,26 +38,22 @@ char	*random_file(void)
 	return (file);
 }
 
-static unsigned int	my_rand(void)
+ // protected
+static unsigned int	my_rand(t_mini *mini)
 {
 	static unsigned int	seed;
 	int					fd;
 
 	fd = open("/dev/urandom", O_RDONLY);
 	if (fd == -1)
-	{
-		perror("open");
-		exit(1);
-	}
+		return (error_manager(mini, OPEN, "open", "/dev/urandom"));
 	if (read(fd, &seed, sizeof(seed)) != sizeof(seed))
-	{
-		perror("read");
-		exit(1);
-	}
+		return (error_manager(mini, OPEN, "read", "/dev/urandom"));
 	close(fd);
 	seed = (3565867 * seed + 12345) % (1U << 31);
 	return (seed % 10);
 }
+
 void	heredoc(t_mini *mini)
 {
 	t_token	*token;
@@ -66,35 +66,36 @@ void	heredoc(t_mini *mini)
 	{
 		if (token->type == HEREDOC)
 		{
-			file = random_file();
+			token = token->next;
+			while (token && token->join == JOIN)
+			{
+				token = list_join(mini, token);
+				if (token->next)
+					token = token->next;
+				else
+					break ;
+			}
+			file = random_file(mini);
 			if (!file)
-			{
-				return ;
-			}
-			fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0777);
+				error_manager(mini, MALLOC, NULL, NULL);
+			fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 			if (fd == -1)
-			{
-				perror("open");
-				free(file);
-				return ;
-			}
+				error_manager(mini, OPEN, "open", file);
 			readline_setup(mini, &line, "heredoc");
-			if (line)
+			while (ft_strcmp(line, token->str))
 			{
-				while (ft_strcmp(line, token->next->str))
+				while (*line)
 				{
-					while (*line)
-					{
-						if (*line == '$')
-							line = expand_line(mini, line + 1, fd);
-						else
-							write(fd, line++, 1);
-					}
-					write(fd, "\n", 1);
-					readline_setup(mini, &line, "heredoc");
+					if (*line == '$')
+						line = expand_line(mini, line + 1, fd);
+					else
+						write(fd, line++, 1);
 				}
+				write(fd, "\n", 1);
+				readline_setup(mini, &line, "heredoc");
 			}
 			close(fd);
+			free(token->str);
 			token->str = file;
 		}
 		token = token->next;

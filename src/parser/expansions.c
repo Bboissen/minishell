@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 18:53:56 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/24 07:58:19 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
  * Expands and joins tokens in the shell.
  * @param {t_mini*} mini - The main structure of the shell.
  */
+//protected random iteration
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
@@ -36,7 +37,7 @@ void	expand_join(t_mini **mini)
 	while ((*mini)->token)
 	{
 		if ((*mini)->token->join)
-			(*mini)->token = list_join((*mini)->token);
+			(*mini)->token = list_join((*mini), (*mini)->token);
 		else
 			(*mini)->token = (*mini)->token->next;
 	}
@@ -44,10 +45,12 @@ void	expand_join(t_mini **mini)
 
 /**
  * Expands a token in the shell.
+ * 
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be expanded.
  * @return {char*} - Returns the expanded string.
  */
+//protected random iteration
 char	*expand_token(t_mini **mini, char *str)
 {
 	t_env	*env;
@@ -56,33 +59,46 @@ char	*expand_token(t_mini **mini, char *str)
 
 	sig = get_sig();
 	env = (*mini)->h_env;
-	env_val = ft_strdup("");
+	env_val = NULL;
 	if (!ft_strcmp(str, "?"))
-		return (ft_itoa(sig->status));
+	{
+		env_val = ft_itoa(sig->status);
+		if (!env_val)
+			error_manager(*mini, MALLOC, NULL, NULL);
+		return (env_val);
+	}
 	while (env && env->name)
 	{
 		if (!ft_strcmp(str, env->name))
 		{
-			env_val = strdup(env->value);
+			env_val = ft_strdup(env->value);
+			if (!env_val)
+				error_manager(*mini, MALLOC, NULL, NULL);
 			return (env_val);
 		}
 		env = env->next;
 	}
+	env_val = ft_strdup("");
+	if (!env_val)
+		error_manager(*mini, MALLOC, NULL, NULL);
 	return (env_val);
 }
 
 /**
  * Joins a list of tokens in the shell.
+ * 
  * @param {t_token*} token - The token to be joined.
  * @return {t_token*} - Returns the joined token.
  */
-t_token	*list_join(t_token *token)
+t_token	*list_join(t_mini *mini, t_token *token)
 {
 	char	*new_str;
 	t_token	*to_free;
 
 	new_str = malloc(ft_strlen(token->str)
 			+ ft_strlen(token->next->str) + 1);
+	if (!new_str)
+		error_manager(mini, MALLOC, NULL, NULL);
 	ft_strcpy(new_str, token->str);
 	ft_strcat(new_str, token->next->str);
 	free(token->next->str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 17:24:17 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/24 08:39:49 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,27 @@ int	main(int ac, char **av, char **env)
 {
 	t_mini	*mini;
 	t_sig	*sig;
-	char	*rl;
 
-	rl = NULL;
 	if (ac != 1)
 		return (ERROR);
 	sig = get_sig();
 	init_mini(&mini, env, av[0]);
 	while (sig->exit == FALSE)
 	{
-		readline_setup(mini, &rl, mini->name);
-		if (rl == NULL)
-			break ;
-		lexer(mini, rl);
+		readline_setup(mini, &(mini->rl), mini->name);
+		if (mini->rl == NULL)
+		{
+			ft_printfd(STDERR_FILENO, "exit\n");
+			return (clean_exit(mini));
+		}
+		lexer(mini);
 		heredoc(mini);
 		expand_join(&mini);
 		if (mini->h_token)
 			parser(mini);
 		if (mini->cmd)
 			cmd_exec(mini);
-		reinit(&mini, &rl);
+		reinit(&mini);
 	}
-	return (clean_exit(mini, rl));
+	return (clean_exit(mini));
 }

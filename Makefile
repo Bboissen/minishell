@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
+#    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/23 15:12:09 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/24 09:17:29 by talibabtou       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-BUILTINS	=	exit #cd		\
+BUILTINS	=	exit pwd env echo #cd		\
 				echo		\
 				env			\
 				exit		\
@@ -42,8 +42,10 @@ ENV			=	env			\
 				shlvl		\
 				sort_env
 
-ERROR		=	error_manager	\
-				lexer_err
+ERROR		=	builtin_err		\
+				error_manager	\
+				lexer_err		\
+				parser_err
 
 EXEC		=	pipe
 

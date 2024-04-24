@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/22 17:30:51 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/24 07:47:53 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
+static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 static int	init_cmd(t_mini *mini, t_cmd **cmd);
 
+//protected
 void	parser(t_mini *mini)
 {
 	t_token	*token;
@@ -45,7 +46,7 @@ void	parser(t_mini *mini)
 		new_cmd(&mini, &cmd, &arg_flag);
 }
 
-static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
+static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 {
 	int	fd;
 
@@ -53,9 +54,16 @@ static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
 		if (access((*token)->next->str, R_OK) == -1)
-			return (cmd_skip(mini, cmd, token));
+			return (parser_err(mini, (*token)->next->str, errno),
+				cmd_skip(mini, cmd, token), errno);
 		else
+		{
+			if ((*cmd)->in)
+				free((*cmd)->in);
 			(*cmd)->in = ft_strdup((*token)->next->str);
+			if (!(*cmd)->in)
+				return (error_manager(mini, MALLOC, NULL, NULL));
+		}
 	}
 	else if ((*token)->type == APPEND || (*token)->type == TRUNC)
 	{
@@ -66,11 +74,19 @@ static void	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		if (fd >= 0)
 			close(fd);
 		if (fd < 0 || access((*token)->next->str, W_OK) == -1)
-			return (cmd_skip(mini, cmd, token));
+			return (parser_err(mini, (*token)->next->str, errno),
+				cmd_skip(mini, cmd, token), errno);
 		else
+		{
+			if ((*cmd)->out)
+				free((*cmd)->out);
 			(*cmd)->out = ft_strdup((*token)->next->str);
+			if (!(*cmd)->out)
+				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL));
+		}
 	}
 	(*token) = (*token)->next->next;
+	return (0);
 }
 
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
@@ -78,9 +94,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	if (*arg_flag)
 	{
 		if ((*cmd)->builtin == EXPORT)
-		{
 			return (cmd_skip(mini, cmd, token));
-		}
 		(*cmd)->args = add_args(cmd, (*token)->str);
 		(*token) = (*token)->next;
 		return ;
@@ -90,11 +104,12 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 		path_finder(mini, cmd, (*token)->str);
 	else if (ft_strchr((*token)->str, '/'))
 		(*cmd)->args = add_args(cmd, (*token)->str);
-	if ((*cmd)->builtin != NONE || ((*cmd)->args
-			&& access((*cmd)->args[0], X_OK) == 0))
+	if ((*cmd)->builtin != NONE
+		|| ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0))
 		(*arg_flag)++;
 	else
-		return (cmd_skip(mini, cmd, token));
+		return (parser_err(mini, (*token)->str, EXE),
+			cmd_skip(mini, cmd, token));
 	(*token) = (*token)->next;
 }
 
@@ -102,7 +117,7 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd)
 {
 	*cmd = malloc(sizeof(t_cmd));
 	if (!*cmd)
-		return (error_manager(mini, MALLOC));
+		return (error_manager(mini, MALLOC, NULL, NULL));
 	(*cmd)->args = NULL;
 	(*cmd)->in = NULL;
 	(*cmd)->out = NULL;

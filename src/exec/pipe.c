@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 17:36:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/24 09:17:22 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static void	exec_builtin(char **args, t_mini *mini)
 {
@@ -20,21 +19,20 @@ static void	exec_builtin(char **args, t_mini *mini)
 	(void)args;
 	sig = get_sig();
 	/*if (mini->cmd->builtin == CD)
-		sig->status = mini_cd(mini);
-	else if (mini->cmd->builtin == ECHO)
+		sig->status = mini_cd(mini);*/
+	if (mini->cmd->builtin == ECHO)
 		sig->status = mini_echo(mini);
 	else if (mini->cmd->builtin == ENV)
 		sig->status = mini_env(mini);
-	else if (mini->cmd->builtin == EXPORT)
-		sig->status = mini_export(args, mini->env);
+	/*else if (mini->cmd->builtin == EXPORT)
+		sig->status = mini_export(args, mini->env);*/
 	else if (mini->cmd->builtin == PWD)
 		sig->status = mini_pwd();
-	else if (mini->cmd->builtin == UNSET)
+	/*else if (mini->cmd->builtin == UNSET)
 		sig->status = mini_unset(mini);*/
-	if (mini->cmd->builtin == EXIT)
+	else if (mini->cmd->builtin == EXIT)
 		sig->status = mini_exit(mini);
 }
-
 
 static pid_t	exec(t_mini *mini, t_cmd *cmd, int *sigpipe_fd)
 {
@@ -76,7 +74,6 @@ static void	fd_handler(t_mini *mini, t_cmd *cmd)
 		cmd->fd[1] = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 }
 
-
 static void	piper(t_mini *mini, t_cmd *cmd, int *sigpipe_fd)
 {
 	t_cmd	*nxt;
@@ -104,7 +101,6 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *sigpipe_fd)
 	}
 }
 
-
 int	cmd_exec(t_mini *mini)
 {
 	t_cmd	*cmd;
@@ -123,7 +119,6 @@ int	cmd_exec(t_mini *mini)
 	{
 		read(sigpipe_fd[0], sig, sizeof(t_sig));
 		waitpid(cmd->pid, &(sig->status), 0);
-		sig->status = WEXITSTATUS(sig->status);
 		close_fds(cmd->fd);
 		cmd = cmd->next;
 	}

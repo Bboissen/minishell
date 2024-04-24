@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/04/23 12:46:59 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 07:17:34 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	builtin_err(t_mini *mini, int error, char *arg)
 {
 	int	i;
 
+	(void)mini;
 	if (error == -1)
 		ft_putstr_fd("export: not valid in this context: ", STDERR_FILENO);
 	else if (error == 0 || error == -3)

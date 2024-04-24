@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_err.c                                        :+:      :+:    :+:   */
+/*   parser_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/01 10:34:17 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/24 07:43:42 by talibabtou       ###   ########.fr       */
+/*   Created: 2024/04/23 10:03:28 by bbsn              #+#    #+#             */
+/*   Updated: 2024/04/24 07:19:26 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	lexer_err(t_mini *mini, char **str, int err, char c)
+void	parser_err(t_mini *mini, char *str, int err)
 {
 	t_sig	*sig;
 
 	sig = get_sig();
 	sig->status = err;
-	mini->token = mini->h_token;
-	*str = NULL;
-	if (err == QUOTE)
-		dprintf(STDERR_FILENO, "%s: odd number of quotes\n", mini->name);
-	else if (err == PARSE && c != 0)
-		dprintf(STDERR_FILENO, "%s: syntax error near unexpected token '%c'\n",
-			mini->name, c);
-	else if (err == PARSE)
-		dprintf(STDERR_FILENO,
-			"%s: syntax error near unexpected token 'newline'\n", mini->name);
+	if (err == EXE)
+		dprintf(STDERR_FILENO, "%s: %s: command not found\n", mini->name, str);
+	else if (err == PERMISSION)
+		dprintf(STDERR_FILENO, "%s: permission denied %s\n", mini->name, str);
+	else if (err == MISSING)
+		dprintf(STDERR_FILENO, "%s: no such file or directory: %s\n",
+			mini->name, str);
 	else
 		error_manager(mini, MALLOC, NULL, NULL);
 }

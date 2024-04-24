@@ -3,16 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/18 10:35:16 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/24 07:12:56 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	odd_quote(char *str)
+static int	odd_quote(char *str);
+
+//protected random iteration
+void	lexer(t_mini *mini)
+{
+	int		quote;
+	char	*str;
+
+	str = mini->rl;
+	if (odd_quote(str))
+		return (lexer_err(mini, &str, QUOTE, 0));
+	mini->token = NULL;
+	quote = 0;
+	while (str && *str != 0)
+	{
+		while (quote == 0 && *str && ft_isspace(*str))
+			str++;
+		str = syntax_check(mini, str, &quote);
+		str = string_handler(mini, str, &quote);
+		str = s_quote_handler(mini, str, &quote);
+		str = d_quote_handler(mini, str, &quote);
+		str = var_handler(mini, str, &quote);
+	}
+	if (mini->token && mini->token->type != STR)
+		return (lexer_err(mini, &str, PARSE, 0));
+	if (mini->token && mini->token->join == JOIN)
+		mini->token->join = 0;
+	mini->token = mini->h_token;
+}
+
+static int	odd_quote(char *str)
 {
 	int		i;
 	int		s_quote;
@@ -53,71 +83,4 @@ int	is_spe_expand(char c)
 		return (0);
 }
 
-int	lexer(t_mini *mini, char *str)
-{
-	int		quote;
-	t_token	*token;
-	t_sig	*sig;
 
-	sig = get_sig();
-	if (odd_quote(str))
-		return (lexer_err(QUOTE, 0));
-	token = NULL;
-	mini->token = token;
-	quote = 0;
-	while (str && *str != 0 && sig->exit == 0)
-	{
-		while (str && quote == 0 && *str && ft_isspace(*str))
-			str++;
-		str = syntax_check(mini, &token, str, &quote);
-		str = string_handler(mini, &token, str, &quote);
-		str = s_quote_handler(mini, &token, str, &quote);
-		str = d_quote_handler(mini, &token, str, &quote);
-		str = var_handler(mini, &token, str, &quote);
-	}
-	// if (token && !token->str)
-	// 	return (printf("bash: syntax error near unexpected token `newline'\n"));
-	if (token && (token)->join == JOIN)
-			(token)->join = 0;
-	return (0);
-}
-
-// int	main(void)
-// {
-// 	char *rl = NULL;
-// 	t_mini	*mini;
-
-// 	mini = malloc(sizeof(t_mini));
-// 	while (!rl || rl[0] != 'z')
-// 	{
-// 		readline_setup(&rl, "Michel");
-// 		mini->sig.status = lexer(mini, rl);
-// 		heredoc(mini);
-// 		printf("\n------------------------------------------\n");
-// 		printf("|type\t|%-20s|join|expand|\n", "string");
-// 		printf("------------------------------------------\n");
-// 		mini->token	= mini->h_token;
-// 		while (mini->token)
-// 		{
-// 			dprintf(1, "|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
-// 			mini->token = mini->token->next;
-// 		}
-
-// 		parser(mini);
-// 		getchar();
-// 		printf("\n------------------------------------------\n");
-// 		printf("|cmd\t|builtin|infile|outfile|\n");
-// 		printf("------------------------------------------\n");
-// 		mini->cmd	= mini->h_cmd;
-// 		while (mini->cmd)
-// 		{
-// 			dprintf(1, "|%s\t|%d|%s|%s|\n", mini->cmd->args[0], mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
-// 			mini->token = mini->token->next;
-// 		}
-// 		rl_on_new_line();
-// 		free(rl);
-// 		rl = NULL;
-// 		printf("\n\n\n");
-// 	}
-// 	return (mini->sig.status);
-// }
