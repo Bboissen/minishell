@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 18:02:46 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:18:29 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	cmd_exec(t_mini *mini)
 	t_sig	*sig;
 
 	sig = get_sig();
-	sig->sig = 2;
+	sig->working = 2;
 	cmd = mini->h_cmd;
 	pipex(mini, cmd);
 	while (cmd)
@@ -151,6 +151,6 @@ int	cmd_exec(t_mini *mini)
 		cmd = cmd->next;
 	}
 	sig->status = WEXITSTATUS(sig->status);
-	sig->sig = 0;
+	sig->working = 0;
 	return (sig->status);
 }

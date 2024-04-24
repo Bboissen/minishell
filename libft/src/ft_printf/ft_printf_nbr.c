@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_nbr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 14:21:11 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/22 11:34:15 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/01/31 12:43:34 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_printnbr(int n)
 	char	*num;
 
 	i = 0;
-	num = ft_itoa(n); //to protect
+	num = ft_itoa(n);
 	i = ft_printstr(num);
 	free(num);
 	return (i);

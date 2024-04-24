@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 11:03:56 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:17:59 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@
 
 # define BUFF_SIZE 4096
 # define PATH_MAX 4096
-
-# define ERROR_LEX "" //to define, etc..
 
 typedef enum e_type
 {
@@ -107,7 +105,7 @@ typedef struct s_env
 typedef struct s_sig
 {
 	int				status;
-	int				sig;
+	int				working;
 	int				exit;
 }	t_sig;
 
@@ -227,7 +225,7 @@ void	delete_heredoc(t_mini *mini);
 void		parser(t_mini *mini);
 void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
-char		**add_args(t_cmd **cmd, char *str);
+char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int		path_finder(t_mini *mini, t_cmd **cmd, char *str);
 void		parser_err(t_mini *mini, char *str, int err);

@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   seq_write.c                                        :+:      :+:    :+:   */
+/*   ft_strequ.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/07 13:24:34 by bboissen          #+#    #+#             */
-/*   Updated: 2023/12/22 11:54:48 by bboissen         ###   ########.fr       */
+/*   Created: 2024/03/20 13:37:59 by gdumas            #+#    #+#             */
+/*   Updated: 2024/03/20 13:40:04 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf_fd.h"
+#include "libft.h"
 
-int	seq_write(int fd, char *s, int len)
+int	ft_strequ(const char *s1, const char *s2)
 {
-	return (write(fd, s, len));
-}
-
-int	ft_putstr_fd(char *s, int fd)
-{
-	return (write(fd, s, ft_strlen(s)));
-}
-
-int	ft_putchar_fd(char c, int fd)
-{
-	return (write(fd, &c, 1));
+	if (!s1 || !s2)
+		return (0);
+	if (!ft_strcmp(s1, s2))
+		return (1);
+	else
+		return (0);
 }

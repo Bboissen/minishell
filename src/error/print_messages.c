@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:05:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/18 16:19:11 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:18:11 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	print_sigquit_message(int code)
 	t_sig	*sig;
 
 	sig = get_sig();
-	if (sig->sig == 2)
+	if (sig->working == 2)
 	{
 		nbr = ft_itoa(code);
 		dprintf(STDERR, "Quit: %s\n", nbr);

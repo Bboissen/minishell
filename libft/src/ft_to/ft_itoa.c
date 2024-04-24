@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:29:22 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 15:38:40 by bboissen         ###   ########.fr       */
+/*   Updated: 2023/11/15 10:13:40 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static char	*pre_conv(int len)
 {
 	char	*tmp;
 
-	(void) len;
 	tmp = malloc((len + 1) * sizeof(char));
 	if (!tmp)
 		return (NULL);

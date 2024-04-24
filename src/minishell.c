@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 13:57:24 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/24 17:36:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 //TODO
 //ISSUE: empty var, CMD try to find path for empty
+
 //replace dprintf
 //check non ft_ function
 //no syntax error pouet test | << END'test' cat test | ls | grep Makefile
 //should quit when syntax error but still do heredoc
 //zsh: parse error near `|' instead of syntax error | << END
-// leak CTRD heredoc
-// leak/error with any type of join
-//sudo permission vs not found
+// itoa printf
+// bash: warning: here-document at line 1 delimited by end-of-file (wanted `END')
 
 /**
  * @brief The main function of the program.
@@ -48,6 +48,8 @@ int	main(int ac, char **av, char **env)
 	while (!sig->exit)
 	{
 		readline_setup(mini, &(mini->rl), mini->name); //protected
+		if (!mini->rl)
+			return (ft_printfd(STDERR_FILENO, "exit\n"), clean_exit(mini));
 		lexer(mini); //protected
 		if (mini->token)
 		{
@@ -89,7 +91,7 @@ int	main(int ac, char **av, char **env)
 		// if (mini->cmd)
 		// 	cmd_exec(mini);
 		reinit(&mini);
-		sig->exit=1;
+		// sig->exit=1;
 	}
 	return (clean_exit(mini));
 }

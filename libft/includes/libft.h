@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 11:05:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/19 16:08:25 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:43:22 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ char	*ft_strchr(char const *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strdup(const char *str);
-char	*ft_strndup(const char *str, int n);
 int		ft_strequ(const char *s1, const char *s2);
 int		ft_strisnum(const char *str);
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
@@ -124,6 +123,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize);
 size_t	ft_strlen(const char *str);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strndup(const char *str, int n);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strrchr(char *s, int c);
 char	*ft_strtok(char *str, char delim);

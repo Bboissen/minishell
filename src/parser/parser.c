@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/24 14:10:26 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/04/24 17:12:09 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 static int	init_cmd(t_mini *mini, t_cmd **cmd);
 
-//protected
+//protected random iteration
 void	parser(t_mini *mini)
 {
 	t_token	*token;
@@ -25,19 +25,19 @@ void	parser(t_mini *mini)
 
 	arg_flag = 0;
 	token = mini->h_token;
-	init_cmd(mini, &cmd);
+	init_cmd(mini, &cmd); //protected random iteration
 	while (token)
 	{
 		if (token && (token->type == INPUT || token->type == HEREDOC
 			|| token->type == APPEND || token->type == TRUNC))
-			check_file(mini, &cmd, &token);
+			check_file(mini, &cmd, &token); //protected random iteration
 		if (token && token->type == STR)
-			check_cmd(mini, &cmd, &token, &arg_flag);
+			check_cmd(mini, &cmd, &token, &arg_flag); //protected random iteration
 		if (token && token->type == PIPE)
 		{
 			if (cmd)
 				new_cmd(&mini, &cmd, &arg_flag);
-			init_cmd(mini, &cmd);
+			init_cmd(mini, &cmd); //protected random iteration
 			arg_flag = 0;
 			token = token->next;
 		}
@@ -45,7 +45,7 @@ void	parser(t_mini *mini)
 	if (cmd)
 		new_cmd(&mini, &cmd, &arg_flag);
 }
-//ready to test
+//protected random iteration
 static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 {
 	int	fd;
@@ -59,7 +59,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		{
 			if ((*cmd)->in)
 				free((*cmd)->in);
-			(*cmd)->in = ft_strdup((*token)->next->str);
+			(*cmd)->in = ft_strdup((*token)->next->str); //protected random iteration
 			if (!(*cmd)->in)
 				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL)); 
 		}
@@ -78,7 +78,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		{
 			if ((*cmd)->out)
 				free((*cmd)->out);
-			(*cmd)->out = ft_strdup((*token)->next->str);
+			(*cmd)->out = ft_strdup((*token)->next->str); //protected random iteration
 			if (!(*cmd)->out)
 				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL));
 		}
@@ -86,16 +86,14 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	(*token) = (*token)->next->next;
 	return (0);
 }
-
+//protected random iteration
 static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 {
+	struct stat	st;
+	
 	if (*arg_flag)
 	{
-		// if ((*cmd)->builtin == EXPORT) //add cmd size test
-		// {
-		// 	return (cmd_skip(mini, cmd, token));
-		// }
-		(*cmd)->args = add_args(cmd, (*token)->str);
+		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
 		(*token) = (*token)->next;
 		return ;
 	}
@@ -103,17 +101,23 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	if ((*cmd)->builtin == NONE && !ft_strchr((*token)->str, '/'))
 		path_finder(mini, cmd, (*token)->str);
 	else if (ft_strchr((*token)->str, '/'))
-		(*cmd)->args = add_args(cmd, (*token)->str);
+		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
+	if ((*cmd)->args && (*cmd)->args[0])
+		stat((*cmd)->args[0], &st);
 	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0))
 		(*arg_flag)++;
+	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || 
+         (st.st_uid == 0 && !(st.st_mode & S_IXOTH))))
+		return (parser_err(mini, (*token)->str, PERMISSION), cmd_skip(mini, cmd, token));
 	else
 		return (parser_err(mini, (*token)->str, EXE), cmd_skip(mini, cmd, token));
 	(*token) = (*token)->next;
 }
 
+//protected random iteration
 static int	init_cmd(t_mini *mini, t_cmd **cmd)
 {
-	*cmd = malloc(sizeof(t_cmd));
+	*cmd = malloc(sizeof(t_cmd)); //protected random iteration
 	if (!*cmd)
 		return (error_manager(mini, MALLOC, NULL, NULL));
 	(*cmd)->args = NULL;

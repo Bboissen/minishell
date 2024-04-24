@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/24 12:27:07 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:30:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void	heredoc(t_mini *mini)
 				else
 					break;
 			}
-			readline_setup(mini, &line, "heredoc"); //protected random iteration
-			while (ft_strcmp(line, token->str))
+			readline_setup(mini, &line, "heredoc");
+			while (line && ft_strcmp(line, token->str))
 			{
 				while (*line)
 				{

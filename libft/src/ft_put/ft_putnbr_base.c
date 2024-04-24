@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_base.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:24:43 by bboissen          #+#    #+#             */
-/*   Updated: 2023/12/22 11:54:36 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/03/19 11:45:55 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf_fd.h"
+#include "libft.h"
 
 static int	ft_test_base(char *str)
 {
