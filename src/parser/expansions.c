@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 11:19:22 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:21:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
  * Expands and joins tokens in the shell.
  * @param {t_mini*} mini - The main structure of the shell.
  */
+//protected random iteration
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
@@ -36,7 +37,11 @@ void	expand_join(t_mini **mini)
 	while ((*mini)->token)
 	{
 		if ((*mini)->token->join)
-			(*mini)->token = list_join((*mini), (*mini)->token);
+		{
+			if ((*mini)->token == (*mini)->h_token)
+				(*mini)->h_token = (*mini)->token->next;	
+			(*mini)->token = list_join((*mini), (*mini)->token); //protected random iteration
+		}
 		else
 			(*mini)->token = (*mini)->token->next;
 	}
@@ -54,7 +59,6 @@ char	*expand_token(t_mini **mini, char *str)
 	t_env *env;
 	char	*env_val;
 	t_sig	*sig;
-	static int i = 0;
 
 	sig = get_sig();
 	env = (*mini)->h_env;
@@ -88,13 +92,14 @@ char	*expand_token(t_mini **mini, char *str)
  * @param {t_token*} token - The token to be joined.
  * @return {t_token*} - Returns the joined token.
  */
+//protected random iteration
 t_token	*list_join(t_mini *mini, t_token *token)
 {
 	char	*new_str;
 	t_token	*to_free;
 
 	new_str = malloc(ft_strlen(token->str)
-				+ ft_strlen(token->next->str) + 1);
+				+ ft_strlen(token->next->str) + 1); //protected random iteration
 	if (!new_str)
 		error_manager(mini, MALLOC, NULL, NULL);
 	ft_strcpy(new_str, token->str);

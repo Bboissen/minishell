@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/23 15:00:08 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:32:52 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,19 @@ void	parser(t_mini *mini)
 
 	arg_flag = 0;
 	token = mini->h_token;
-	init_cmd(mini, &cmd); //protected
+	init_cmd(mini, &cmd);
 	while (token)
 	{
 		if (token && (token->type == INPUT || token->type == HEREDOC
 			|| token->type == APPEND || token->type == TRUNC))
-			check_file(mini, &cmd, &token); //protected
+			check_file(mini, &cmd, &token);
 		if (token && token->type == STR)
 			check_cmd(mini, &cmd, &token, &arg_flag);
 		if (token && token->type == PIPE)
 		{
 			if (cmd)
 				new_cmd(&mini, &cmd, &arg_flag);
-			init_cmd(mini, &cmd); //protected
+			init_cmd(mini, &cmd);
 			arg_flag = 0;
 			token = token->next;
 		}
@@ -78,7 +78,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		{
 			if ((*cmd)->out)
 				free((*cmd)->out);
-			(*cmd)->out = ft_strdup((*token)->next->str); //protected
+			(*cmd)->out = ft_strdup((*token)->next->str);
 			if (!(*cmd)->out)
 				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL));
 		}
@@ -93,7 +93,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	{
 		if ((*cmd)->builtin == EXPORT)
 		{
-			return (cmd_skip(mini, cmd, token)); //protected
+			return (cmd_skip(mini, cmd, token));
 		}
 		(*cmd)->args = add_args(cmd, (*token)->str);
 		(*token) = (*token)->next;
@@ -115,7 +115,7 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd)
 {
 	*cmd = malloc(sizeof(t_cmd));
 	if (!*cmd)
-		return (error_manager(mini, MALLOC, NULL, NULL)); //protected
+		return (error_manager(mini, MALLOC, NULL, NULL));
 	(*cmd)->args = NULL;
 	(*cmd)->in = NULL;
 	(*cmd)->out = NULL;

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/23 15:13:42 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:33:30 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	**add_args(t_cmd **cmd, char *str)
 			return (free_tab(new_cmd), error_manager(NULL, MALLOC, NULL, NULL), NULL);
 	new_cmd[j + 1] = NULL;
 	if ((*cmd)->args)
-		free((*cmd)->args);
+		free_tab((*cmd)->args);
 	return (new_cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 11:18:30 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:33:47 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 //ISSUE: empty var, CMD try to find path for empty
 //replace dprintf
 //check non ft_ function
-//leak parser pouet test | cat test | ls | grep Makefile - echo test | cat test
-//leak heredoc
 //no syntax error pouet test | << END'test' cat test | ls | grep Makefile
 //should quit when syntax error but still do heredoc
 //zsh: parse error near `|' instead of syntax error | << END
 // leak CTRD heredoc
+// leak/error with any type of join
+
 /**
  * @brief The main function of the program.
  * The function initializes minishell, then enters a loop where it 

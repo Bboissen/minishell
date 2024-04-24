@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/24 11:18:07 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:27:07 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static unsigned int	my_rand(t_mini *mini)
 	seed = (3565867 * seed + 12345) % (1U << 31);
 	return (seed % 10);
 }
+
+//protected random iteration
 void	heredoc(t_mini *mini)
 {
 	t_token	*token;
@@ -62,6 +64,13 @@ void	heredoc(t_mini *mini)
 	{
 		if (token->type == HEREDOC)
 		{
+			token->str = random_file(mini); //protected
+			if (!token->str)
+				error_manager(mini, MALLOC, NULL, NULL);
+			fd = open(token->str, O_CREAT | O_RDWR | O_TRUNC, 0644);
+			if (fd == -1)
+				error_manager(mini, OPEN, "open", token->str);
+			token = token->next;
 			while (token && token->join == JOIN)
 			{
 				token = list_join(mini, token); //protected
@@ -70,13 +79,6 @@ void	heredoc(t_mini *mini)
 				else
 					break;
 			}
-			token->str = random_file(mini); //protected
-			if (!token->str)
-				error_manager(mini, MALLOC, NULL, NULL);
-			fd = open(token->str, O_CREAT | O_RDWR | O_TRUNC, 0644);
-			if (fd == -1)
-				error_manager(mini, OPEN, "open", token->str);
-			token = token->next;
 			readline_setup(mini, &line, "heredoc"); //protected random iteration
 			while (ft_strcmp(line, token->str))
 			{
