@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 08:39:49 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 17:56:15 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ int	main(int ac, char **av, char **env)
 	{
 		readline_setup(mini, &(mini->rl), mini->name);
 		if (mini->rl == NULL)
-		{
-			ft_printfd(STDERR_FILENO, "exit\n");
-			return (clean_exit(mini));
-		}
+			return (ft_printfd(STDERR_FILENO, "exit\n"), clean_exit(mini));
 		lexer(mini);
 		heredoc(mini);
 		expand_join(&mini);

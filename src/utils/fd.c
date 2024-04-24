@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 11:27:56 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 15:46:22 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,25 @@ void	delete_heredoc(t_mini *mini)
 		}
 		current = current->next;
 	}
+}
+
+/**
+ * @brief Calculate the size of the command.
+ * 
+ * @param h_cmd The head of the command list.
+ * @return {int} The size of the command list.
+ */
+int	cmd_size(t_cmd *h_cmd)
+{
+	t_cmd	*tmp;
+	int		i;
+
+	tmp = h_cmd;
+	i = 0;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	return (i);
 }

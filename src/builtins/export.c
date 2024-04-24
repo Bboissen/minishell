@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 12:39:53 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 17:55:20 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	print_error(int error, const char *arg)
+int	is_valid_env(const char *env)
 {
-	int	i;
+	int		i;
 
-	if (error == -1)
-		ft_putstr_fd("export: not valid in this context: ", STDERR);
-	else if (error == 0 || error == -3)
-		ft_putstr_fd("export: not a valid identifier: ", STDERR);
 	i = 0;
-	while (arg[i] && (arg[i] != '=' || error == -3))
+	if (ft_isdigit(env[i]) == 1)
+		return (0);
+	while (env[i] && env[i] != '=')
 	{
-		write(STDERR, &arg[i], 1);
+		if (ft_isalnum(env[i]) == 0)
+			return (-1);
 		i++;
 	}
-	write(STDERR, "\n", 1);
-	return (ERROR);
+	if (env[i] != '=')
+		return (2);
+	return (1);
 }
 
 int	env_add(const char *value, t_env *env)
@@ -87,13 +87,17 @@ int	is_in_env(t_env *env, char *args)
 	return (FALSE);
 }
 
-int	mini_export(char **args, t_env *env)
+int	mini_export(t_mini *mini)
 {
-	int	new_env;
-	int	error;
+	int		new_env;
+	int		error;
+	t_env	*env;
+	char	**args;
 
 	new_env = 0;
-	if (!args[1])
+	env = mini->h_env;
+	args = mini->cmd->args;
+	if (!arg_exists(args, 0))
 		print_sorted_env(env);
 	else
 	{
@@ -101,7 +105,7 @@ int	mini_export(char **args, t_env *env)
 		if (args[1][0] == '=')
 			error = -3;
 		if (error <= 0)
-			return (print_error(error, args[1]));
+			return (export_err(mini, error, args[1]));
 		if (error == 2)
 			new_env = 1;
 		else

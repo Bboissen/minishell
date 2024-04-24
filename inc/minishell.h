@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 07:38:34 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 17:41:04 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef enum e_builtin
 	CD, //skip when pipe
 	ECHO, //work with pipe
 	ENV, //work with pipe
-	EXIT, //work with pipe but output devnull
+	EXIT, //update status but not exit
 	EXPORT, //work with pipe without args
 	PWD, //work with pipe
 	UNSET, //skip when pipe
@@ -67,8 +67,7 @@ typedef enum e_builtin
 typedef enum e_bool
 {
 	FALSE = 0,
-	TRUE,
-	SIG_RECEIVED
+	TRUE
 }	t_bool;
 
 typedef enum e_error
@@ -145,8 +144,8 @@ int			mini_cd(t_mini *mini);
 int			mini_echo(t_mini *mini);
 int			mini_env(t_mini *mini);
 int			mini_exit(t_mini *mini);
-int			mini_export(char **args, t_env *env);
-int			mini_pwd(void);
+int			mini_export(t_mini *mini);
+int			mini_pwd(t_mini *mini);
 int			mini_unset(t_mini *mini);
 
 /* Env */
@@ -160,6 +159,8 @@ void		sort_env(char **tab, int env_len);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
 t_token		*list_join(t_mini *mini, t_token *token);
+int			is_in_env(t_env *env, char *args);
+int			is_valid_env(const char *env);
 
 /* Init */
 
@@ -173,6 +174,10 @@ void		reinit(t_mini **mini);
 /* Exec */
 
 int			cmd_exec(t_mini *mini);
+int			cmd_size(t_cmd *h_cmd);
+void		exec_builtin(t_mini *mini);
+void		fd_handler(t_mini *mini, t_cmd *cmd);
+int			arg_exists(char **args, int index);
 
 /* Stds & fds */
 
@@ -196,6 +201,7 @@ void		sig_handler(int code);
 int			error_manager(t_mini *mini, int err, char *fct, char *str);
 void		lexer_err(t_mini *mini, char **str, int err, char c);
 void		parser_err(t_mini *mini, char *str, int err);
+int			export_err(t_mini *mini, int error, char *arg);
 
 // lexer
 void		lexer(t_mini *mini);

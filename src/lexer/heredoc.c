@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/24 07:44:38 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 17:31:02 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	heredoc(t_mini *mini)
 			if (fd == -1)
 				error_manager(mini, OPEN, "open", file);
 			readline_setup(mini, &line, "heredoc");
-			while (ft_strcmp(line, token->str))
+			while (line && ft_strcmp(line, token->str))
 			{
 				while (*line)
 				{

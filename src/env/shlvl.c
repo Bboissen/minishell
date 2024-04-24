@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   shlvl.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 07:42:42 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 17:00:51 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
 
 /**
  * Check if a string represents a valid shell level.

@@ -3,32 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 08:58:20 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 17:40:40 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	cmdsize(t_cmd *h_cmd)
-{
-	t_cmd	*tmp;
-	int		i;
-
-	tmp = h_cmd;
-	i = 0;
-	while (tmp)
-	{
-		tmp = tmp->next;
-		i++;
-	}
-	ft_printfd(STDERR_FILENO, "cmdsize: %d\n", i);
-	return (i);
-}
-
-static int	arg_exists(char **args, int index)
+/**
+ * @brief Check if an argument exists at a given index.
+ * 
+ * @param args The array of arguments.
+ * @param index The index to check.
+ * @return {int} 1 if an argument exists at the given index, 0 otherwise.
+ */
+int	arg_exists(char **args, int index)
 {
 	int	i;
 
@@ -36,14 +27,19 @@ static int	arg_exists(char **args, int index)
 	if (args == NULL)
 		return (0);
 	while (args[i] != NULL)
-	{
-		ft_printfd(STDERR_FILENO, "args[%d]: %s\n", i, args[i]);
 		i++;
-	}
 	return (i > index);
 }
 
-/*static int	ft_atoi_exit(const char *str, int i, int *pbm)
+/**
+ * @brief Convert a string to an integer, with error checking for exit command.
+ * 
+ * @param str The string to convert.
+ * @param i The starting index in the string.
+ * @param overflow Pointer to an integer to store any error.
+ * @return {int} The converted integer.
+ */
+static int	ft_atoi_exit(const char *str, int i, int *overflow)
 {
 	int			j;
 	long		neg;
@@ -62,99 +58,79 @@ static int	arg_exists(char **args, int index)
 		sum = (sum * 10) + (str[i] - 48);
 		if (((i == 18 && neg == 1) && (str[i] > '7' && str[i] <= '9'))
 			|| ((i == 19 && neg == -1) && (str[i] == '9')))
-			*pbm = 1;
+			*overflow = 1;
 		i++;
 	}
 	while (str[i++])
 		j++;
 	if ((j > 19 && neg == 1) || (j > 20 && neg == -1))
-		*pbm = 1;
+		*overflow = 1;
 	return (sum * neg);
 }
 
-static void	exit_arg(t_mini *mini)
+/**
+ * @brief Validate if the argument is numeric.
+ * 
+ * @param mini The mini structure.
+ * @param sig The sig structure.
+ * @param overflow The error flag.
+ * @return {int} ERROR if the argument is not numeric, SUCCESS otherwise.
+ */
+static int	validate_numeric_argument(t_mini *mini, t_sig *sig, int overflow)
 {
-	char	*arg;
-	int		i;
-	t_sig	*sig;
+	int	i;
 
-	sig = get_sig();
-	arg = mini->cmd->args[0];
-	if (arg && (arg[0] == '-' || arg[0] == '+'))
-	{
-		ft_printfd(2, "%s: exit: %s: numeric argument \
-required\n", mini->name, arg);
-		sig->status = 2;
-	}
 	i = 0;
-	while (arg && arg[i])
-	{
-		if (!isdigit(arg[i]))
-		{
-			ft_printfd(2, "%s: exit: %s: numeric argument \
-required\n", mini->name, arg);
-			sig->status = 2;
-		}
+	if (mini->cmd->args[0][i] == '-' || mini->cmd->args[0][i] == '+')
 		i++;
+	while (mini->cmd->args[0][i])
+	{
+		if (!ft_isdigit(mini->cmd->args[0][i++]) || overflow == 1)
+		{
+			ft_printfd(STDERR_FILENO,
+				"%s: exit: %s: numeric argument required\n",
+				mini->name, mini->cmd->args[0]);
+			sig->status = 2;
+			return (ERROR);
+		}
 	}
+	return (SUCCESS);
 }
 
-int	mini_exit(t_mini *mini)
-{
-	int			pbm;
-	t_sig		*sig;
-
-	(void)mini;
-	sig = get_sig();
-	if (mini->cmd->args && mini->cmd->args[0])
-	{
-		exit_arg(mini);
-		if (mini->cmd->args[1])
-			return (ft_printfd(2, "exit\n%s: exit: too many arguments\n",
-					mini->name), sig->status = 1);
-		pbm = 0;
-		sig->status = (ft_atoi_exit(mini->cmd->args[1], 0, &pbm)) % 256;
-		if (pbm == 1)
-			return (ft_printfd(2, "%s: exit: %s: numeric argument required\n",
-					mini->name, mini->cmd->args[1]), sig->status = 2);
-	}
-	if (cmdsize(mini->h_cmd) == 1)
-		sig->exit = 1;
-	return (sig->status);
-}*/
-
+/**
+ * @brief Handle the exit command.
+ * 
+ * @param mini The mini structure.
+ * @return {int} The status of the exit command.
+ */
 int	mini_exit(t_mini *mini)
 {
 	t_sig	*sig;
 	int		narg;
+	int		overflow;
 
 	sig = get_sig();
 	if (mini->cmd->args)
-		narg = ft_atoi(mini->cmd->args[0]);
-	if (mini->cmd->args)
 	{
-		if (!ft_isdigit(narg))
-		{
-			ft_printfd(STDERR_FILENO,
-				"exit\n%s: exit: %s: numeric argument required\n",
-				mini->name, narg);
-			sig->status = 2;
-			sig->exit = 1;
+		narg = ft_atoi_exit(mini->cmd->args[0], 0, &overflow);
+		if (validate_numeric_argument(mini, sig, overflow) == ERROR)
 			return (sig->status);
-		}
-		else
-			sig->status = narg % 256;
+		sig->status = narg % 256;
+	}
+	if (cmd_size(mini->h_cmd) == 1)
+	{
+		if (narg != 0)
+			sig->status = narg;
+		sig->exit = 1;
+		ft_printfd(STDERR_FILENO, "exit\n");
 	}
 	if (mini->cmd->args && arg_exists(mini->cmd->args, 1))
 	{
 		ft_printfd(STDERR_FILENO,
-			"exit\n%s: exit: too many arguments\n", mini->name);
+			"%s: exit: too many arguments\n", mini->name);
 		sig->status = 1;
+		sig->exit = 0;
 	}
-	if (cmdsize(mini->h_cmd) == 1)
-	{
-		sig->exit = 1;
-		ft_printfd(STDERR_FILENO, "exit\n");
-	}
+
 	return (sig->status);
 }

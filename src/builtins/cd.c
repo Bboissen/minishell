@@ -3,20 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 12:37:00 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 16:03:49 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Add the home path to the given path if it starts with '~/'
- * @param {char*} path - The path to add the home path to.
- * @return {char*} - Returns the new path with the home path added.
- */
 static char	*add_home_path(t_mini *mini, char *path)
 {
 	char	*tmp1;
@@ -36,14 +31,6 @@ static char	*add_home_path(t_mini *mini, char *path)
 	return (path);
 }
 
-/**
- * Change the current directory to the given path and update the PWD and OLDPWD 
- * environment variables.
- * @param {char*} path - The path to change to.
- * @param {int} home - Flag to indicate if the path is the home directory.
- * @return {int} - Returns ERROR if the directory change was successful, 
- * SUCCESS otherwise.
- */
 static int	change(t_mini *mini, char *path, int home)
 {
 	char	*pwd;
@@ -69,15 +56,6 @@ static int	change(t_mini *mini, char *path, int home)
 	return (free(pwd), SUCCESS);
 }
 
-/**
- * Set the current directory to the given path and print an error message 
- * if the directory change was not successful.
- * @param {t_mini*} mini - The main structure of the shell.
- * @param {char*} path - The path to set as the current directory.
- * @param {int} home - Flag to indicate if the path is the home directory.
- * @return {int} - Returns SUCCESS if the directory was set successfully, 
- * ERROR otherwise.
- */
 static int	set_directory(t_mini *mini, char *path, int home)
 {
 	struct stat	st;
@@ -106,13 +84,6 @@ static int	set_directory(t_mini *mini, char *path, int home)
 	return (SUCCESS);
 }
 
-/**
- * Change the current directory to the given path or to the previous directory 
- * if the path is '-'.
- * @param {t_mini*} mini - The main structure of the shell.
- * @return {int} - Returns ERROR if the directory change was successful, the 
- * result of set_directory otherwise.
- */
 static int	s_path(t_mini *mini)
 {
 	char	*tmp;
@@ -138,12 +109,6 @@ static int	s_path(t_mini *mini)
 	return (set_directory(mini, args[1], 0));
 }
 
-/**
- * Execute the cd command.
- * @param {t_mini*} mini - The main structure of the shell.
- * @return {int} - Returns the result of set_directory if the directory 
- * change was successful, ERROR otherwise.
- */
 int	mini_cd(t_mini *mini)
 {
 	char	*home;

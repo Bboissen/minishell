@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_err.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/04/24 07:17:34 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/24 16:08:23 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_err(t_mini *mini, int error, char *arg)
+int	export_err(t_mini *mini, int error, char *arg)
 {
 	int	i;
 
