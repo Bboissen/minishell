@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 17:40:40 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 15:14:36 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,5 @@ int	mini_exit(t_mini *mini)
 		sig->status = 1;
 		sig->exit = 0;
 	}
-
 	return (sig->status);
 }
