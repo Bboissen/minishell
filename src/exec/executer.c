@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 18:06:24 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 08:16:13 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ static void	exec_child(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 static pid_t	exec(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 {
 	pid_t	pid;
-	t_sig	*sig;
 
-	sig = get_sig();
 	pid = fork();
 	if (pid == 0)
 		exec_child(mini, cmd, sig_pipefd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:36:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 14:42:57 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 08:37:55 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,16 @@ static size_t	check_n(char **args)
 	j = 0;
 	while (args[0][j])
 	{
-		if (args[0][j++] == '-' && args[0][j] && args[0][j] == 'n')
+		if (args[0][j] == '-' && args[0][j++] && args[0][j] == 'n')
 		{
 			while (args[0][j] == 'n')
 				j++;
-			if (args[0][j] && args[0][j] != 'n')
+			if (args[0][j])
 				return (FALSE);
+			return (TRUE);
 		}
 		else
-			return (TRUE);
+			return (FALSE);
 	}
 	return (FALSE);
 }
@@ -55,7 +56,7 @@ int	mini_echo(t_mini *mini)
 	if (!args)
 		return (ft_putchar_fd('\n', STDOUT_FILENO), SUCCESS);
 	i = 0;
-	if (!check_n(&args[0]))
+	if (check_n(args))
 	{
 		n_opt = TRUE;
 		i++;
