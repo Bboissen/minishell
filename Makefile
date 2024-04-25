@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/23 10:45:08 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/25 15:04:32 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,24 +29,25 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-# BUILTINS	=	cd			\
-# 				echo		\
-# 				env			\
-# 				exit		\
-# 				export		\
-# 				pwd			\
-# 				unset
+BUILTINS	=	cd			\
+				echo		\
+				env			\
+				exit		\
+				export		\
+				pwd			\
+				unset
 
 ENV			=	env			\
 				init		\
 				shlvl		\
 				sort_env
 
-ERROR		=	print_messages	\
- 				error_manager	
+ERROR		=	builtin_err		\
+				error_manager	
 
-EXEC		=	pipe		
-
+EXEC		=	exec_utils	\
+				executer
+				
 UTILS		=	fd			\
 				free		\
 				signal
@@ -63,7 +64,8 @@ PARSING		=	expansions		\
 				parser_utils	\
 				parser_err
 				
-SRCS		=	$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
+SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
+				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
 				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
 				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
 				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\

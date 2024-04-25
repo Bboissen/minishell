@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 11:28:27 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:03:47 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,25 +146,27 @@ typedef struct s_mini
 
 /* Builtin */
 
-int		mini_cd(t_mini *mini);
-int		mini_echo(t_mini *mini);
-int		mini_env(t_mini *mini);
-int		mini_exit(t_mini *mini);
-int		mini_export(char **args, t_env *env, t_env *secret);
-int		mini_pwd(void);
-int		mini_unset(t_mini *mini);
+int			mini_cd(t_mini *mini);
+int			mini_echo(t_mini *mini);
+int			mini_env(t_mini *mini);
+int			mini_exit(t_mini *mini);
+int			mini_export(t_mini *mini);
+int			mini_pwd(t_mini *mini);
+int			mini_unset(t_mini *mini);
 
 /* Env */
 
-t_sig	*get_sig(void);
-char	**env_to_tab(t_env *env_lst);
-char	*get_env(t_env *env, char *name);
-void	set_env(t_env **env, char *name, char *value);
-void	print_sorted_env(t_env *env);
-void	sort_env(char **tab, int env_len);
-void	expand_join(t_mini **mini);
-char	*expand_token(t_mini **mini, char *str);
-t_token	*list_join(t_mini *mini, t_token *token);
+t_sig		*get_sig(void);
+char		**env_to_tab(t_env *env_lst);
+char		*get_env(t_env *env, char *name);
+void		set_env(t_env **env, char *name, char *value);
+void		print_sorted_env(t_env *env);
+void		sort_env(char **tab, int env_len);
+void		expand_join(t_mini **mini);
+char		*expand_token(t_mini **mini, char *str);
+t_token		*list_join(t_mini *mini, t_token *token);
+int			is_in_env(t_env *env, char *args);
+int			is_valid_env(const char *env);
 
 /* Init */
 
@@ -177,13 +179,16 @@ void	reinit(t_mini **mini);
 
 /* Exec */
 
-int		cmd_exec(t_mini *mini);
+int			cmd_exec(t_mini *mini);
+int			cmd_size(t_cmd *h_cmd);
+void		exec_builtin(t_mini *mini);
+void		fd_handler(t_mini *mini, t_cmd *cmd);
+int			arg_exists(char **args, int index);
 
 /* Stds & fds */
 
-void	ft_close(int fd);
-void	close_fds(int *fd);
-void	delete_heredoc(t_mini *mini);
+void		close_fds(int *fd);
+void		delete_heredoc(t_mini *mini);
 
 /* Free */
 
@@ -198,10 +203,8 @@ int		clean_exit(t_mini *mini);
 void	sig_handler(int code);
 
 /* Errors */
-
-void	print_sigquit_message(int code);
 int		error_manager(t_mini *mini, int err, char *fct, char *str);
-
+int			export_err(t_mini *mini, int error, char *arg);
 
 // lexer
 void		lexer(t_mini *mini);

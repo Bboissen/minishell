@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 14:24:17 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:13:22 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int ac, char **av, char **env)
 		return (ERROR);
 	sig = get_sig();
 	init_mini(&mini, env, av[0]); //protected random iteration
-	while (!sig->exit)
+	while (sig->exit == FALSE)
 	{
 		readline_setup(mini, &(mini->rl), mini->name); //protected
 		if (!mini->rl)
@@ -80,10 +80,9 @@ int	main(int ac, char **av, char **env)
 		}
 		ft_printfd(1,"\n\n");
 		mini->cmd = mini->h_cmd;
-		// if (mini->cmd)
-		// 	cmd_exec(mini);
+		if (mini->cmd)
+			cmd_exec(mini);
 		reinit(&mini);
-		// sig->exit=1;
 	}
 	return (clean_exit(mini));
 }
