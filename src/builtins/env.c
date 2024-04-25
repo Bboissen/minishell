@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:35:11 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 16:02:50 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 14:29:03 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	mini_env(t_mini *mini)
 	env = mini->h_env;
 	while (env)
 	{
-		if (ft_printf("%s=%s\n", env->name, env->value) < 0)
+		if (ft_printfd(STDOUT_FILENO, "%s=%s\n", env->name, env->value) < 0)
 		{
 			perror("printf");
 			return (errno);

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 13:54:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 17:05:56 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 		exec_child(mini, cmd, sig_pipefd);
 	else if (pid > 0)
 	{
-		dup2(cmd->fd[0], 0);
+		if (cmd->next != NULL)
+			dup2(cmd->fd[0], 0);
 		close_fds(cmd->fd);
 		close(sig_pipefd[1]);
 	}

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:47:31 by gdumas            #+#    #+#             */
-/*   Updated: 2023/11/13 13:06:14 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 11:21:33 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 			return (b1[i] - b2[i]);
 		i++;
 	}
-	return (0);
+	return (b1[i] - b2[i]);
 }

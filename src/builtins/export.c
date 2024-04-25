@@ -6,13 +6,13 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 17:55:20 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 15:34:26 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_valid_env(const char *env)
+static int	is_valid_env(const char *env)
 {
 	int		i;
 
@@ -105,7 +105,7 @@ int	mini_export(t_mini *mini)
 		if (args[1][0] == '=')
 			error = -3;
 		if (error <= 0)
-			return (export_err(mini, error, args[1]));
+			return (export_err(mini, error, args[1]), ERROR);
 		if (error == 2)
 			new_env = 1;
 		else

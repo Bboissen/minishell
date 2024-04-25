@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 16:03:49 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 18:03:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,25 @@ static char	*add_home_path(t_mini *mini, char *path)
 	char	*tmp1;
 	char	*tmp2;
 
-	if (!ft_strncmp(path, "~/", 2))
+	tmp1 = NULL;
+	tmp2 = NULL;
+	if (path && path[0] == '~' && (path[1] && path[1] == '/'))
 	{
-		tmp1 = get_env(mini->h_env, "HOME");
+		tmp1 = get_env_value(mini, "HOME");
 		if (tmp1)
 		{
 			tmp2 = ft_substr(path, 1, ft_strlen(path));
-			free(path);
 			path = ft_strjoin(tmp1, tmp2);
-			return (free(tmp1), free(tmp2), path);
 		}
 	}
+	else if (path && path[0] == '-' && !path[1])
+		backward_dir(mini);
+	ft_memdel(tmp1);
+	ft_memdel(tmp2);
 	return (path);
 }
 
-static int	change(t_mini *mini, char *path, int home)
+static int	change(t_mini *mini, char *path)
 {
 	char	*pwd;
 
@@ -41,72 +45,36 @@ static int	change(t_mini *mini, char *path, int home)
 		if (pwd)
 		{
 			set_env(&mini->h_env, "OLDPWD", pwd);
-			free(pwd);
+			ft_memdel(pwd);
 		}
 		pwd = getcwd(NULL, 0);
 		if (pwd)
 		{
 			set_env(&mini->h_env, "PWD", pwd);
-			free(pwd);
+			ft_memdel(pwd);
 		}
-		if (home)
-			free(path);
-		return (ERROR);
+		return (SUCCESS);
 	}
-	return (free(pwd), SUCCESS);
+	return (ft_memdel(pwd), cd_err(mini, errno, path), ERROR);
 }
 
-static int	set_directory(t_mini *mini, char *path, int home)
-{
-	struct stat	st;
-	t_sig		*sig;
-
-	sig = get_sig();
-	if (change(mini, path, home))
-		return (ERROR);
-	ft_printfd(2, "minishell: cd: %s", path);
-	sig->status = ERROR;
-	if (stat(path, &st) == -1)
-	{
-		ft_printfd(2, ": No such file or directory");
-		sig->status = DIRECTORY;
-	}
-	else if (!(st.st_mode & S_IXUSR))
-	{
-		ft_printfd(2, ": Permission denied");
-		sig->status = EXE;
-	}
-	else
-		ft_printfd(2, ": Not a directory");
-	ft_printfd(2, "\n");
-	if (home)
-		free(path);
-	return (SUCCESS);
-}
-
-static int	s_path(t_mini *mini)
+int	backward_dir(t_mini *mini)
 {
 	char	*tmp;
 	char	**args;
 
 	args = mini->cmd->args;
-	if (ft_strequ(args[1], "-"))
+	if (ft_strequ(args[0], "-"))
 	{
-		tmp = get_env(mini->h_env, "OLDPWD");
+		tmp = get_env_value(mini, "OLDPWD");
 		if (tmp)
-		{
-			set_directory(mini, tmp, 0);
-			free(tmp);
-		}
-		tmp = get_env(mini->h_env, "PWD");
+			change(mini, tmp);
+		tmp = get_env_value(mini, "PWD");
 		if (tmp)
-		{
 			ft_printfd(1, "%s\n", tmp);
-			free(tmp);
-		}
 		return (ERROR);
 	}
-	return (set_directory(mini, args[1], 0));
+	return (SUCCESS);
 }
 
 int	mini_cd(t_mini *mini)
@@ -116,24 +84,24 @@ int	mini_cd(t_mini *mini)
 	t_sig	*sig;
 
 	sig = get_sig();
-	sig->status = SUCCESS;
 	home = NULL;
 	args = mini->cmd->args;
-	if (args && args[1] && args[2])
+	if (arg_exists(args, 1))
+		return (cd_err(mini, EXE, NULL), ERROR);
+	if (!args || (ft_strequ(args[0], "~") && !args[1])
+		|| (ft_strequ(args[0], "--") && !args[1]))
 	{
-		ft_printfd(2, "%s: cd: too many arguments\n", mini->name);
-		return (ERROR);
-	}
-	if (!args[1] || ft_strequ(args[1], "~") || ft_strequ(args[1], "--"))
-	{
-		home = get_env(mini->h_env, "HOME");
+		if (!get_env_value(mini, "HOME"))
+			return (cd_err(mini, MISSING, "HOME"), ERROR);
+		home = ft_strdup(get_env_value(mini, "HOME"));
 		if (!home)
-		{
-			ft_printfd(2, "%s: cd: HOME not set\n", mini->name);
-			return (ERROR);
-		}
-		return (set_directory(mini, home, 1));
+			return (error_manager(mini, MALLOC, NULL, NULL), ERROR);
+		return (change(mini, home), SUCCESS);
 	}
-	args[1] = add_home_path(mini, args[1]);
-	return (s_path(mini));
+	if (args && args[0][0] == '-' && !args[0][1])
+		return (backward_dir(mini), SUCCESS);
+	if (access(args[0], F_OK) == -1)
+		args[0] = add_home_path(mini, args[0]);
+	change(mini, args[0]);
+	return (SUCCESS);
 }

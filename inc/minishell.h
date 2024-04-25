@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 17:41:04 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/25 17:01:40 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ int			mini_unset(t_mini *mini);
 
 t_sig		*get_sig(void);
 char		**env_to_tab(t_env *env_lst);
-char		*get_env(t_env *env, char *name);
+char		*get_env_value(t_mini *mini, char *name);
 void		set_env(t_env **env, char *name, char *value);
 void		print_sorted_env(t_env *env);
 void		sort_env(char **tab, int env_len);
@@ -160,7 +160,6 @@ void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
 t_token		*list_join(t_mini *mini, t_token *token);
 int			is_in_env(t_env *env, char *args);
-int			is_valid_env(const char *env);
 
 /* Init */
 
@@ -183,6 +182,7 @@ int			arg_exists(char **args, int index);
 
 void		close_fds(int *fd);
 void		delete_heredoc(t_mini *mini);
+int			backward_dir(t_mini *mini);
 
 /* Free */
 
@@ -201,7 +201,8 @@ void		sig_handler(int code);
 int			error_manager(t_mini *mini, int err, char *fct, char *str);
 void		lexer_err(t_mini *mini, char **str, int err, char c);
 void		parser_err(t_mini *mini, char *str, int err);
-int			export_err(t_mini *mini, int error, char *arg);
+void		export_err(t_mini *mini, int error, char *arg);
+void		cd_err(t_mini *mini, int err, char *arg);
 
 // lexer
 void		lexer(t_mini *mini);
