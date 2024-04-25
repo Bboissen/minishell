@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/23 16:13:38 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:03:41 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ char	*syntax_check(t_mini *mini, char *str, int *quote)
 	}
 	if (*quote != 0 || !*str || is_spechar(*str) != 2)
 		return (str);
-	if (((*str == '|' && !mini->token) || (mini->token && (mini->token->type == APPEND
+	if (((*str == '|' && (!mini->token || mini->token->type == PIPE)) || (mini->token && (mini->token->type == APPEND
 					|| mini->token->type == TRUNC || mini->token->type == INPUT
-					|| mini->token->type == HEREDOC || mini->token->type == PIPE))))
+					|| mini->token->type == HEREDOC))))
 	{
-		lexer_err(mini, &str, PARSE, *str);
-		return (str);
+		lexer_err(mini, NULL, PARSE, *str);
+		return (NULL);
 	}
 	str = token_typer(options, str);
 	options[1] = 0;
@@ -90,6 +90,10 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	options[2] = 0;
 	if (*(str) && is_spechar(*(str)) != 2 && !ft_isspace(*(str)))
 		options[1] = JOIN;
+	while (*str == '\'')
+		str++;
+	if (*(str) && (is_spechar(*(str)) == 2 || ft_isspace(*(str))))
+		options[1] = 0;
 	new_token(mini, start, options);
 	*quote = 0;
 	return (str);
@@ -208,12 +212,12 @@ static void	new_token(t_mini *mini, char *str, t_type options[3])
 
 	new_token = malloc(sizeof(t_token)); //protected random iteration
 	if (!new_token)
-		return (lexer_err(mini, &str, MALLOC, 0));
+		return (lexer_err(mini, NULL, MALLOC, 0));
 	if (str)
 	{
 		new_token->str = ft_strdup(str); //protected random iteration
 		if (!new_token->str)
-			return (free(new_token), lexer_err(mini, &str, MALLOC, 0));
+			return (free(new_token), lexer_err(mini, NULL, MALLOC, 0));
 	}
 	else
 		new_token->str = NULL;

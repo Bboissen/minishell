@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 12:21:46 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:11:49 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	expand_join(t_mini **mini)
 			free((*mini)->token->str);
 			(*mini)->token->str = tmp;
 			(*mini)->token->expand = 0;
+			if (!tmp[0])
+				(*mini)->token = list_join((*mini), (*mini)->token);
 		}
 		(*mini)->token = (*mini)->token->next;
 	}

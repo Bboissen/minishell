@@ -6,21 +6,13 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 17:36:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:24:17 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 //TODO
-//ISSUE: empty var, CMD try to find path for empty
-
-//replace dprintf
-//check non ft_ function
-//no syntax error pouet test | << END'test' cat test | ls | grep Makefile
-//should quit when syntax error but still do heredoc
-//zsh: parse error near `|' instead of syntax error | << END
 // itoa printf
-// bash: warning: here-document at line 1 delimited by end-of-file (wanted `END')
 
 /**
  * @brief The main function of the program.
@@ -51,21 +43,21 @@ int	main(int ac, char **av, char **env)
 		if (!mini->rl)
 			return (ft_printfd(STDERR_FILENO, "exit\n"), clean_exit(mini));
 		lexer(mini); //protected
+		mini->token = mini->h_token;
+		printf( "\n------------------------------------------\n");
+		printf("|type\t|%-20s|join|expand|\n", "string");
+		printf("------------------------------------------\n");
+		while (mini->token)
+		{
+			printf("|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
+			mini->token = mini->token->next;
+		}
+		mini->token = mini->h_token;
 		if (mini->token)
 		{
 			heredoc(mini); //protected random iteration
 			expand_join(&mini);
 		}
-		mini->token = mini->h_token;
-		printf("\n------------------------------------------\n");
-		printf("|type\t|%-20s|join|expand|\n", "string");
-		printf("------------------------------------------\n");
-		while (mini->token)
-		{
-			dprintf(1, "|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
-			mini->token = mini->token->next;
-		}
-		mini->token = mini->h_token;
 		if (mini->h_token)
 			parser(mini);
 		printf("\n-----------------------------------------------\n");
@@ -78,15 +70,15 @@ int	main(int ac, char **av, char **env)
 			if (mini->cmd->args)
 			{
 				while(mini->cmd->args[i])
-					dprintf(1, "%s ", mini->cmd->args[i++]);
-				dprintf(1, "%-5s ", " ");
+					printf("%s ", mini->cmd->args[i++]);
+				printf("%-5s ", " ");
 			}
 			else
-				dprintf(1, "|%-10s\t|", "NULL");
-			dprintf(1, "|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
+				printf("|%-10s\t|", "NULL");
+			printf("|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
 			mini->cmd = mini->cmd->next;
 		}
-		printf("\n\n");
+		ft_printfd(1,"\n\n");
 		mini->cmd = mini->h_cmd;
 		// if (mini->cmd)
 		// 	cmd_exec(mini);

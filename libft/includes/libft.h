@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 11:05:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/15 16:43:22 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:28:33 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,6 @@ void	*ft_memdel(void *ptr);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	*ft_memset(void *str, int c, size_t len);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
-
-/*ft_printf*/
-int		ft_printf(const char *str, ...);
-int		ft_printstr(char *str);
-int		ft_printchar(int c);
-int		ft_printptr(unsigned long long ptr);
-int		ft_printnbr(int n);
-int		ft_printunsigned(unsigned int n);
-int		ft_printhex(unsigned int num, const char format);
 
 /*ft_printfd*/
 size_t	ft_strlen(const char *s);

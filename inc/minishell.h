@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 17:17:59 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:28:27 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ void		lexer(t_mini *mini);
 int			is_spechar(char c);
 int			is_space(int c);
 int			is_spe_expand(char c);
-void		lexer_err(t_mini *mini, char **str, int err, char c);
+void		lexer_err(t_mini *mini, char *str, int err, char c);
 char		*syntax_check(t_mini *mini, char *str, int *quote);
 char		*string_handler(t_mini *mini, char *str, int *quote);
 char		*s_quote_handler(t_mini *mini, char *str, int *quote);

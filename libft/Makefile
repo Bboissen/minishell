@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
+#    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 13:27:07 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/15 13:55:11 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/25 14:27:34 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Aliases #
 
 NAME	=	libft.a
-CC		=	gcc
+CC		=	cc
 FLAGS	=	-Wall -Wextra -Werror -I $(INCS)
 SRC_DIR	=	src/
 OBJ_DIR	=	obj/
@@ -66,12 +66,6 @@ MEM_SRC =	ft_bzero	\
 			ft_memset	\
 			ft_realloc
 
-PRT_SRC =	ft_printf_char	\
-			ft_printf_hex	\
-			ft_printf_nbr	\
-			ft_printf_ptr	\
-			ft_printf
-
 PFD_SRC	=	converter		\
 			printf_fd		\
 			seq_write
@@ -123,7 +117,6 @@ SRCS	=	$(addprefix $(SRC_DIR)ft_gnl/, $(addsuffix .c, $(GNL_SRC)))		\
 			$(addprefix $(SRC_DIR)ft_lst/, $(addsuffix .c, $(LST_SRC)))		\
 			$(addprefix $(SRC_DIR)ft_math/, $(addsuffix .c, $(MATH_SRC)))	\
 			$(addprefix $(SRC_DIR)ft_mem/, $(addsuffix .c, $(MEM_SRC)))		\
-			$(addprefix $(SRC_DIR)ft_printf/, $(addsuffix .c, $(PRT_SRC)))	\
 			$(addprefix $(SRC_DIR)ft_printfd/, $(addsuffix .c, $(PFD_SRC)))	\
 			$(addprefix $(SRC_DIR)ft_put/, $(addsuffix .c, $(PUT_SRC)))		\
 			$(addprefix $(SRC_DIR)ft_skip/, $(addsuffix .c, $(SKIP_SRC)))	\

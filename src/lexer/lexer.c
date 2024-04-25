@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/24 12:05:31 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:03:33 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	lexer(t_mini *mini)
 	
 	str = mini->rl;
 	if (odd_quote(str))
-		return (lexer_err(mini, &str, QUOTE, 0));
+		return (lexer_err(mini, NULL, QUOTE, 0));
 	mini->token = NULL;
 	quote = 0;
 	while (str && *str != 0)
@@ -36,7 +36,7 @@ void	lexer(t_mini *mini)
 		str = var_handler(mini, str, &quote);
 	}
 	if (mini->token && mini->token->type != STR)
-		return (lexer_err(mini, &str, PARSE, 0));
+		return (lexer_err(mini, NULL, PARSE, 0));
 	if (mini->token && mini->token->join == JOIN)
 			mini->token->join = 0;
 	mini->token = mini->h_token;

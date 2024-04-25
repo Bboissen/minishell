@@ -6,13 +6,14 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/24 17:30:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:52:09 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static unsigned int	my_rand(t_mini *mini);
+static void	expand_heredoc(t_mini *mini, t_token **token);
  // protected
 char	*random_file(t_mini *mini)
 {
@@ -73,13 +74,11 @@ void	heredoc(t_mini *mini)
 			token = token->next;
 			while (token && token->join == JOIN)
 			{
+				expand_heredoc(mini, &token); //protected random iteration
 				token = list_join(mini, token); //protected
-				if(token->next)
-					token = token->next;
-				else
-					break;
 			}
 			readline_setup(mini, &line, "heredoc");
+
 			while (line && ft_strcmp(line, token->str))
 			{
 				while (*line)
@@ -92,10 +91,12 @@ void	heredoc(t_mini *mini)
 				write(fd, "\n", 1);
 				readline_setup(mini, &line, "heredoc");
 			}
+			close(fd);
+			if (!line)
+				return (lexer_err(mini, token->str, END, 0));
 			free(token->str);
 			token->str = token->prev->str;
 			token->prev->str = NULL;
-			close(fd);
 		}
 		token = token->next;
 	}
@@ -117,4 +118,29 @@ char	*expand_line(t_mini *mini, char *str, int fd)
 	free(var);
 	*str = end;
 	return (str++);
+}
+
+ //protected random iteration
+static void	expand_heredoc(t_mini *mini, t_token **token)
+{
+	char	*new_str;
+
+	if ((*token)->expand == EXPAND)
+	{
+		new_str = ft_strjoin("$", (*token)->str); //protected
+		if (!new_str)
+			error_manager(mini, MALLOC, NULL, NULL);
+		free((*token)->str);
+		(*token)->str = new_str;
+		(*token)->expand = 0;
+	}
+	if ((*token)->next->expand == EXPAND)
+	{
+		new_str = ft_strjoin("$", (*token)->next->str); //protected
+		if (!new_str)
+			error_manager(mini, MALLOC, NULL, NULL);
+		free((*token)->next->str);
+		(*token)->next->str = new_str;
+		(*token)->next->expand = 0;
+	}
 }
