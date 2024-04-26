@@ -3,35 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:35:11 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 15:23:45 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/15 13:15:59 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief Print the environment variables.
- * 
+ * Print the environment variables.
  * @param {t_mini*} mini - The main structure of the shell.
  * @return {int} - Returns SUCCESS if the environment variables were 
  * printed successfully, the error number otherwise.
  */
 int	mini_env(t_mini *mini)
 {
-	t_env	*env;
-
-	env = mini->h_env;
-	while (env)
+	mini->sig.status = 0;
+	while (mini->env)
 	{
-		if (ft_printfd(1, "%s=%s\n", env->name, env->value) < 0)
+		if (ft_printf("%s=%s\n", mini->env->name, mini->env->value) < 0)
 		{
 			perror("printf");
 			return (errno);
 		}
-		env = env->next;
+		mini->env = mini->env->next;
 	}
 	return (SUCCESS);
 }
