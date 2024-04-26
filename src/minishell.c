@@ -6,13 +6,19 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 15:13:22 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/26 09:16:04 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 //TODO
-// itoa printf
+//unset seems to delete the newly attributed env
+// exec issue when
+// <test2 ls | ls >test2 | ls | ls
+
+// ls | grep Makefile | ls
+
+// <test cat | grep s
 
 /**
  * @brief The main function of the program.

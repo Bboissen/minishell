@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 15:59:40 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/26 09:13:17 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	link_env(t_mini *mini, char **args)
 
 	while (mini->env && mini->env->next)
 	{
-		if (ft_strncmp(args[1], mini->env->next->name,
+		if (ft_strncmp(args[0], mini->env->next->name,
 				env_size(mini->env->next->name)) == 0)
 		{
 			tmp = mini->env->next->next;
@@ -62,9 +62,9 @@ int	mini_unset(t_mini *mini)
 
 	args = mini->cmd->args;
 	env = mini->h_env;
-	if ((args[1]))
+	if ((args[0]))
 	{
-		if (!ft_strncmp(args[1], env->name,
+		if (!ft_strncmp(args[0], env->name,
 				env_size(env->name)))
 		{
 			if (env->next)

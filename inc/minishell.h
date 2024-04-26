@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 15:03:47 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:33:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ typedef enum e_error
 	QUIT = 131,
 	PARSE = 132,
 	OPEN = 133,
-	READ = 134
+	READ = 134,
+	FCT = 135,
 }	t_error;
 
 /* Structures */

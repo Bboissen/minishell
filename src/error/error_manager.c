@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:51:27 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/25 09:30:55 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:01:03 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 int	error_manager(t_mini *mini, int err, char *fct, char *str)
 {
+	t_sig	*sig;
+
+	sig = get_sig();
+	sig->status = err;
 	if (mini && err == MALLOC)
 	{
 		ft_printfd(STDERR, "%s: memory allocation failed\n", mini->name);
@@ -23,8 +27,8 @@ int	error_manager(t_mini *mini, int err, char *fct, char *str)
 	else if (fct)
 	{
 		ft_printfd(STDERR, "%s: ", mini->name);
-		ft_printfd(STDERR, "%s: ", fct);
-		perror(str);
+		ft_printfd(STDERR, "%s: ", str);
+		perror(fct);
 		return (clean_exit(mini));
 	}
 	return (clean_exit(mini));
