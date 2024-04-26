@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 15:33:13 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/26 10:43:44 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,6 @@ typedef enum e_builtin
 	PWD, //work with pipe
 	UNSET, //skip when pipe
 }	t_builtin;
-
-typedef enum e_io
-{
-	STDIN = 0,
-	STDOUT,
-	STDERR
-}	t_io;
 
 typedef enum e_bool
 {
@@ -159,15 +152,12 @@ int			mini_unset(t_mini *mini);
 
 t_sig		*get_sig(void);
 char		**env_to_tab(t_env *env_lst);
-char		*get_env(t_env *env, char *name);
+char		*get_env_value(t_mini *mini, char *name);
 void		set_env(t_env **env, char *name, char *value);
 void		print_sorted_env(t_env *env);
-void		sort_env(char **tab, int env_len);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
 t_token		*list_join(t_mini *mini, t_token *token);
-int			is_in_env(t_env *env, char *args);
-int			is_valid_env(const char *env);
 
 /* Init */
 
@@ -205,7 +195,8 @@ void	sig_handler(int code);
 
 /* Errors */
 int		error_manager(t_mini *mini, int err, char *fct, char *str);
-int			export_err(t_mini *mini, int error, char *arg);
+void		export_err(t_mini *mini, int error, char *arg);
+void		cd_err(t_mini *mini, int err, char *arg);
 
 // lexer
 void		lexer(t_mini *mini);

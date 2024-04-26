@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 09:30:41 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/26 10:39:55 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	init_mini(t_mini **mini, char **env, char *name)
 	(*mini) = malloc(sizeof(t_mini)); //protected
 	if (!(*mini))
 	{
-		ft_printfd(STDERR, "%s: memory allocation failed\n",
+		ft_printfd(STDERR_FILENO, "%s: memory allocation failed\n",
 			ft_strrchr(name, '/') + 1);
 		error_manager(NULL, MALLOC, NULL, NULL);
 	}
