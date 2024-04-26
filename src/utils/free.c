@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 08:54:58 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/23 14:57:32 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	free_env(t_env *env)
 	}
 }
 
+
 /**
  * @brief Frees all allocated memory and exits the program.
  * 
@@ -127,6 +128,8 @@ int	clean_exit(t_mini *mini)
 		free_cmd(&(mini->cmd));
 	if (mini->env)
 		free_env(mini->env);
+	if (sig->exit == 1)
+		ft_putstr_fd("exit\n", 2);
 	if (mini->rl)
 		free(mini->rl);
 	free(mini);

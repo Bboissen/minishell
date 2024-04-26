@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 09:15:16 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/16 08:44:06 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,8 @@ void	set_env(t_env **env, char *name, char *value)
  * @return {char*} - Returns the value of the environment variable if
  * found, NULL otherwise.
  */
-char	*get_env_value(t_mini *mini, char *name)
+char	*get_env(t_env *env, char *name)
 {
-	t_env	*env;
-
-	env = mini->h_env;
 	while (env != NULL)
 	{
 		if (strcmp(env->name, name) == 0)
@@ -81,7 +78,7 @@ char	*get_env_value(t_mini *mini, char *name)
  * @param {char**} tab - The array to sort.
  * @param {int} env_len - The length of the array.
  */
-static void	sort_env(char **tab, int env_len)
+void	sort_env(char **tab, int env_len)
 {
 	int		ordered;
 	int		i;

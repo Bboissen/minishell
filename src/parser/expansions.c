@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 07:58:19 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/25 14:11:49 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ void	expand_join(t_mini **mini)
 	{
 		if ((*mini)->token->expand)
 		{
-			tmp = expand_token(mini, (*mini)->token->str);
+			tmp = expand_token(mini, (*mini)->token->str); //protected random iteration
 			free((*mini)->token->str);
 			(*mini)->token->str = tmp;
 			(*mini)->token->expand = 0;
+			if (!tmp[0])
+				(*mini)->token = list_join((*mini), (*mini)->token);
 		}
 		(*mini)->token = (*mini)->token->next;
 	}
@@ -37,7 +39,11 @@ void	expand_join(t_mini **mini)
 	while ((*mini)->token)
 	{
 		if ((*mini)->token->join)
-			(*mini)->token = list_join((*mini), (*mini)->token);
+		{
+			if ((*mini)->token == (*mini)->h_token)
+				(*mini)->h_token = (*mini)->token->next;	
+			(*mini)->token = list_join((*mini), (*mini)->token); //protected random iteration
+		}
 		else
 			(*mini)->token = (*mini)->token->next;
 	}
@@ -45,7 +51,6 @@ void	expand_join(t_mini **mini)
 
 /**
  * Expands a token in the shell.
- * 
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be expanded.
  * @return {char*} - Returns the expanded string.
@@ -53,7 +58,7 @@ void	expand_join(t_mini **mini)
 //protected random iteration
 char	*expand_token(t_mini **mini, char *str)
 {
-	t_env	*env;
+	t_env *env;
 	char	*env_val;
 	t_sig	*sig;
 
@@ -62,23 +67,23 @@ char	*expand_token(t_mini **mini, char *str)
 	env_val = NULL;
 	if (!ft_strcmp(str, "?"))
 	{
-		env_val = ft_itoa(sig->status);
+		env_val = ft_itoa(sig->status); //protected random iteration
 		if (!env_val)
-			error_manager(*mini, MALLOC, NULL, NULL);
+			error_manager(*mini, MALLOC, NULL, NULL); 
 		return (env_val);
 	}
 	while (env && env->name)
 	{
 		if (!ft_strcmp(str, env->name))
 		{
-			env_val = ft_strdup(env->value);
+			env_val = ft_strdup(env->value); //protected random iteration
 			if (!env_val)
 				error_manager(*mini, MALLOC, NULL, NULL);
 			return (env_val);
 		}
 		env = env->next;
 	}
-	env_val = ft_strdup("");
+	env_val = ft_strdup(""); //protected random iteration
 	if (!env_val)
 		error_manager(*mini, MALLOC, NULL, NULL);
 	return (env_val);
@@ -86,17 +91,17 @@ char	*expand_token(t_mini **mini, char *str)
 
 /**
  * Joins a list of tokens in the shell.
- * 
  * @param {t_token*} token - The token to be joined.
  * @return {t_token*} - Returns the joined token.
  */
+//protected random iteration
 t_token	*list_join(t_mini *mini, t_token *token)
 {
 	char	*new_str;
 	t_token	*to_free;
 
 	new_str = malloc(ft_strlen(token->str)
-			+ ft_strlen(token->next->str) + 1);
+				+ ft_strlen(token->next->str) + 1); //protected random iteration
 	if (!new_str)
 		error_manager(mini, MALLOC, NULL, NULL);
 	ft_strcpy(new_str, token->str);
