@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 09:20:39 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/26 11:06:52 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,22 @@ static char	*add_home_path(t_mini *mini, char *path)
 {
 	char	*tmp1;
 	char	*tmp2;
+	static int	i = 0;
 
 	tmp1 = NULL;
 	tmp2 = NULL;
 	if (path && path[0] == '~' && (path[1] && path[1] == '/'))
 	{
-		tmp1 = get_env_value(mini, "HOME");
+		tmp1 = ft_strdup(get_env_value(mini, "HOME"));
 		if (tmp1)
 		{
-			tmp2 = ft_substr(path, 1, ft_strlen(path));
+			if (i++ < 4)
+				tmp2 = ft_substr(path, 1, ft_strlen(path));
+			if (!tmp2)
+				return (error_manager(mini, MALLOC, NULL, NULL), path);
 			path = ft_strjoin(tmp1, tmp2);
+			if (!path)
+				return (error_manager(mini, MALLOC, NULL, NULL), tmp2);
 		}
 	}
 	ft_memdel(tmp1);

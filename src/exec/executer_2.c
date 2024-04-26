@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 16:50:33 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:00:41 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static void	exec_child(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 	t_sig	*sig;
 
 	sig = get_sig();
-	close(cmd->fd[0]);
-	if (cmd->fd[1] != -1)
-		dup2(cmd->fd[1], STDOUT_FILENO);
-	close(cmd->fd[1]);
+	// if (cmd->in)
+	dup2(cmd->fd[0], STDIN_FILENO);
+	dup2(cmd->fd[1], STDOUT_FILENO);
+	close_fds(cmd->fd);
 	close(sig_pipefd[0]);
 	if (cmd->builtin == NONE)
 		execve(cmd->args[0], cmd->args, env_to_tab(mini->h_env));
@@ -41,14 +41,10 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 	pid = fork();
 	if (pid == 0)
 		exec_child(mini, cmd, sig_pipefd);
-	else if (pid > 0)
-	{
-		close(cmd->fd[1]);
-		if (cmd->fd[0] != -1)
-			dup2(cmd->fd[0], STDIN_FILENO);
-		close(cmd->fd[0]);
-		close(sig_pipefd[1]);
-	}
+	if (cmd->next != NULL)
+		dup2(cmd->fd[0], 0);
+	close_fds(cmd->fd);
+	close(sig_pipefd[1]);
 	return (pid);
 }
 
@@ -58,23 +54,23 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 	int		pipefd[2];
 
 	pipe(sig_pipefd);
-	while (cmd->next)
+	pipe(pipefd);
+	while (cmd)
 	{
 		fd_handler(mini, cmd);
-		pipe(pipefd);
-		cmd->fd[0] = pipefd[0];
-		if (cmd->fd[1] == -1)
-			cmd->fd[1] = pipefd[1];
-		printf("pipefd = |%d|%d|\n", pipefd[0], pipefd[1]);
+		if (!cmd->out && cmd->next && !cmd->next->in)
+		{
+			if (!cmd->in)
+				cmd->fd[0] = pipefd[0];
+			if (!cmd->out)
+				cmd->fd[1] = pipefd[1];
+			printf("pipefd = |%d|%d|\n", pipefd[0], pipefd[1]);
+		}
 		nxt = cmd->next;
 		cmd->pid = exec(mini, cmd, sig_pipefd);
+		close_fds(pipefd);
 		cmd = nxt;
 	}
-	// cmd->fd[0] = STDIN_FILENO;
-	// cmd->fd[1] = STDOUT_FILENO;
-	fd_handler(mini, cmd);
-	printf("cmd->fd[0] = %d cmd->fd[1] = %d\n", cmd->fd[0], cmd->fd[1]);
-	cmd->pid = exec(mini, cmd, sig_pipefd);
 }
 
 void	cmd_exec(t_mini *mini)
@@ -89,6 +85,8 @@ void	cmd_exec(t_mini *mini)
 	cmd = mini->h_cmd;
 	initial_fds[0] = dup(STDIN_FILENO);
 	initial_fds[1] = dup(STDOUT_FILENO);
+	if (cmd_size(mini->h_cmd) == 1 && cmd->builtin != NONE)
+		return (exec_builtin(mini));
 	piper(mini, cmd, sig_pipefd);
 	while (cmd)
 	{

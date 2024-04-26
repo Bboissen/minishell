@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 10:43:44 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/26 11:43:39 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void	reinit(t_mini **mini);
 
 /* Exec */
 
-int			cmd_exec(t_mini *mini);
+void		cmd_exec(t_mini *mini);
 int			cmd_size(t_cmd *h_cmd);
 void		exec_builtin(t_mini *mini);
 void		fd_handler(t_mini *mini, t_cmd *cmd);
