@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_err.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/04/25 17:59:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/26 08:53:07 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,22 @@ void	export_err(t_mini *mini, int err, char *arg)
 		i++;
 	}
 	write((STDERR_FILENO), "\n", 1);
+}
+
+static void	cd_err_next(t_mini *mini, int err, char *arg)
+{
+	t_sig	*sig;
+
+	sig = get_sig();
+	sig->status = err;
+	if (err == ERROR)
+		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
+Too many arguments\n", mini->name, arg);
+	else if (err == MISSING)
+		ft_printfd(STDERR_FILENO, "%s: cd: \
+%d not set\n\n", mini->name, arg);
+	else
+		error_manager(mini, MALLOC, NULL, NULL);
 }
 
 void	cd_err(t_mini *mini, int err, char *arg)
@@ -58,5 +74,5 @@ Not a directory\n", mini->name, arg);
 		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
 Bad address\n", mini->name, arg);
 	else
-		error_manager(mini, MALLOC, NULL, NULL);
+		cd_err_next(mini, err, arg);
 }

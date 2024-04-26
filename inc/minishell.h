@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 17:01:40 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/26 09:16:12 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,11 +155,9 @@ char		**env_to_tab(t_env *env_lst);
 char		*get_env_value(t_mini *mini, char *name);
 void		set_env(t_env **env, char *name, char *value);
 void		print_sorted_env(t_env *env);
-void		sort_env(char **tab, int env_len);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
 t_token		*list_join(t_mini *mini, t_token *token);
-int			is_in_env(t_env *env, char *args);
 
 /* Init */
 

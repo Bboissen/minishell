@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   shlvl.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 17:00:51 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/26 09:14:42 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-
 /**
  * Check if a string represents a valid shell level.
  * 
  * @param {const char*} str - The string to check.
- * @return {int} - Returns SUCCESS if the string is a valid shell level, ERROR otherwise.
+ * @return {int} - Returns SUCCESS if the string is a 
+ * valid shell level, ERROR otherwise.
  */
 static int	invalid_lvl(const char *str)
 {
@@ -59,11 +58,39 @@ static int	get_lvl(const char *str)
 }
 
 /**
+ * @brief Replaces the shell level in the environment variables.
+ *
+ * This function replaces the shell level in the environment variables 
+ * with the given shell level.
+ *
+ * @param mini A pointer to a pointer to the main structure of the minishell.
+ * @param shell_level The new shell level to set.
+ * @param shlvl A pointer to the string representation of the new shell level. 
+ * This will be freed and replaced with a new string.
+ */
+static void	replace_shlvl(t_mini **mini, int shell_level, char *shlvl)
+{
+	ft_memdel((*mini)->env->value);
+	shlvl = ft_itoa(shell_level);
+	if (!shlvl)
+	{
+		(*mini)->env->value = NULL;
+		error_manager(*mini, MALLOC, NULL, NULL);
+	}
+	(*mini)->env->value = ft_strdup(shlvl);
+	if (!(*mini)->env->value)
+	{
+		ft_memdel(shlvl);
+		error_manager(*mini, MALLOC, NULL, NULL);
+	}
+	ft_memdel(shlvl);
+}
+
+/**
  * Increment the shell level in the environment.
  * 
  * @param {t_env*} env - The environment to increment the shell level in.
  */
-//protected
 void	increment_shell_level(t_mini **mini)
 {
 	char	*shell_level_value;
@@ -74,24 +101,12 @@ void	increment_shell_level(t_mini **mini)
 	shell_level = get_lvl(shell_level_value) + 1;
 	if (shell_level_value)
 		ft_memdel(shell_level_value);
+	shlvl = 0;
 	while ((*mini)->env && (*mini)->env->name)
 	{
 		if (!ft_strcmp((*mini)->env->name, "SHLVL"))
 		{
-			ft_memdel((*mini)->env->value);
-			shlvl = ft_itoa(shell_level);
-			if (!shlvl)
-			{
-				(*mini)->env->value = NULL;
-				error_manager(*mini, MALLOC, NULL, NULL);
-			}
-			(*mini)->env->value = ft_strdup(shlvl);
-			if (!(*mini)->env->value)
-			{
-				ft_memdel(shlvl);
-				error_manager(*mini, MALLOC, NULL, NULL);
-			}
-			ft_memdel(shlvl);
+			replace_shlvl(mini, shell_level, shlvl);
 			return ;
 		}
 		(*mini)->env = (*mini)->env->next;

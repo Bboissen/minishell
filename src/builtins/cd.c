@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 18:03:19 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/26 09:20:39 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Adds the home path to the given path if it starts with '~/'.
+ *
+ * @param mini The main structure of the minishell.
+ * @param path The path to which the home path should be added.
+ * @return The new path with the home path added, or the original 
+ * path if it didn't start with '~/'. 
+ */
 static char	*add_home_path(t_mini *mini, char *path)
 {
 	char	*tmp1;
@@ -28,13 +36,19 @@ static char	*add_home_path(t_mini *mini, char *path)
 			path = ft_strjoin(tmp1, tmp2);
 		}
 	}
-	else if (path && path[0] == '-' && !path[1])
-		backward_dir(mini);
 	ft_memdel(tmp1);
 	ft_memdel(tmp2);
 	return (path);
 }
 
+/**
+ * @brief Changes the current directory to the given path and 
+ * updates the PWD and OLDPWD environment variables.
+ *
+ * @param mini The main structure of the minishell.
+ * @param path The path to change to.
+ * @return SUCCESS if the directory was changed successfully, ERROR otherwise.
+ */
 static int	change(t_mini *mini, char *path)
 {
 	char	*pwd;
@@ -58,6 +72,13 @@ static int	change(t_mini *mini, char *path)
 	return (ft_memdel(pwd), cd_err(mini, errno, path), ERROR);
 }
 
+/**
+ * @brief Changes the current directory to the previous one
+ * stored in the OLDPWD environment variable.
+ *
+ * @param mini The main structure of the minishell.
+ * @return ERROR if the command was '-', SUCCESS otherwise.
+ */
 int	backward_dir(t_mini *mini)
 {
 	char	*tmp;
@@ -77,19 +98,25 @@ int	backward_dir(t_mini *mini)
 	return (SUCCESS);
 }
 
+/**
+ * @brief Changes the current directory to the one specified in the arguments,
+ * or to the home directory if no arguments are given.
+ *
+ * @param mini The main structure of the minishell.
+ * @return SUCCESS if the directory was changed successfully, ERROR otherwise.
+ */
 int	mini_cd(t_mini *mini)
 {
 	char	*home;
 	char	**args;
-	t_sig	*sig;
 
-	sig = get_sig();
 	home = NULL;
 	args = mini->cmd->args;
-	if (arg_exists(args, 1))
-		return (cd_err(mini, EXE, NULL), ERROR);
-	if (!args || (ft_strequ(args[0], "~") && !args[1])
-		|| (ft_strequ(args[0], "--") && !args[1]))
+	if (arg_exists(args, 1) && !ft_strequ(args[0], "--"))
+		return (cd_err(mini, ERROR, NULL), ERROR);
+	else if (arg_exists(args, 1) && ft_strequ(args[0], "--"))
+		args++;
+	if (!args || (ft_strequ(args[0], "~") && !args[1]))
 	{
 		if (!get_env_value(mini, "HOME"))
 			return (cd_err(mini, MISSING, "HOME"), ERROR);
@@ -105,3 +132,5 @@ int	mini_cd(t_mini *mini)
 	change(mini, args[0]);
 	return (SUCCESS);
 }
+
+// || (ft_strequ(args[0], "--") && !args[1])

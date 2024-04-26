@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 07:55:27 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/26 08:56:23 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be used as the base of the prompt.
  */
-//protected
 void	readline_setup(t_mini *mini, char **rl, char *str)
 {
 	char		*prompt;
@@ -39,7 +38,6 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char**} env - The environment for the shell.
  */
-//protected
 void	init_mini(t_mini **mini, char **env, char *name)
 {
 	(*mini) = malloc(sizeof(t_mini));

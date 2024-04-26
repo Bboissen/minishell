@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 08:37:05 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/26 08:54:58 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void	free_env(t_env *env)
 		env = tmp;
 	}
 }
-
 
 /**
  * @brief Frees all allocated memory and exits the program.

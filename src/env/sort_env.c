@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 17:40:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/26 09:15:16 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*get_env_value(t_mini *mini, char *name)
  * @param {char**} tab - The array to sort.
  * @param {int} env_len - The length of the array.
  */
-void	sort_env(char **tab, int env_len)
+static void	sort_env(char **tab, int env_len)
 {
 	int		ordered;
 	int		i;
