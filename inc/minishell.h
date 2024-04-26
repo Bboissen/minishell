@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 09:16:12 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/26 15:24:14 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,10 +170,10 @@ void		reinit(t_mini **mini);
 
 /* Exec */
 
-int			cmd_exec(t_mini *mini);
+void		cmd_exec(t_mini *mini);
 int			cmd_size(t_cmd *h_cmd);
 void		exec_builtin(t_mini *mini);
-void		fd_handler(t_mini *mini, t_cmd *cmd);
+void		fd_handler(t_cmd *cmd);
 int			arg_exists(char **args, int index);
 
 /* Stds & fds */
@@ -197,9 +197,9 @@ void		sig_handler(int code);
 /* Errors */
 
 int			error_manager(t_mini *mini, int err, char *fct, char *str);
-void		lexer_err(t_mini *mini, char **str, int err, char c);
+void		lexer_err(t_mini *mini, char *str, int err, char c);
 void		parser_err(t_mini *mini, char *str, int err);
-void		export_err(t_mini *mini, int error, char *arg);
+int			export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 
 // lexer
@@ -222,7 +222,7 @@ void		delete_heredoc(t_mini *mini);
 void		parser(t_mini *mini);
 void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
-char		**add_args(t_cmd **cmd, char *str);
+char		**add_args(t_mini *mini,t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 

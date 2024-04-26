@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 09:20:39 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/26 11:01:10 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,5 +132,3 @@ int	mini_cd(t_mini *mini)
 	change(mini, args[0]);
 	return (SUCCESS);
 }
-
-// || (ft_strequ(args[0], "--") && !args[1])

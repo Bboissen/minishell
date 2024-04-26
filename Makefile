@@ -6,7 +6,7 @@
 #    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/24 16:04:03 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/26 10:43:00 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,19 +43,19 @@ ENV			=	env			\
 				sort_env
 
 ERROR		=	builtin_err		\
-				error_manager	\
-				lexer_err		\
-				parser_err
+				error_manager
 
 EXEC		=	exec_utils	\
 				executer
 
 LEXER		=	lexer		\
 				lex_utils	\
+				lexer_err	\
 				heredoc
 
 PARSER		=	expansions	\
 				parser		\
+				parser_err	\
 				parser_utils
 
 UTILS		=	fd			\
