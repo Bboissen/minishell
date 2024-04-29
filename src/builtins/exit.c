@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 14:19:26 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/29 18:05:07 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * 
  * @param args The array of arguments.
  * @param index The index to check.
- * @return {int} 1 if an argument exists at the given index, 0 otherwise.
+ * @return {int} 1 if an argument exists at the given index, FALSE otherwise.
  */
 int	arg_exists(char **args, int index)
 {
@@ -25,7 +25,7 @@ int	arg_exists(char **args, int index)
 
 	i = 0;
 	if (args == NULL)
-		return (0);
+		return (FALSE);
 	while (args[i] != NULL)
 		i++;
 	return (i > index);

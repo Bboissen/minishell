@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 10:46:14 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/29 18:12:16 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,9 @@ void	sort_env(char **tab, int env_len)
 	char	*tmp;
 
 	ordered = FALSE;
-	while (tab && ordered == FALSE)
+	while (!ordered)
 	{
+		ordered = TRUE;
 		i = -1;
 		while (++i < env_len - 1)
 		{
@@ -98,10 +99,12 @@ void	sort_env(char **tab, int env_len)
 				tmp = tab[i];
 				tab[i] = tab[i + 1];
 				tab[i + 1] = tmp;
-				ordered = TRUE;
+				ordered = FALSE;
 			}
 		}
 		env_len--;
+		if (env_len == 0)
+			ordered = TRUE;
 	}
 }
 
@@ -114,10 +117,8 @@ void	print_sorted_env(t_env *h_env)
 {
 	int		i;
 	char	**tab;
-	t_env	*env;
 
-	env = h_env;
-	tab = env_to_tab(env);
+	tab = env_to_tab(h_env);
 	sort_env(tab, str_env_len(tab));
 	i = 0;
 	while (tab[i])

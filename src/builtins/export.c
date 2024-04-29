@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 08:54:06 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/29 18:09:24 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,15 @@ static int	is_valid_env(const char *env)
 	int		i;
 
 	i = 0;
-	if (ft_isdigit(env[i]) == 1)
-		return (0);
+	if (ft_isdigit(env[i]))
+		return (FALSE);
 	while (env[i] && env[i] != '=')
 	{
-		if (ft_isalnum(env[i]) == 0)
-			return (-1);
+		if (!ft_isalnum(env[i]))
+			return (FALSE);
 		i++;
 	}
-	if (env[i] != '=')
-		return (2);
-	return (1);
+	return (TRUE);
 }
 
 int	env_add(const char *value, t_env *env)
@@ -89,32 +87,19 @@ static int	is_in_env(t_env *env, char *args)
 
 int	mini_export(t_mini *mini)
 {
-	int		new_env;
-	int		error;
 	t_env	*env;
 	char	**args;
 
-	new_env = 0;
 	env = mini->h_env;
 	args = mini->cmd->args;
 	if (!arg_exists(args, 0))
-		print_sorted_env(env);
-	else
+		print_sorted_env(mini->h_env);
+	else if (arg_exists(args, 0))
 	{
-		error = is_valid_env(args[1]);
-		if (args[1][0] == '=')
-			error = -3;
-		if (error <= 0)
-			return (export_err(mini, error, args[1]), ERROR);
-		if (error == 2)
-			new_env = 1;
-		else
-			new_env = is_in_env(env, args[1]);
-		if (new_env == 0)
-		{
-			if (error == 1)
-				env_add(args[1], env);
-		}
+		if (!is_valid_env(args[0]) || args[0][0] == '=')
+			return (export_err(mini, 22, args[0]), EINVAL);
+		if (!is_in_env(env, args[0]))
+			env_add(args[0], mini->h_env);
 	}
 	return (SUCCESS);
 }

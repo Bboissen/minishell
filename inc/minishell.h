@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 15:24:14 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/29 17:45:34 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ void		reinit(t_mini **mini);
 void		cmd_exec(t_mini *mini);
 int			cmd_size(t_cmd *h_cmd);
 void		exec_builtin(t_mini *mini);
-void		fd_handler(t_cmd *cmd);
+void		fd_handler(t_mini *mini, t_cmd *cmd);
 int			arg_exists(char **args, int index);
 
 /* Stds & fds */

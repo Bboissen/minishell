@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 14:57:32 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/29 14:57:17 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,9 @@ int	clean_exit(t_mini *mini)
 		free_cmd(&(mini->cmd));
 	if (mini->env)
 		free_env(mini->env);
-	if (sig->exit == 1)
-		ft_putstr_fd("exit\n", 2);
 	if (mini->rl)
 		free(mini->rl);
+	rl_clear_history();
 	free(mini);
 	exit(status);
 }

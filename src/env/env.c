@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 16:03:38 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:13:33 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,28 +107,27 @@ char	**env_to_tab(t_env *env)
  * @return {int} - Returns ERROR if memory allocation fails, 
  * otherwise returns SUCCESS.
  */
-//protected
 static int	env_cpy(char **env_array, t_env **env, int *i)
 {
 	char	*equals_pos;
 
-	*env = malloc(sizeof(t_env)); //protected random iteration
+	*env = malloc(sizeof(t_env));
 	if (!(*env))
 		return (ERROR);
 	equals_pos = ft_strchr(env_array[*i], '=');
 	if (equals_pos != NULL)
 	{
-		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]);//protected random iteration
+		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]);
 		if (!(*env)->name)
 			return (free(*env), ERROR);
-		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1); //protected random iteration
+		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1);
 	}
 	else
 	{
-		(*env)->name = ft_strdup(env_array[*i]); //protected random iteration
+		(*env)->name = ft_strdup(env_array[*i]);
 		if (!(*env)->name)
 			return (free(*env), ERROR);
-		(*env)->value = ft_strdup(""); //protected random iteration
+		(*env)->value = ft_strdup("");
 	}
 	if (!(*env)->value)
 		return (free((*env)->name), free(*env), ERROR);
@@ -145,7 +144,6 @@ static int	env_cpy(char **env_array, t_env **env, int *i)
  * @return {int} - Returns ERROR if memory allocation fails, 
  * otherwise returns SUCCESS.
  */
-//protected
 int	init_env(t_mini **mini, char **env_array)
 {
 	t_env	*env;
@@ -157,7 +155,7 @@ int	init_env(t_mini **mini, char **env_array)
 	i = -1;
 	while (env_array && env_array[++i])
 	{
-		if (env_cpy(env_array, &env, &i)) //protected random iteration
+		if (env_cpy(env_array, &env, &i))
 			return (error_manager(*mini, MALLOC, NULL, NULL));
 		if (prev)
 			prev->next = env;
