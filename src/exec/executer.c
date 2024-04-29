@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 16:50:33 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:39:45 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	exec_child(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 
 	sig = get_sig();
 	close(cmd->fd[0]);
-	if (cmd->fd[1] != -1)
+	if (!cmd->out)
 		dup2(cmd->fd[1], STDOUT_FILENO);
 	close(cmd->fd[1]);
 	close(sig_pipefd[0]);
@@ -51,8 +51,9 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 	}
 	return (pid);
 }
-
-static void	piper(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
+//everything
+// <test cat | grep o | grep a >test3 | grep o >test2 | ls
+static void	piper(t_mini *mini, t_cmd *cmd, int *sig_pipefd, int *initial_fds)
 {
 	t_cmd	*nxt;
 	int		pipefd[2];
@@ -65,15 +66,18 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *sig_pipefd)
 		cmd->fd[0] = pipefd[0];
 		if (cmd->fd[1] == -1)
 			cmd->fd[1] = pipefd[1];
-		printf("pipefd = |%d|%d|\n", pipefd[0], pipefd[1]);
+		dprintf(2, "pipefd = |%d|%d|\n", pipefd[0], pipefd[1]);
+		dprintf(2, "cmd->fd[0] = %d cmd->fd[1] = %d\n\n\n", cmd->fd[0], cmd->fd[1]);
 		nxt = cmd->next;
 		cmd->pid = exec(mini, cmd, sig_pipefd);
 		cmd = nxt;
+		
 	}
-	// cmd->fd[0] = STDIN_FILENO;
-	// cmd->fd[1] = STDOUT_FILENO;
+	cmd->fd[0] = pipefd[0];
+	if (!cmd->out)
+		dup2(initial_fds[1], STDOUT_FILENO);
 	fd_handler(mini, cmd);
-	printf("cmd->fd[0] = %d cmd->fd[1] = %d\n", cmd->fd[0], cmd->fd[1]);
+	dprintf(2, "cmd->fd[0] = %d cmd->fd[1] = %d\n", cmd->fd[0], cmd->fd[1]);
 	cmd->pid = exec(mini, cmd, sig_pipefd);
 }
 
@@ -89,7 +93,7 @@ void	cmd_exec(t_mini *mini)
 	cmd = mini->h_cmd;
 	initial_fds[0] = dup(STDIN_FILENO);
 	initial_fds[1] = dup(STDOUT_FILENO);
-	piper(mini, cmd, sig_pipefd);
+	piper(mini, cmd, sig_pipefd, initial_fds);
 	while (cmd)
 	{
 		waitpid(cmd->pid, &(sig->status), 0);
