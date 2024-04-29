@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/25 17:01:16 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/29 18:56:16 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*random_file(t_mini *mini)
 	while (i++ < 9)
 	{
 		seed = my_rand(mini);
-		rand = rand * 10 + my_rand(mini);
+		rand = seed * 10 + my_rand(mini);
 	}
 	tmp = ft_itoa(rand); //protected
 	if (!tmp)

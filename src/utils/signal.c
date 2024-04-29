@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 17:36:35 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/29 18:56:28 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,12 @@ void	sig_handler(int code)
  */
 void	sig_init(void)
 {
-	int		i;
 	t_sig	*sig;
 
 	sig = get_sig();
 	sig->status = SUCCESS;
 	sig->working = FALSE;
 	sig->exit = FALSE;
-	i = 0;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	rl_catch_signals = 0;
