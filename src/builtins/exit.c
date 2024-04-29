@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 15:14:36 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/29 14:19:26 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int	mini_exit(t_mini *mini)
 	int		overflow;
 
 	sig = get_sig();
+	narg = 0;
 	if (mini->cmd->args)
 	{
 		narg = ft_atoi_exit(mini->cmd->args[0], 0, &overflow);
@@ -117,19 +118,14 @@ int	mini_exit(t_mini *mini)
 			return (sig->status);
 		sig->status = narg % 256;
 	}
-	if (cmd_size(mini->h_cmd) == 1)
-	{
-		if (narg != 0)
-			sig->status = narg;
-		sig->exit = 1;
-		ft_printfd(STDERR_FILENO, "exit\n");
-	}
+	sig->exit = TRUE;
+	ft_printfd(STDERR_FILENO, "exit\n");
 	if (mini->cmd->args && arg_exists(mini->cmd->args, 1))
 	{
 		ft_printfd(STDERR_FILENO,
 			"%s: exit: too many arguments\n", mini->name);
-		sig->status = 1;
-		sig->exit = 0;
+		sig->status = ERROR;
+		sig->exit = FALSE;
 	}
 	return (sig->status);
 }
