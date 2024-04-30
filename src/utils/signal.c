@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 18:56:28 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 16:30:52 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@ void	sig_handler(int code)
 	if (code == SIGINT)
 	{
 		sig->status = INTERUPT;
-		ft_putstr_fd("^C\n", STDERR_FILENO);
-		rl_replace_line("", 0);
+		ft_putstr_fd("\n", STDERR_FILENO);
 		rl_on_new_line();
-		rl_redisplay();
 	}
 	else if (code == SIGQUIT)
 	{
@@ -61,5 +59,4 @@ void	sig_init(void)
 	sig->exit = FALSE;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
-	rl_catch_signals = 0;
 }

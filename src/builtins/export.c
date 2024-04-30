@@ -6,22 +6,22 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 14:32:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/30 17:23:20 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_valid_env(const char *env)
+static int	is_valid_env(const char *name)
 {
 	int		i;
 
 	i = 0;
-	if (ft_isdigit(env[i]))
+	if (!ft_strcmp(name, "") || ft_isdigit(name[i]) || !ft_strcmp(name, "="))
 		return (FALSE);
-	while (env[i] && env[i] != '=')
+	while (name[i] && name[i] != '=')
 	{
-		if (!ft_isalnum(env[i]))
+		if (!ft_isalnum(name[i]))
 			return (FALSE);
 		i++;
 	}
@@ -94,26 +94,29 @@ static int	is_in_env(t_env *env, char *args)
 int	mini_export(t_mini *mini)
 {
 	t_env	*env;
-	char	**args;
 	char	*name;
 	char	*value;
+	int		i;
 
+	i = 0;
+	name = NULL;
+	value = NULL;
 	env = mini->h_env;
-	args = mini->cmd->args;
-	if (!arg_exists(args, 0))
+	if (!arg_exists(mini->cmd->args, i))
 		return (print_sorted_env(mini), SUCCESS);
-	else if (arg_exists(args, 0))
+	while (arg_exists(mini->cmd->args, i++))
 	{
 		name = malloc(sizeof(char) * BUFF_SIZE);
-		value = malloc(sizeof(char) * BUFF_SIZE);
-		if (!name || !value)
+		if (!name)
 			error_manager(mini, MALLOC, NULL, NULL);
-		get_env_name(name, args[0]);
-		value = args[0] + ft_strlen(name) + 1;
+		get_env_name(name, mini->cmd->args[0]);
 		if (!is_valid_env(name))
-			return (export_err(mini, EINVAL, args[0]), EINVAL);
+			export_err(mini, EINVAL, mini->cmd->args[0]);
+		value = ft_strdup(mini->cmd->args[0] + ft_strlen(name) + 1);
 		if (!is_in_env(env, name))
 			env_add(mini, name, value);
+		free(name);
+		free(value);
 	}
-	return (SUCCESS);
+	return ;
 }
