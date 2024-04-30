@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 16:55:15 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/30 09:31:00 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	exec_child(t_mini *mini, t_cmd *cmd)
 		dup2(cmd->fd[1], STDOUT_FILENO);
 	close(cmd->fd[1]);
 	if (cmd->builtin == NONE)
-		execve(cmd->args[0], cmd->args, env_to_tab(mini->h_env));
+		execve(cmd->args[0], cmd->args, env_to_tab(mini));
 	else
 	{
 		exec_builtin(mini);

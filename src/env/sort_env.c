@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 18:12:16 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/30 09:30:29 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,12 @@ void	sort_env(char **tab, int env_len)
  * 
  * @param {t_env*} env - The environment to print.
  */
-void	print_sorted_env(t_env *h_env)
+void	print_sorted_env(t_mini *mini)
 {
 	int		i;
 	char	**tab;
 
-	tab = env_to_tab(h_env);
+	tab = env_to_tab(mini);
 	sort_env(tab, str_env_len(tab));
 	i = 0;
 	while (tab[i])

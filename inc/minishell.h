@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 17:45:34 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/30 09:30:16 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,10 @@ int			mini_unset(t_mini *mini);
 /* Env */
 
 t_sig		*get_sig(void);
-char		**env_to_tab(t_env *env_lst);
+char		**env_to_tab(t_mini *mini);
 char		*get_env_value(t_mini *mini, char *name);
 void		set_env(t_env **env, char *name, char *value);
-void		print_sorted_env(t_env *env);
+void		print_sorted_env(t_mini *mini);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
 t_token		*list_join(t_mini *mini, t_token *token);

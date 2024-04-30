@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 11:13:33 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/30 09:29:31 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,20 +73,20 @@ static char	*append_name_value(t_env *env_lst)
  * @return {char**} - Returns an array of strings, each string 
  * being a name-value pair from the environment list.
  */
-char	**env_to_tab(t_env *env)
+char	**env_to_tab(t_mini *mini)
 {
 	t_env	*tmp;
 	char	**tab;
 	int		size;
 	int		i;
 
-	if (!env)
+	if (!mini->h_env)
 		return (NULL);
-	size = size_env_tab(env);
+	size = size_env_tab(mini->h_env);
 	tab = malloc(sizeof(char *) * (size + 1));
 	if (!tab)
 		return (NULL);
-	tmp = env;
+	tmp = mini->h_env;
 	i = 0;
 	while (tmp)
 	{
