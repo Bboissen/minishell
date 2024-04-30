@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 11:20:39 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/30 14:52:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ static char	*append_name_value(t_env *env_lst, int i, int j, int k)
 	}
 	if (env_lst->value)
 	{
-		env_str[++i] = '\"';
+		// env_str[++i] = '\"';
 		while (env_lst->value[++k])
 			env_str[++i] = env_lst->value[k];
-		env_str[++i] = '\"';
+		// env_str[++i] = '\"';
 	}
 	env_str[++i] = '\0';
 	return (env_str);
@@ -90,6 +90,7 @@ char	**env_to_tab(t_mini *mini)
 		tmp = tmp->next;
 	}
 	tab[i] = NULL;
+	mini->env = mini->h_env;
 	return (tab);
 }
 

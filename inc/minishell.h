@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 09:30:16 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 12:36:47 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ void		sig_handler(int code);
 int			error_manager(t_mini *mini, int err, char *fct, char *str);
 void		lexer_err(t_mini *mini, char *str, int err, char c);
 void		parser_err(t_mini *mini, char *str, int err);
-int			export_err(t_mini *mini, int error, char *arg);
+void		export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 
 // lexer

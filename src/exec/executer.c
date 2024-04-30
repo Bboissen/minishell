@@ -3,26 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 09:31:00 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 14:18:32 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	exec_child(t_mini *mini, t_cmd *cmd)
+static void	exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds)
 {
 	t_sig	*sig;
 
 	sig = get_sig();
-	close(cmd->fd[0]);
 	if (!cmd->out)
 		dup2(cmd->fd[1], STDOUT_FILENO);
-	close(cmd->fd[1]);
+	close_fds(cmd->fd);
+	close_fds(initial_fds);
 	if (cmd->builtin == NONE)
+	{
 		execve(cmd->args[0], cmd->args, env_to_tab(mini));
+	}
 	else
 	{
 		exec_builtin(mini);
@@ -30,27 +32,24 @@ static void	exec_child(t_mini *mini, t_cmd *cmd)
 	}
 }
 
-static pid_t	exec(t_mini *mini, t_cmd *cmd)
+static pid_t	exec(t_mini *mini, t_cmd *cmd, int *initial_fds)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)
-		exec_child(mini, cmd);
+		exec_child(mini, cmd, initial_fds);
 	else if (pid > 0)
 	{
-		close(cmd->fd[0]);
-		close(cmd->fd[1]);
 		if (cmd->fd[0] != -1)
 			dup2(cmd->fd[0], STDIN_FILENO);
+		close_fds(cmd->fd);
 	}
 	return (pid);
 }
-//everything
-// <test cat | grep o | grep a >test3 | grep o >test2 | ls
+
 static void	piper(t_mini *mini, t_cmd *cmd, int *initial_fds)
 {
-	t_cmd	*nxt;
 	int		pipefd[2];
 
 	while (cmd->next)
@@ -58,52 +57,42 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *initial_fds)
 		fd_handler(mini, cmd);
 		pipe(pipefd);
 		cmd->fd[0] = pipefd[0];
-		if (cmd->fd[1] == -1)
-			cmd->fd[1] = pipefd[1];
-		dprintf(2, "pipefd = |%d|%d|\n", pipefd[0], pipefd[1]);
-		dprintf(2, "cmd->fd[0] = %d cmd->fd[1] = %d\n\n\n", cmd->fd[0], cmd->fd[1]);
-		nxt = cmd->next;
-		cmd->pid = exec(mini, cmd);
-		cmd = nxt;
+		cmd->fd[1] = pipefd[1];
+		cmd->pid = exec(mini, cmd, initial_fds);
+		cmd = cmd->next;
 	}
-	cmd->fd[0] = pipefd[0];
+	fd_handler(mini, cmd);
+	cmd->fd[0] = initial_fds[0];
+	// cmd->fd[1] = initial_fds[1];
 	if (!cmd->out)
 		dup2(initial_fds[1], STDOUT_FILENO);
-	fd_handler(mini, cmd);
-	dprintf(2, "cmd->fd[0] = %d cmd->fd[1] = %d\n", cmd->fd[0], cmd->fd[1]);
-	cmd->pid = exec(mini, cmd);
+	cmd->pid = exec(mini, cmd, initial_fds);
 }
 
 void	cmd_exec(t_mini *mini)
 {
-	t_cmd	*cmd;
 	t_sig	*sig;
 	int		initial_fds[2];
 
 	sig = get_sig();
 	sig->working = TRUE;
-	cmd = mini->h_cmd;
+	mini->cmd = mini->h_cmd;
 	initial_fds[0] = dup(STDIN_FILENO);
 	initial_fds[1] = dup(STDOUT_FILENO);
-	if (cmd_size(mini->cmd) == 1)
+	if (mini->cmd->builtin != NONE && cmd_size(mini->cmd) == 1)
 	{
-		fd_handler(mini, cmd);
-		if (cmd->builtin == NONE)
-			cmd->pid = exec(mini, cmd);
-		else
-			exec_builtin(mini);
-		return ;
+		fd_handler(mini, mini->cmd);
+		exec_builtin(mini);
 	}
-	piper(mini, cmd, initial_fds);
-	while (cmd)
+	else
+		piper(mini, mini->cmd, initial_fds);
+	while (mini->cmd)
 	{
-		waitpid(cmd->pid, &(sig->status), 0);
+		waitpid(mini->cmd->pid, &(sig->status), 0);
 		sig->status = WEXITSTATUS(sig->status);
-		close_fds(cmd->fd);
-		cmd = cmd->next;
+		close_fds(mini->cmd->fd);
+		mini->cmd = mini->cmd->next;
 	}
-	mini->cmd->fd[0] = STDIN_FILENO;
-	mini->cmd->fd[1] = STDOUT_FILENO;
 	dup2(initial_fds[0], STDIN_FILENO);
 	dup2(initial_fds[1], STDOUT_FILENO);
 	close_fds(initial_fds);
