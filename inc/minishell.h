@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 16:19:23 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:34:18 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,12 +161,12 @@ t_token		*list_join(t_mini *mini, t_token *token);
 
 /* Init */
 
-void	init_mini(t_mini **mini, char **env, char *name);
-int		init_env(t_mini **mini, char **env_array);
-void	increment_shell_level(t_mini **mini);
-void	sig_init(void);
-void	readline_setup(t_mini *mini, char **rl, char *str);
-void	reinit(t_mini **mini);
+void		init_mini(t_mini **mini, char **env, char *name);
+int			init_env(t_mini **mini, char **env_array);
+void		increment_shell_level(t_mini **mini);
+void		sig_init(void);
+void		readline_setup(t_mini *mini, char **rl, char *str);
+void		reinit(t_mini **mini);
 
 /* Exec */
 
@@ -183,19 +183,19 @@ void		delete_heredoc(t_mini *mini);
 
 /* Free */
 
-void	free_token(t_token **token);
-void	free_env(t_env *env);
-void	free_tab(char **tab);
-void	free_cmd(t_cmd **cmd);
-int		clean_exit(t_mini *mini);
+void		free_token(t_token **token);
+void		free_env(t_env *env);
+void		free_tab(char **tab);
+void		free_cmd(t_cmd **cmd);
+int			clean_exit(t_mini *mini);
 
 /* Signals */
 
-void	sig_handler(int code);
+void		sig_handler(int code);
 
 /* Errors */
-int		error_manager(t_mini *mini, int err, char *fct, char *str);
-int		export_err(t_mini *mini, int error, char *arg);
+int			error_manager(t_mini *mini, int err, char *fct, char *str);
+int			export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 
 // lexer
@@ -213,9 +213,9 @@ char		*var_handler(t_mini *mini, char *str, int *quote);
 char		*random_file(t_mini *mini);
 
 //heredoc
-void	heredoc(t_mini *mini);
-char	*expand_line(t_mini *mini, char *str, int fd);
-void	delete_heredoc(t_mini *mini);
+void		heredoc(t_mini *mini);
+char		*expand_line(t_mini *mini, char *str, int fd);
+void		delete_heredoc(t_mini *mini);
 
 //parser
 void		parser(t_mini *mini);
@@ -223,6 +223,6 @@ void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
-int		path_finder(t_mini *mini, t_cmd **cmd, char *str);
+int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 void		parser_err(t_mini *mini, char *str, int err);
 #endif

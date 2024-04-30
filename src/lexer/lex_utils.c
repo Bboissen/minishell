@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/30 16:18:46 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:12:42 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ char	*syntax_check(t_mini *mini, char *str, int *quote)
 	}
 	if (*quote != 0 || !*str || is_spechar(*str) != 2)
 		return (str);
+
 	if (((*str == '|' && (!mini->token || mini->token->type == PIPE)) || (mini->token && (mini->token->type == APPEND
 					|| mini->token->type == TRUNC || mini->token->type == INPUT
 					|| mini->token->type == HEREDOC))))
@@ -82,7 +83,7 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*quote == 0 && is_spe_builtin(mini->token->str))
+	if (*quote == 0 && mini->token && is_spe_builtin(mini->token->str))
 		return(new_token(mini, "", options), str);
 	else if (*quote == 0)
 		return (str);
@@ -117,7 +118,7 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*quote == 0 && is_spe_builtin(mini->token->str))
+	if (*quote == 0 && mini->token && is_spe_builtin(mini->token->str))
 		return(new_token(mini, "", options), str);
 	else if (*quote == 0)
 		return (str);
