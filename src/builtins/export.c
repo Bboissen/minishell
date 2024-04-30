@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 11:42:38 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/30 09:55:23 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//args[0][0] == '='
 static int	is_valid_env(const char *env)
 {
 	int		i;
@@ -21,7 +22,7 @@ static int	is_valid_env(const char *env)
 		return (FALSE);
 	while (env[i] && env[i] != '=')
 	{
-		if (!ft_isalnum(env[i]) && !is_spe_expand(env[i]))
+		if (!ft_isalnum(env[i]))
 			return (FALSE);
 		i++;
 	}
@@ -99,33 +100,23 @@ int	mini_export(t_mini *mini)
 	char	**args;
 	char	*name;
 	char	*value;
-	int		i;
 
 	env = mini->h_env;
 	args = mini->cmd->args;
 	if (!arg_exists(args, 0))
 		return (print_sorted_env(mini), SUCCESS);
-	else
+	else if (arg_exists(args, 0))
 	{
-		i = 0;
-		while (args[i])
-		{
-			name = malloc(sizeof(char) * BUFF_SIZE);
-			value = malloc(sizeof(char) * BUFF_SIZE);
-			if (!name || !value)
-				error_manager(mini, MALLOC, NULL, NULL);
-			get_env_name(name, args[i]);
-			value = args[i] + ft_strlen(name) + 1;
-			if (!is_valid_env(name))
-			{
-				free(name);
-				free(value);
-				return (export_err(mini, EINVAL, args[i]), EINVAL);
-			}
-			if (!is_in_env(env, name))
-				env_add(mini, name, value);
-			i++;
-		}
+		name = malloc(sizeof(char) * BUFF_SIZE);
+		value = malloc(sizeof(char) * BUFF_SIZE);
+		if (!name || !value)
+			error_manager(mini, MALLOC, NULL, NULL);
+		get_env_name(name, args[0]);
+		value = args[0] + ft_strlen(name) + 1;
+		if (!is_valid_env(name))
+			return (export_err(mini, EINVAL, args[0]), EINVAL);
+		if (!is_in_env(env, name))
+			env_add(mini, name, value);
 	}
 	return (SUCCESS);
 }
