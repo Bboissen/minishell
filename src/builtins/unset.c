@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 09:56:31 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 11:12:36 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	link_env(t_mini *mini, char **args)
 
 	while (mini->env && mini->env->next)
 	{
-		if (ft_strncmp(args[1], mini->env->next->name,
+		if (ft_strncmp(args[0], mini->env->next->name,
 				env_size(mini->env->next->name)) == 0)
 		{
 			tmp = mini->env->next->next;
@@ -72,9 +72,6 @@ int	mini_unset(t_mini *mini)
 			return (free_node(mini, env), SUCCESS);
 		}
 		link_env(mini, args);
-		return (SUCCESS);
 	}
-	return (ft_printfd(2,
-			"minishell: unset: '%s': not a valid identifier\n",
-			mini->cmd->args[0]), SUCCESS);
+	return (SUCCESS);
 }

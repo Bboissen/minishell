@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/25 17:01:16 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:21:59 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static unsigned int	my_rand(t_mini *mini)
 	static unsigned int	seed;
 	int					fd;
 
-	fd = open("/dev/urando", O_RDONLY); // protected
+	fd = open("/dev/urandom", O_RDONLY); // protected
 	if (fd == -1) 
 		return (error_manager(mini, OPEN, "open", "/dev/urandom")); // protected
 	if (read(fd, &seed, sizeof(seed)) != sizeof(seed))

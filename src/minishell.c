@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 10:32:50 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:20:10 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,40 @@
  */
 
 // TOFIX
-// echo $?HELLO -> lexer to modify
-// exit code builtin
-// cat <"1""2""3""4""5" :
-// error code missing file -> change error code
+// -----export------
+// not a valid identifier: wrong error code
+// issue with "export ="
 
-// export / exit / env -> let arg even if empty
+// -----unset------
+// "unset" wrong error code
+
+// -----cd------
+// no error code
+
+// -----echo------
+// pipe not working with builtin
+// cat <infile | echo hi => no output
+// cat infile | echo hi => no output
+// echo hi >>test | echo bye => weird output
+
+// -----exit------
+// no error code
+
+// -----parser------
+// no such file or directory: wrong error code
+// addpuntos when file provided + wrong error code
+
+// -----lexer------
+// echo $?HELLO
+
+// -----signal------
+// "^C^C" when sleep 5
 
 int	main(int ac, char **av, char **env)
 {
 	t_mini	*mini;
 	t_sig	*sig;
-	// int		i;
+	int		i;
 
 	if (ac != 1)
 		return (ERROR);
@@ -55,19 +77,17 @@ int	main(int ac, char **av, char **env)
 	while (sig->exit == FALSE)
 	{
 		readline_setup(mini, &(mini->rl), mini->name); //protected
-		if (!mini->rl)
-			return (ft_printfd(STDERR_FILENO, "exit\n"), clean_exit(mini));
 		lexer(mini); //protected
-		// mini->token = mini->h_token;
-		// printf( "\n------------------------------------------\n");
-		// printf("|type\t|%-20s|join|expand|\n", "string");
-		// printf("------------------------------------------\n");
-		// while (mini->token)
-		// {
-		// 	printf("|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
-		// 	mini->token = mini->token->next;
-		// }
-		// mini->token = mini->h_token;
+		mini->token = mini->h_token;
+		printf( "\n------------------------------------------\n");
+		printf("|type\t|%-20s|join|expand|\n", "string");
+		printf("------------------------------------------\n");
+		while (mini->token)
+		{
+			printf("|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
+			mini->token = mini->token->next;
+		}
+		mini->token = mini->h_token;
 		if (mini->token)
 		{
 			heredoc(mini); //protected random iteration
@@ -75,26 +95,27 @@ int	main(int ac, char **av, char **env)
 		}
 		if (mini->h_token)
 			parser(mini);
-		// printf("\n-----------------------------------------------\n");
-		// printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
-		// printf("-----------------------------------------------\n");
-		// mini->cmd = mini->h_cmd;
-		// while (mini->cmd)
-		// {
-		// 	i = 0;
-		// 	if (mini->cmd->args)
-		// 	{
-		// 		while(mini->cmd->args[i])
-		// 			printf("%s ", mini->cmd->args[i++]);
-		// 		printf("%-5s ", " ");
-		// 	}
-		// 	else
-		// 		printf("|%-10s\t|", "NULL");
-		// 	printf("|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
-		// 	mini->cmd = mini->cmd->next;
-		// }
-		// ft_printfd(1,"\n\n");
+		printf("\n-----------------------------------------------\n");
+		printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
+		printf("-----------------------------------------------\n");
 		mini->cmd = mini->h_cmd;
+		while (mini->cmd)
+		{
+			i = 0;
+			if (mini->cmd->args)
+			{
+				while(mini->cmd->args[i])
+					printf("%s ", mini->cmd->args[i++]);
+				printf("%-5s ", " ");
+			}
+			else
+				printf("|%-10s\t|", "NULL");
+			printf("|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
+			mini->cmd = mini->cmd->next;
+		}
+		ft_printfd(1,"\n\n");
+		mini->cmd = mini->h_cmd;
+		mini->env = mini->h_env;
 		if (mini->cmd)
 			cmd_exec(mini);
 		reinit(&mini);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 16:03:38 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:52:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,12 @@ static size_t	size_env_tab(t_env *env_lst)
  * @param {t_env*} env_lst - The node of the environment list.
  * @return {char*} - Returns a string with the format "name=value".
  */
-static char	*append_name_value(t_env *env_lst)
+static char	*append_name_value(t_env *env_lst, int i, int j, int k)
 {
 	char	*env_str;
-	int		i;
-	int		j;
-	int		k;
 
-	i = -1;
-	j = -1;
-	k = -1;
 	env_str = malloc(sizeof(char) * (ft_strlen(env_lst->name)
-				+ ft_strlen(env_lst->value) + 2));
+				+ ft_strlen(env_lst->value) + 4));
 	if (!env_str)
 		return (NULL);
 	if (env_lst->name)
@@ -59,8 +53,10 @@ static char	*append_name_value(t_env *env_lst)
 	}
 	if (env_lst->value)
 	{
+		// env_str[++i] = '\"';
 		while (env_lst->value[++k])
 			env_str[++i] = env_lst->value[k];
+		// env_str[++i] = '\"';
 	}
 	env_str[++i] = '\0';
 	return (env_str);
@@ -73,27 +69,28 @@ static char	*append_name_value(t_env *env_lst)
  * @return {char**} - Returns an array of strings, each string 
  * being a name-value pair from the environment list.
  */
-char	**env_to_tab(t_env *env)
+char	**env_to_tab(t_mini *mini)
 {
 	t_env	*tmp;
 	char	**tab;
 	int		size;
 	int		i;
 
-	if (!env)
+	if (!mini->h_env)
 		return (NULL);
-	size = size_env_tab(env);
+	size = size_env_tab(mini->h_env);
 	tab = malloc(sizeof(char *) * (size + 1));
 	if (!tab)
 		return (NULL);
-	tmp = env;
+	tmp = mini->h_env;
 	i = 0;
 	while (tmp)
 	{
-		tab[i++] = append_name_value(tmp);
+		tab[i++] = append_name_value(tmp, -1, -1, -1);
 		tmp = tmp->next;
 	}
 	tab[i] = NULL;
+	mini->env = mini->h_env;
 	return (tab);
 }
 
@@ -107,28 +104,27 @@ char	**env_to_tab(t_env *env)
  * @return {int} - Returns ERROR if memory allocation fails, 
  * otherwise returns SUCCESS.
  */
-//protected
 static int	env_cpy(char **env_array, t_env **env, int *i)
 {
 	char	*equals_pos;
 
-	*env = malloc(sizeof(t_env)); //protected random iteration
+	*env = malloc(sizeof(t_env));
 	if (!(*env))
 		return (ERROR);
 	equals_pos = ft_strchr(env_array[*i], '=');
 	if (equals_pos != NULL)
 	{
-		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]);//protected random iteration
+		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]);
 		if (!(*env)->name)
 			return (free(*env), ERROR);
-		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1); //protected random iteration
+		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1);
 	}
 	else
 	{
-		(*env)->name = ft_strdup(env_array[*i]); //protected random iteration
+		(*env)->name = ft_strdup(env_array[*i]);
 		if (!(*env)->name)
 			return (free(*env), ERROR);
-		(*env)->value = ft_strdup(""); //protected random iteration
+		(*env)->value = ft_strdup("");
 	}
 	if (!(*env)->value)
 		return (free((*env)->name), free(*env), ERROR);
@@ -145,7 +141,6 @@ static int	env_cpy(char **env_array, t_env **env, int *i)
  * @return {int} - Returns ERROR if memory allocation fails, 
  * otherwise returns SUCCESS.
  */
-//protected
 int	init_env(t_mini **mini, char **env_array)
 {
 	t_env	*env;
@@ -157,7 +152,7 @@ int	init_env(t_mini **mini, char **env_array)
 	i = -1;
 	while (env_array && env_array[++i])
 	{
-		if (env_cpy(env_array, &env, &i)) //protected random iteration
+		if (env_cpy(env_array, &env, &i))
 			return (error_manager(*mini, MALLOC, NULL, NULL));
 		if (prev)
 			prev->next = env;

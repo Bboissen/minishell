@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 11:43:39 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:19:23 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,10 @@ int			mini_unset(t_mini *mini);
 /* Env */
 
 t_sig		*get_sig(void);
-char		**env_to_tab(t_env *env_lst);
+char		**env_to_tab(t_mini *mini);
 char		*get_env_value(t_mini *mini, char *name);
 void		set_env(t_env **env, char *name, char *value);
-void		print_sorted_env(t_env *env);
+void		print_sorted_env(t_mini *mini);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
 t_token		*list_join(t_mini *mini, t_token *token);
@@ -195,13 +195,14 @@ void	sig_handler(int code);
 
 /* Errors */
 int		error_manager(t_mini *mini, int err, char *fct, char *str);
-void		export_err(t_mini *mini, int error, char *arg);
+int		export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 
 // lexer
 void		lexer(t_mini *mini);
 int			is_spechar(char c);
 int			is_space(int c);
+int			is_spe_builtin(char *str);
 int			is_spe_expand(char c);
 void		lexer_err(t_mini *mini, char *str, int err, char c);
 char		*syntax_check(t_mini *mini, char *str, int *quote);

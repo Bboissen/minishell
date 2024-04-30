@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:54:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 16:43:36 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/29 16:25:36 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	fd_handler(t_mini *mini, t_cmd *cmd)
 {
 	int	in;
 	int	out;
-	
+
 	(void)mini;
 	if (cmd->in != NULL)
 	{

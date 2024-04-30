@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 09:55:23 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 14:32:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//args[0][0] == '='
 static int	is_valid_env(const char *env)
 {
 	int		i;
@@ -80,13 +79,11 @@ static int	is_in_env(t_env *env, char *args)
 		get_env_name(env_name, env->name);
 		if (ft_strcmp(var_name, env_name) == 0)
 		{
-			if (env->value && !ft_strchr(args, ':'))
+			if (env->value)
 			{
 				ft_memdel(env->value);
 				env->value = ft_strdup(args);
 			}
-			else if (ft_strchr(args, ':'))
-				env->value = ft_strjoin(env->value, args);
 			return (TRUE);
 		}
 		env = env->next;

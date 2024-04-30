@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/25 15:56:09 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:18:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,17 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 		str++;
 		*quote = ((*quote) + 1) % 2;
 	}
-	if (*quote == 0)
+	options[0] = STR;
+	options[1] = 0;
+	options[2] = 0;
+	if (*quote == 0 && is_spe_builtin(mini->token->str))
+		return(new_token(mini, "", options), str);
+	else if (*quote == 0)
 		return (str);
 	start = str;
 	while (*str != '\'')
 		str++;
 	*str++ = '\0';
-	options[0] = STR;
-	options[1] = 0;
-	options[2] = 0;
 	if (*(str) && is_spechar(*(str)) != 2 && !ft_isspace(*(str)))
 		options[1] = JOIN;
 	while (*str == '\'')
@@ -112,16 +114,18 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 		str++;
 		*quote = ((*quote) + 1) % 2;
 	}
-	if (*quote == 0)
+	options[0] = STR;
+	options[1] = 0;
+	options[2] = 0;
+	if (*quote == 0 && is_spe_builtin(mini->token->str))
+		return(new_token(mini, "", options), str);
+	else if (*quote == 0)
 		return (str);
 	start = str;
 	while (*str != '"' && *str != '$')
 		str++;
 	end = *str;
 	*str = '\0';
-	options[0] = STR;
-	options[1] = 0;
-	options[2] = 0;
 	if (end == '$' || ((*(str + 1) && is_spechar(*(str + 1)) != 2 && !ft_isspace(*(str + 1)))))
 		options[1] = JOIN;
 	if (strlen(start) > 0)
