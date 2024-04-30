@@ -26,7 +26,7 @@ int	error_manager(t_mini *mini, int err, char *fct, char *str)
 	}
 	else if (fct)
 	{
-		ft_printfd(STDERR_FILENO, "%s: ", mini->name);
+		ft_printfd(STDERR_FILENO, "%s: %s", mini->name);
 		ft_printfd(STDERR_FILENO, "%s: ", str);
 		perror(fct);
 		return (clean_exit(mini));

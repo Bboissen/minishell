@@ -56,7 +56,7 @@
 
 // -----parser------
 // no such file or directory: wrong error code
-// addpuntos when file provided + wrong error code
+// manage with errno and strerror -> see parser error
 
 // -----signal------
 // "^C^C" when sleep 5

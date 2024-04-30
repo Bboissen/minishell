@@ -18,9 +18,11 @@ void	parser_err(t_mini *mini, char *str, int err)
 
 	sig = get_sig();
 	sig->status = err;
+	// ft_printfd(STDERR_FILENO, "%s: no such file or directory: %s\n", mini->name, str);
+	// getchar();
 	if (err == EXE)
 		ft_printfd(STDERR_FILENO, "%s: %s: command not found\n", mini->name, str);
-	else if(err == PERMISSION)
+	else if(err == F_PERM || err == X_PERM)
 		ft_printfd(STDERR_FILENO, "%s: permission denied %s\n", mini->name, str);
 	else if(err == MISSING)
 		ft_printfd(STDERR_FILENO, "%s: no such file or directory: %s\n", mini->name, str);
