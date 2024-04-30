@@ -46,7 +46,6 @@ typedef enum e_type
 	INPUT,
 	HEREDOC,
 	PIPE,
-	END,
 	JOIN,
 	EXPAND
 }	t_type;
@@ -73,6 +72,7 @@ typedef enum e_error
 {
 	SUCCESS = 0,
 	ERROR = 1,
+	END = 0,
 	MISSING = 2,
 	PERMISSION = 13,
 	DIRECTORY = 126,
@@ -81,7 +81,7 @@ typedef enum e_error
 	QUOTE = 129,
 	INTERUPT = 130,
 	QUIT = 131,
-	PARSE = 132,
+	PARSE = 2,
 	OPEN = 133,
 	READ = 134,
 	FCT = 135,

@@ -76,14 +76,23 @@ char	*expand_token(t_mini **mini, char *str)
 {
 	t_env *env;
 	char	*env_val;
+	char 	*tmp;
 	t_sig	*sig;
 
 	sig = get_sig();
 	env = (*mini)->h_env;
 	env_val = NULL;
-	if (!ft_strcmp(str, "?"))
+	if (!ft_strncmp(str, "?", 1))
 	{
 		env_val = ft_itoa(sig->status); //protected random iteration
+		if (!env_val)
+			error_manager(*mini, MALLOC, NULL, NULL);
+		if (ft_strcmp(str, "?") != 0)
+		{
+			tmp = ft_strjoin(env_val, str + 1); //protected random iteration
+			free(env_val);
+			env_val = tmp;
+		}
 		if (!env_val)
 			error_manager(*mini, MALLOC, NULL, NULL); 
 		return (env_val);

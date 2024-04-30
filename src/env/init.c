@@ -27,13 +27,13 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
 	if (!prompt)
 		error_manager(mini, MALLOC, NULL, NULL);
 	*rl = readline(prompt);
-	if (mini->rl == NULL)
+	if (mini->rl == NULL && ft_strcmp(str, "heredoc"))
 	{
 		ft_printfd(STDERR_FILENO, "exit\n");
 		free(prompt);
 		clean_exit(mini);
 	}
-	if (ft_strcmp(*rl, "") != SUCCESS)
+	if (*rl != NULL && ft_strcmp(*rl, "") != SUCCESS)
 		add_history(*rl);
 	rl_on_new_line();
 	free(prompt);

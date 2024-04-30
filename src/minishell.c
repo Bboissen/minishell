@@ -58,9 +58,6 @@
 // no such file or directory: wrong error code
 // addpuntos when file provided + wrong error code
 
-// -----lexer------
-// echo $?HELLO
-
 // -----signal------
 // "^C^C" when sleep 5
 

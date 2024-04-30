@@ -76,7 +76,6 @@ void	heredoc(t_mini *mini)
 				token = list_join(mini, token); //protected
 			}
 			readline_setup(mini, &line, "heredoc");
-
 			while (line && ft_strcmp(line, token->str))
 			{
 				while (*line)

@@ -27,7 +27,6 @@ char	*syntax_check(t_mini *mini, char *str, int *quote)
 	}
 	if (*quote != 0 || !*str || is_spechar(*str) != 2)
 		return (str);
-
 	if (((*str == '|' && (!mini->token || mini->token->type == PIPE)) || (mini->token && (mini->token->type == APPEND
 					|| mini->token->type == TRUNC || mini->token->type == INPUT
 					|| mini->token->type == HEREDOC))))
@@ -73,7 +72,7 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	char	*start;
 	t_type	options[3];
 
-	if (!str || *quote != 0)
+	if (!str || *str !='\'' || *quote != 0)
 		return (str);
 	while (*str == '\'')
 	{
@@ -85,7 +84,7 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	options[2] = 0;
 	if (*quote == 0 && mini->token && is_spe_builtin(mini->token->str))
 		return(new_token(mini, "", options), str);
-	else if (*quote == 0)
+	if (*quote == 0)
 		return (str);
 	start = str;
 	while (*str != '\'')
@@ -108,7 +107,7 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	char	end;
 	t_type	options[3];
 
-	if (!str)
+	if (!str  || *str !='"' )
 		return (str);
 	while (*str == '"')
 	{
