@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 10:39:55 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/29 17:13:20 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,14 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
 	if (!prompt)
 		error_manager(mini, MALLOC, NULL, NULL);
 	*rl = readline(prompt);
-	add_history(*rl);
+	if (mini->rl == NULL)
+	{
+		ft_printfd(STDERR_FILENO, "exit\n");
+		free(prompt);
+		clean_exit(mini);
+	}
+	if (ft_strcmp(*rl, "") != SUCCESS)
+		add_history(*rl);
 	rl_on_new_line();
 	free(prompt);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/24 15:46:22 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/29 16:36:37 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@
  */
 void	close_fds(int *fd)
 {
-	if (fd[0] != -1 && fd[0] != STDIN_FILENO)
+	if (fd[0] != -1)
 	{
 		close(fd[0]);
 		fd[0] = -1;
 	}
-	if (fd[1] != -1 && fd[1] != STDOUT_FILENO)
+	if (fd[1] != -1)
 	{
 		close(fd[1]);
 		fd[1] = -1;

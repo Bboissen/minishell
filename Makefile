@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/25 15:04:32 by bboissen         ###   ########.fr        #
+#    Updated: 2024/04/29 15:46:26 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 NAME		=	minishell
 CC			=	cc
-FLAGS		=	-Werror -Wall -Wextra $(IFLAGS)
+FLAGS		=	-Werror -Wall -Wextra -g3 $(IFLAGS)
 IFLAGS		=	-I $(INCS) -I $(LIBFT_DIR)includes/
 LFLAGS		=	-L libft -lft -lreadline
 

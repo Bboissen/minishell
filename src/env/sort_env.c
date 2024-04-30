@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 09:15:16 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 09:30:29 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,16 @@ char	*get_env_value(t_mini *mini, char *name)
  * @param {char**} tab - The array to sort.
  * @param {int} env_len - The length of the array.
  */
-static void	sort_env(char **tab, int env_len)
+void	sort_env(char **tab, int env_len)
 {
 	int		ordered;
 	int		i;
 	char	*tmp;
 
 	ordered = FALSE;
-	while (tab && ordered == FALSE)
+	while (!ordered)
 	{
+		ordered = TRUE;
 		i = -1;
 		while (++i < env_len - 1)
 		{
@@ -98,10 +99,12 @@ static void	sort_env(char **tab, int env_len)
 				tmp = tab[i];
 				tab[i] = tab[i + 1];
 				tab[i + 1] = tmp;
-				ordered = TRUE;
+				ordered = FALSE;
 			}
 		}
 		env_len--;
+		if (env_len == 0)
+			ordered = TRUE;
 	}
 }
 
@@ -110,14 +113,12 @@ static void	sort_env(char **tab, int env_len)
  * 
  * @param {t_env*} env - The environment to print.
  */
-void	print_sorted_env(t_env *h_env)
+void	print_sorted_env(t_mini *mini)
 {
 	int		i;
 	char	**tab;
-	t_env	*env;
 
-	env = h_env;
-	tab = env_to_tab(env);
+	tab = env_to_tab(mini);
 	sort_env(tab, str_env_len(tab));
 	i = 0;
 	while (tab[i])

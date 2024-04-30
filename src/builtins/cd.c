@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 11:06:52 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/04/26 11:01:10 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,16 @@ static char	*add_home_path(t_mini *mini, char *path)
 {
 	char	*tmp1;
 	char	*tmp2;
-	static int	i = 0;
 
 	tmp1 = NULL;
 	tmp2 = NULL;
 	if (path && path[0] == '~' && (path[1] && path[1] == '/'))
 	{
-		tmp1 = ft_strdup(get_env_value(mini, "HOME"));
+		tmp1 = get_env_value(mini, "HOME");
 		if (tmp1)
 		{
-			if (i++ < 4)
-				tmp2 = ft_substr(path, 1, ft_strlen(path));
-			if (!tmp2)
-				return (error_manager(mini, MALLOC, NULL, NULL), path);
+			tmp2 = ft_substr(path, 1, ft_strlen(path));
 			path = ft_strjoin(tmp1, tmp2);
-			if (!path)
-				return (error_manager(mini, MALLOC, NULL, NULL), tmp2);
 		}
 	}
 	ft_memdel(tmp1);
@@ -138,5 +132,3 @@ int	mini_cd(t_mini *mini)
 	change(mini, args[0]);
 	return (SUCCESS);
 }
-
-// || (ft_strequ(args[0], "--") && !args[1])

@@ -6,49 +6,52 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 08:54:06 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 09:55:23 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//args[0][0] == '='
 static int	is_valid_env(const char *env)
 {
 	int		i;
 
 	i = 0;
-	if (ft_isdigit(env[i]) == 1)
-		return (0);
+	if (ft_isdigit(env[i]))
+		return (FALSE);
 	while (env[i] && env[i] != '=')
 	{
-		if (ft_isalnum(env[i]) == 0)
-			return (-1);
+		if (!ft_isalnum(env[i]))
+			return (FALSE);
 		i++;
 	}
-	if (env[i] != '=')
-		return (2);
-	return (1);
+	return (TRUE);
 }
 
-int	env_add(const char *value, t_env *env)
+static int	env_add(t_mini *mini, char *name, char *value)
 {
 	t_env	*new;
 	t_env	*tmp;
 
-	if (env && env->value == NULL)
-	{
-		env->value = ft_strdup(value);
-		return (SUCCESS);
-	}
 	new = malloc(sizeof(t_env));
 	if (!new)
-		return (-1);
+		error_manager(mini, MALLOC, NULL, NULL);
+	new->name = ft_strdup(name);
 	new->value = ft_strdup(value);
-	while (env && env->next && env->next->next)
-		env = env->next;
-	tmp = env->next;
-	env->next = new;
-	new->next = tmp;
+	new->next = NULL;
+	if (mini->env == NULL)
+	{
+		mini->env = new;
+		mini->h_env = new;
+	}
+	else
+	{
+		tmp = mini->env;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
 	return (SUCCESS);
 }
 
@@ -74,12 +77,16 @@ static int	is_in_env(t_env *env, char *args)
 	get_env_name(var_name, args);
 	while (env && env->next)
 	{
-		get_env_name(env_name, env->value);
+		get_env_name(env_name, env->name);
 		if (ft_strcmp(var_name, env_name) == 0)
 		{
-			if (env->value)
+			if (env->value && !ft_strchr(args, ':'))
+			{
 				ft_memdel(env->value);
-			env->value = ft_strdup(args);
+				env->value = ft_strdup(args);
+			}
+			else if (ft_strchr(args, ':'))
+				env->value = ft_strjoin(env->value, args);
 			return (TRUE);
 		}
 		env = env->next;
@@ -89,32 +96,27 @@ static int	is_in_env(t_env *env, char *args)
 
 int	mini_export(t_mini *mini)
 {
-	int		new_env;
-	int		error;
 	t_env	*env;
 	char	**args;
+	char	*name;
+	char	*value;
 
-	new_env = 0;
 	env = mini->h_env;
 	args = mini->cmd->args;
 	if (!arg_exists(args, 0))
-		print_sorted_env(env);
-	else
+		return (print_sorted_env(mini), SUCCESS);
+	else if (arg_exists(args, 0))
 	{
-		error = is_valid_env(args[1]);
-		if (args[1][0] == '=')
-			error = -3;
-		if (error <= 0)
-			return (export_err(mini, error, args[1]), ERROR);
-		if (error == 2)
-			new_env = 1;
-		else
-			new_env = is_in_env(env, args[1]);
-		if (new_env == 0)
-		{
-			if (error == 1)
-				env_add(args[1], env);
-		}
+		name = malloc(sizeof(char) * BUFF_SIZE);
+		value = malloc(sizeof(char) * BUFF_SIZE);
+		if (!name || !value)
+			error_manager(mini, MALLOC, NULL, NULL);
+		get_env_name(name, args[0]);
+		value = args[0] + ft_strlen(name) + 1;
+		if (!is_valid_env(name))
+			return (export_err(mini, EINVAL, args[0]), EINVAL);
+		if (!is_in_env(env, name))
+			env_add(mini, name, value);
 	}
 	return (SUCCESS);
 }
