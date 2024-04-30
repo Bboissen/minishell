@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 09:29:31 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 11:20:39 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,12 @@ static size_t	size_env_tab(t_env *env_lst)
  * @param {t_env*} env_lst - The node of the environment list.
  * @return {char*} - Returns a string with the format "name=value".
  */
-static char	*append_name_value(t_env *env_lst)
+static char	*append_name_value(t_env *env_lst, int i, int j, int k)
 {
 	char	*env_str;
-	int		i;
-	int		j;
-	int		k;
 
-	i = -1;
-	j = -1;
-	k = -1;
 	env_str = malloc(sizeof(char) * (ft_strlen(env_lst->name)
-				+ ft_strlen(env_lst->value) + 2));
+				+ ft_strlen(env_lst->value) + 4));
 	if (!env_str)
 		return (NULL);
 	if (env_lst->name)
@@ -59,8 +53,10 @@ static char	*append_name_value(t_env *env_lst)
 	}
 	if (env_lst->value)
 	{
+		env_str[++i] = '\"';
 		while (env_lst->value[++k])
 			env_str[++i] = env_lst->value[k];
+		env_str[++i] = '\"';
 	}
 	env_str[++i] = '\0';
 	return (env_str);
@@ -90,7 +86,7 @@ char	**env_to_tab(t_mini *mini)
 	i = 0;
 	while (tmp)
 	{
-		tab[i++] = append_name_value(tmp);
+		tab[i++] = append_name_value(tmp, -1, -1, -1);
 		tmp = tmp->next;
 	}
 	tab[i] = NULL;

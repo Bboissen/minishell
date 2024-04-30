@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 09:30:29 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 11:16:42 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,7 @@ void	print_sorted_env(t_mini *mini)
 	i = 0;
 	while (tab[i])
 	{
-		ft_putstr("declare -x ");
-		ft_putendl(tab[i]);
+		ft_printfd(STDOUT_FILENO, "declare -x %s\n", tab[i]);
 		i++;
 	}
 	free_tab(tab);
