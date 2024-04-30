@@ -52,14 +52,14 @@ void	sig_handler(int code)
  */
 void	sig_init(void)
 {
-	int		i;
+	// int		i;
 	t_sig	*sig;
 
 	sig = get_sig();
 	sig->status = SUCCESS;
 	sig->working = FALSE;
 	sig->exit = FALSE;
-	i = 0;
+	// i = 0;
 	// while (i < _NSIG)
 	// 	signal(i++, SIG_IGN);
 	signal(SIGINT, sig_handler);

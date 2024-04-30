@@ -20,14 +20,12 @@ char	*random_file(t_mini *mini)
 	char 			*file;
 	char 			*tmp;
 	unsigned int	rand;
-	unsigned int	seed;
 	int				i;
 
 	i = 0;
 	rand = 0;
 	while (i++ < 9)
 	{
-		seed = my_rand(mini);
 		rand = rand * 10 + my_rand(mini);
 	}
 	tmp = ft_itoa(rand); //protected
