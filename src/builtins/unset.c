@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 11:12:36 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/30 11:39:25 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,41 +37,35 @@ static void	free_node(t_mini *mini, t_env *env)
 	ft_memdel(env);
 }
 
-static void	link_env(t_mini *mini, char **args)
-{
-	t_env	*tmp;
-
-	while (mini->env && mini->env->next)
-	{
-		if (ft_strncmp(args[0], mini->env->next->name,
-				env_size(mini->env->next->name)) == 0)
-		{
-			tmp = mini->env->next->next;
-			free_node(mini, mini->env->next);
-			mini->env->next = tmp;
-			return ;
-		}
-		mini->env = mini->env->next;
-	}
-}
-
 int	mini_unset(t_mini *mini)
 {
 	char	**args;
 	t_env	*env;
+	t_env	*prev;
+	int		i;
 
 	args = mini->cmd->args;
 	env = mini->h_env;
-	if ((args[0]))
+	i = 0;
+	while (args[i])
 	{
-		if (!ft_strncmp(args[0], env->name,
-				env_size(env->name)))
+		prev = NULL;
+		while (env)
 		{
-			if (env->next)
-				env = env->next;
-			return (free_node(mini, env), SUCCESS);
+			if (!ft_strncmp(args[i], env->name, env_size(env->name)))
+			{
+				if (prev)
+					prev->next = env->next;
+				else
+					mini->h_env = env->next;
+				free_node(mini, env);
+				break ;
+			}
+			prev = env;
+			env = env->next;
 		}
-		link_env(mini, args);
+		env = mini->h_env;
+		i++;
 	}
 	return (SUCCESS);
 }
