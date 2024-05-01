@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 15:43:18 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:26:30 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ void	sig_handler(int code)
 	if (code == SIGINT)
 	{
 		sig->status = INTERUPT;
-		ft_putstr_fd("^C\n", STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
 		rl_on_new_line();
-		rl_redisplay();
+		rl_replace_line("", 0);
+		if (sig->working != TRUE)
+			rl_redisplay();
 	}
 	else if (code == SIGQUIT)
 	{
@@ -52,17 +54,12 @@ void	sig_handler(int code)
  */
 void	sig_init(void)
 {
-	// int		i;
 	t_sig	*sig;
 
 	sig = get_sig();
 	sig->status = SUCCESS;
 	sig->working = FALSE;
 	sig->exit = FALSE;
-	// i = 0;
-	// while (i < _NSIG)
-	// 	signal(i++, SIG_IGN);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
-	rl_catch_signals = 0;
 }

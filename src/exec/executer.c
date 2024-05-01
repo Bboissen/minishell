@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 16:51:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:24:25 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	cmd_exec(t_mini *mini)
 	while (mini->cmd)
 	{
 		waitpid(mini->cmd->pid, &(status), 0);
-		if (mini->cmd->builtin == NONE && cmd_size(mini->h_cmd) != 1)
+		if (mini->cmd->builtin == NONE && cmd_size(mini->h_cmd) != 1) //issue when only 1 classic function after a fail
 			sig->status = WEXITSTATUS(status);
 		close_fds(mini->cmd->fd);
 		mini->cmd = mini->cmd->next;

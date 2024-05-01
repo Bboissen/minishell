@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 17:03:53 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:09:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@
  */
 
 // TOFIX
-// -----export------
-// not a valid identifier: wrong error code
-// issue with "export ="
 
 // -----unset------
 // unset SHELL SEGFAULT
@@ -47,7 +44,6 @@
 // cd $PWD hi -> error message
 
 // -----exit------
-// no error code
 // CTRL+D not exiting when executing folder ./tester
 
 // -----parser------
@@ -58,6 +54,7 @@
 
 // -----exec------
 // $PWD
+
 // -----signal------
 // "^C^C" when sleep 5
 
