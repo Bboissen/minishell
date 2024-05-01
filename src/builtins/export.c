@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:06:27 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:56:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,5 @@ int	mini_export(t_mini *mini, t_cmd *cmd)
 		free(value);
 		i++;
 	}
-	return (SUCCESS);
+	return (get_sig()->status);
 }

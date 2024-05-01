@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 11:14:28 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:03:53 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,24 @@
 // issue with "export ="
 
 // -----unset------
-// "unset" wrong error code
+// unset SHELL SEGFAULT
 
 // -----cd------
 // no error code
+// cd $PWD hi -> error message
 
 // -----exit------
 // no error code
 // CTRL+D not exiting when executing folder ./tester
 
 // -----parser------
-// no such file or directory: wrong error code
+// cat <missing | cat
 // if directory to exec, error code
-// manage with errno and strerror -> see parser error
+// ls >./outfiles/outfile01 >./test_files/invalid_permission
+// echo hi | echo bye >./test_files/invalid_permission
 
+// -----exec------
+// $PWD
 // -----signal------
 // "^C^C" when sleep 5
 

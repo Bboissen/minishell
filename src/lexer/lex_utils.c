@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/01 10:49:55 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:26:48 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,14 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	*quote = 0;
 	return (str);
 }
-//echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $ <<" see expansion
+
 char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 {
 	char	*start;
 	char	end;
 	t_type	options[3];
 
-	if (!str  || *str !='"' )
+	if (*quote == 0 && (!str  || *str !='"' ))
 		return (str);
 	while (*str == '"')
 	{
@@ -122,8 +122,6 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	else if (*quote == 0)
 		return (str);
 	start = str;
-	printf("start: %s\n", start);
-	getchar();
 	while (*str != '"' && *str != '$')
 		str++;
 	end = *str;

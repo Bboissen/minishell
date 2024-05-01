@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:20:35 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 15:49:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,5 @@ int	mini_exit(t_mini *mini, t_cmd *cmd)
 		sig->status = ERROR;
 	}
 	sig->exit = TRUE;
-	dprintf(2, "pouet %d\n", sig->status);
 	return (sig->status);
 }

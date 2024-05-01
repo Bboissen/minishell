@@ -6,13 +6,13 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:19:53 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:51:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds)
+static void	exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds)
 {
 	t_sig	*sig;
 
@@ -27,10 +27,9 @@ static int	exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds)
 	}
 	else
 	{
-		sig->status = exec_builtin(mini, cmd);
-		dprintf(2, "signal %d\n", sig->status);
+		exec_builtin(mini, cmd);
+		exit(sig->status);
 	}
-	exit(sig->status);
 }
 
 static pid_t	exec(t_mini *mini, t_cmd *cmd, int *initial_fds)
@@ -39,7 +38,7 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd, int *initial_fds)
 
 	pid = fork();
 	if (pid == 0)
-		get_sig()->status = exec_child(mini, cmd, initial_fds);
+		exec_child(mini, cmd, initial_fds);
 	else if (pid > 0)
 	{
 		if (cmd->fd[0] != -1)
@@ -91,8 +90,8 @@ void	cmd_exec(t_mini *mini)
 	while (mini->cmd)
 	{
 		waitpid(mini->cmd->pid, &(status), 0);
-		dprintf(2, "status %d\n", status);
-		sig->status = WEXITSTATUS(status);
+		if (mini->cmd->builtin == NONE && cmd_size(mini->h_cmd) != 1)
+			sig->status = WEXITSTATUS(status);
 		close_fds(mini->cmd->fd);
 		mini->cmd = mini->cmd->next;
 	}
