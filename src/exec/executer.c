@@ -90,7 +90,7 @@ void	cmd_exec(t_mini *mini)
 	while (mini->cmd)
 	{
 		waitpid(mini->cmd->pid, &(status), 0);
-		if (mini->cmd->builtin == NONE && cmd_size(mini->h_cmd) != 1) //issue when only 1 classic function after a fail
+		if (mini->cmd->builtin == NONE || cmd_size(mini->h_cmd) != 1) //issue when only 1 classic function after a fail
 			sig->status = WEXITSTATUS(status);
 		close_fds(mini->cmd->fd);
 		mini->cmd = mini->cmd->next;

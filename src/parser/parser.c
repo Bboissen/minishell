@@ -13,8 +13,8 @@
 #include "minishell.h"
 
 static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
-static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
-static int	init_cmd(t_mini *mini, t_cmd **cmd);
+static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
+static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip);
 
 //protected random iteration
 void	parser(t_mini *mini)
@@ -22,22 +22,25 @@ void	parser(t_mini *mini)
 	t_token	*token;
 	t_cmd	*cmd;
 	int		arg_flag;
+	int		skip;
 
 	arg_flag = 0;
+	skip = 0;
 	token = mini->h_token;
-	init_cmd(mini, &cmd); //protected random iteration
+	init_cmd(mini, &cmd, skip); //protected random iteration
 	while (token)
 	{
+		skip = 0;
 		if (token && (token->type == INPUT || token->type == HEREDOC
 			|| token->type == APPEND || token->type == TRUNC))
-			check_file(mini, &cmd, &token); //protected random iteration
+			skip += check_file(mini, &cmd, &token); //protected random iteration
 		if (token && token->type == STR)
-			check_cmd(mini, &cmd, &token, &arg_flag); //protected random iteration
+			skip += check_cmd(mini, &cmd, &token, &arg_flag); //protected random iteration
 		if (token && token->type == PIPE)
 		{
 			if (cmd)
 				new_cmd(&mini, &cmd, &arg_flag);
-			init_cmd(mini, &cmd); //protected random iteration
+			init_cmd(mini, &cmd, skip); //protected random iteration
 			arg_flag = 0;
 			token = token->next;
 		}
@@ -54,14 +57,17 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
 		if (access((*token)->next->str, R_OK) == -1)
+		{
+			// printf("access error\n");
 			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
+		}
 		else
 		{
 			if ((*cmd)->in)
 				free((*cmd)->in);
 			(*cmd)->in = ft_strdup((*token)->next->str); //protected random iteration
 			if (!(*cmd)->in)
-				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL)); 
+				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), ERROR); 
 		}
 	}
 	else if ((*token)->type == APPEND || (*token)->type == TRUNC)
@@ -80,14 +86,14 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 				free((*cmd)->out);
 			(*cmd)->out = ft_strdup((*token)->next->str); //protected random iteration
 			if (!(*cmd)->out)
-				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL));
+				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), ERROR);
 		}
 	}
 	(*token) = (*token)->next->next;
 	return (0);
 }
 //protected random iteration
-static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
+static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 {
 	struct stat	st;
 	
@@ -95,7 +101,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	{
 		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
 		(*token) = (*token)->next;
-		return ;
+		return (SUCCESS);
 	}
 	(*cmd)->builtin = check_blt(cmd, (*token)->str, arg_flag);
 	if ((*cmd)->builtin == NONE && !ft_strchr((*token)->str, '/'))
@@ -108,20 +114,28 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 		(*arg_flag)++;
 	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || 
          (st.st_uid == 0 && !(st.st_mode & S_IXOTH))))
-		return (parser_err(mini, (*token)->str, errno), cmd_skip(mini, cmd, token));
+		 {
+			parser_err(mini, (*token)->str, errno);
+			get_sig()->status = 126;
+			return (cmd_skip(mini, cmd, token), ERROR);
+		 }
 	else
-		return (parser_err(mini, (*token)->str, EXE), cmd_skip(mini, cmd, token));
+		return (parser_err(mini, (*token)->str, EXE), cmd_skip(mini, cmd, token), ERROR);
 	(*token) = (*token)->next;
+	return (SUCCESS);
 }
 
 //protected random iteration
-static int	init_cmd(t_mini *mini, t_cmd **cmd)
+static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 {
 	*cmd = malloc(sizeof(t_cmd)); //protected random iteration
 	if (!*cmd)
 		return (error_manager(mini, MALLOC, NULL, NULL));
 	(*cmd)->args = NULL;
-	(*cmd)->in = NULL;
+	if (skip == 0)
+		(*cmd)->in = NULL;
+	else
+		(*cmd)->in = ft_strdup("/dev/null");
 	(*cmd)->out = NULL;
 	(*cmd)->fd[0] = -1;
 	(*cmd)->fd[1] = -1;
