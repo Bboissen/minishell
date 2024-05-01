@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:51:27 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/26 10:40:20 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 10:39:53 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ int	error_manager(t_mini *mini, int err, char *fct, char *str)
 	}
 	else if (fct)
 	{
-		ft_printfd(STDERR_FILENO, "%s: %s", mini->name);
-		ft_printfd(STDERR_FILENO, "%s: ", str);
-		perror(fct);
+		ft_printfd(STDERR_FILENO, "%s: %s: %s\n", mini->name, str, strerror(err));
 		return (clean_exit(mini));
 	}
 	return (clean_exit(mini));

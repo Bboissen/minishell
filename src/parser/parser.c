@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/24 17:12:09 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 10:34:23 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
 		if (access((*token)->next->str, R_OK) == -1)
-			return (parser_err(mini, (*token)->next->str, F_PERM), cmd_skip(mini, cmd, token), F_PERM);
+			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
 		else
 		{
 			if ((*cmd)->in)
@@ -73,7 +73,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		if (fd >= 0)
 			close(fd);
 		if (fd < 0 || access((*token)->next->str, W_OK) == -1)
-			return (parser_err(mini, (*token)->next->str, F_PERM), cmd_skip(mini, cmd, token), F_PERM);
+			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
 		else
 		{
 			if ((*cmd)->out)
@@ -108,7 +108,7 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 		(*arg_flag)++;
 	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || 
          (st.st_uid == 0 && !(st.st_mode & S_IXOTH))))
-		return (parser_err(mini, (*token)->str, X_PERM), cmd_skip(mini, cmd, token));
+		return (parser_err(mini, (*token)->str, errno), cmd_skip(mini, cmd, token));
 	else
 		return (parser_err(mini, (*token)->str, EXE), cmd_skip(mini, cmd, token));
 	(*token) = (*token)->next;

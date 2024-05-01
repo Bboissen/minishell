@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 16:34:18 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 09:55:49 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef enum e_error
 {
 	SUCCESS = 0,
 	ERROR = 1,
+	SYNTAX = 2,
 	END = 0,
 	MISSING = 1,
 	F_PERM = 1,
