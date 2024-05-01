@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 14:32:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 15:06:27 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_valid_env(const char *env)
+static int	is_valid_env(const char *name)
 {
 	int		i;
 
 	i = 0;
-	if (ft_isdigit(env[i]))
+	if (!ft_strcmp(name, "") || ft_isdigit(name[i]) || !ft_strcmp(name, "="))
 		return (FALSE);
-	while (env[i] && env[i] != '=')
+	while (name[i] && name[i] != '=')
 	{
-		if (!ft_isalnum(env[i]))
+		if (!ft_isalnum(name[i]))
 			return (FALSE);
 		i++;
 	}
@@ -68,21 +68,16 @@ char	*get_env_name(char *dest, const char *src)
 	return (dest);
 }
 
-static int	is_in_env(t_env *env, char *args)
+static int	is_in_env(t_env *env, char *name, char *value)
 {
-	char	var_name[BUFF_SIZE];
-	char	env_name[BUFF_SIZE];
-
-	get_env_name(var_name, args);
-	while (env && env->next)
+	while (env)
 	{
-		get_env_name(env_name, env->name);
-		if (ft_strcmp(var_name, env_name) == 0)
+		if (ft_strcmp(name, env->name) == 0)
 		{
 			if (env->value)
 			{
 				ft_memdel(env->value);
-				env->value = ft_strdup(args);
+				env->value = ft_strdup(value);
 			}
 			return (TRUE);
 		}
@@ -91,29 +86,33 @@ static int	is_in_env(t_env *env, char *args)
 	return (FALSE);
 }
 
-int	mini_export(t_mini *mini)
+int	mini_export(t_mini *mini, t_cmd *cmd)
 {
 	t_env	*env;
-	char	**args;
 	char	*name;
 	char	*value;
+	int		i;
 
+	i = 0;
+	name = NULL;
+	value = NULL;
 	env = mini->h_env;
-	args = mini->cmd->args;
-	if (!arg_exists(args, 0))
+	if (!arg_exists(cmd->args, i))
 		return (print_sorted_env(mini), SUCCESS);
-	else if (arg_exists(args, 0))
+	while (arg_exists(cmd->args, i))
 	{
 		name = malloc(sizeof(char) * BUFF_SIZE);
-		value = malloc(sizeof(char) * BUFF_SIZE);
-		if (!name || !value)
+		if (!name)
 			error_manager(mini, MALLOC, NULL, NULL);
-		get_env_name(name, args[0]);
-		value = args[0] + ft_strlen(name) + 1;
+		get_env_name(name, cmd->args[i]);
 		if (!is_valid_env(name))
-			return (export_err(mini, EINVAL, args[0]), EINVAL);
-		if (!is_in_env(env, name))
+			export_err(mini, EINVAL, cmd->args[i]);
+		value = ft_strdup(cmd->args[i] + ft_strlen(name) + 1);
+		if (!is_in_env(env, name, value))
 			env_add(mini, name, value);
+		free(name);
+		free(value);
+		i++;
 	}
 	return (SUCCESS);
 }

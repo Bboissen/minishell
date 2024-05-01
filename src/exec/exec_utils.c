@@ -3,34 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:54:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 16:25:36 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 15:11:27 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exec_builtin(t_mini *mini)
+int	exec_builtin(t_mini *mini, t_cmd *cmd)
 {
 	t_sig	*sig;
 
 	sig = get_sig();
+	// printf("mini->cmd->fd[1] = %d\n", mini->cmd->fd[1]);
 	if (mini->cmd->builtin == CD)
-		sig->status = mini_cd(mini);
+		sig->status = mini_cd(mini, cmd);
 	if (mini->cmd->builtin == ECHO)
-		sig->status = mini_echo(mini);
+		sig->status = mini_echo(mini, cmd);
 	else if (mini->cmd->builtin == ENV)
-		sig->status = mini_env(mini);
+		sig->status = mini_env(mini, cmd);
 	else if (mini->cmd->builtin == EXPORT)
-		sig->status = mini_export(mini);
+		sig->status = mini_export(mini, cmd);
 	else if (mini->cmd->builtin == PWD)
-		sig->status = mini_pwd(mini);
+		sig->status = mini_pwd(mini, cmd);
 	else if (mini->cmd->builtin == UNSET)
-		sig->status = mini_unset(mini);
+		sig->status = mini_unset(mini, cmd);
 	else if (mini->cmd->builtin == EXIT)
-		sig->status = mini_exit(mini);
+		sig->status = mini_exit(mini, cmd);
+	return (sig->status);
 }
 
 void	fd_handler(t_mini *mini, t_cmd *cmd)

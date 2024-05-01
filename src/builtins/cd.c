@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/26 11:01:10 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 15:03:53 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ static int	change(t_mini *mini, char *path)
  * @param mini The main structure of the minishell.
  * @return ERROR if the command was '-', SUCCESS otherwise.
  */
-int	backward_dir(t_mini *mini)
+int	backward_dir(t_mini *mini, t_cmd *cmd)
 {
 	char	*tmp;
 	char	**args;
 
-	args = mini->cmd->args;
+	args = cmd->args;
 	if (ft_strequ(args[0], "-"))
 	{
 		tmp = get_env_value(mini, "OLDPWD");
@@ -105,13 +105,13 @@ int	backward_dir(t_mini *mini)
  * @param mini The main structure of the minishell.
  * @return SUCCESS if the directory was changed successfully, ERROR otherwise.
  */
-int	mini_cd(t_mini *mini)
+int	mini_cd(t_mini *mini, t_cmd *cmd)
 {
 	char	*home;
 	char	**args;
 
 	home = NULL;
-	args = mini->cmd->args;
+	args = cmd->args;
 	if (arg_exists(args, 1) && !ft_strequ(args[0], "--"))
 		return (cd_err(mini, ERROR, NULL), ERROR);
 	else if (arg_exists(args, 1) && ft_strequ(args[0], "--"))
@@ -126,7 +126,7 @@ int	mini_cd(t_mini *mini)
 		return (change(mini, home), SUCCESS);
 	}
 	if (args && args[0][0] == '-' && !args[0][1])
-		return (backward_dir(mini), SUCCESS);
+		return (backward_dir(mini, cmd), SUCCESS);
 	if (access(args[0], F_OK) == -1)
 		args[0] = add_home_path(mini, args[0]);
 	change(mini, args[0]);

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 09:55:49 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/01 15:02:25 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,13 +142,13 @@ typedef struct s_mini
 
 /* Builtin */
 
-int			mini_cd(t_mini *mini);
-int			mini_echo(t_mini *mini);
-int			mini_env(t_mini *mini);
-int			mini_exit(t_mini *mini);
-int			mini_export(t_mini *mini);
-int			mini_pwd(t_mini *mini);
-int			mini_unset(t_mini *mini);
+int			mini_cd(t_mini *mini, t_cmd *cmd);
+int			mini_echo(t_mini *mini, t_cmd *cmd);
+int			mini_env(t_mini *mini, t_cmd *cmd);
+int			mini_exit(t_mini *mini, t_cmd *cmd);
+int			mini_export(t_mini *mini, t_cmd *cmd);
+int			mini_pwd(t_mini *mini, t_cmd *cmd);
+int			mini_unset(t_mini *mini, t_cmd *cmd);
 
 /* Env */
 
@@ -174,7 +174,7 @@ void		reinit(t_mini **mini);
 
 void		cmd_exec(t_mini *mini);
 int			cmd_size(t_cmd *h_cmd);
-void		exec_builtin(t_mini *mini);
+int			exec_builtin(t_mini *mini, t_cmd *cmd);
 void		fd_handler(t_mini *mini, t_cmd *cmd);
 int			arg_exists(char **args, int index);
 
