@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 16:30:52 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 17:26:59 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ void	sig_handler(int code)
 		sig->status = INTERUPT;
 		ft_putstr_fd("\n", STDERR_FILENO);
 		rl_on_new_line();
+		rl_replace_line("", 0);
+		if (sig->working == FALSE)
+			rl_redisplay();
 	}
 	else if (code == SIGQUIT)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/26 10:38:50 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 10:34:23 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ static void	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0))
 		(*arg_flag)++;
 	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || 
-		 (st.st_uid == 0 && !(st.st_mode & S_IXOTH))))
-		return (parser_err(mini, (*token)->str, PERMISSION), cmd_skip(mini, cmd, token));
+         (st.st_uid == 0 && !(st.st_mode & S_IXOTH))))
+		return (parser_err(mini, (*token)->str, errno), cmd_skip(mini, cmd, token));
 	else
 		return (parser_err(mini, (*token)->str, EXE), cmd_skip(mini, cmd, token));
 	(*token) = (*token)->next;

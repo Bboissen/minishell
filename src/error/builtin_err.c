@@ -6,13 +6,13 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/04/30 12:36:35 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/29 18:07:56 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	export_err(t_mini *mini, int error, char *arg)
+int	export_err(t_mini *mini, int error, char *arg)
 {
 	t_sig	*sig;
 
@@ -20,6 +20,7 @@ void	export_err(t_mini *mini, int error, char *arg)
 	sig->status = error;
 	ft_printfd(STDERR_FILENO, "%s: `%s' \
 not a valid identifier\n", mini->name, arg);
+	return (sig->status);
 }
 
 static void	cd_err_next(t_mini *mini, int err, char *arg)

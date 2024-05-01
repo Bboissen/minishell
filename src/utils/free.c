@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 14:57:17 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 17:21:04 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,10 @@ void	free_env(t_env *env)
 int	clean_exit(t_mini *mini)
 {
 	int		status;
-	t_sig	*sig;
 
-	sig = get_sig();
+	status = SUCCESS;
 	if (mini)
-		status = sig->status;
-	else
-		exit(MALLOC);
+		status = get_sig()->status;
 	mini->env = mini->h_env;
 	mini->token = mini->h_token;
 	mini->cmd = mini->h_cmd;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/04/29 18:56:16 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/01 10:39:57 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,13 @@ char	*random_file(t_mini *mini)
 	char 			*file;
 	char 			*tmp;
 	unsigned int	rand;
-	unsigned int	seed;
 	int				i;
 
 	i = 0;
 	rand = 0;
 	while (i++ < 9)
 	{
-		seed = my_rand(mini);
-		rand = seed * 10 + my_rand(mini);
+		rand = rand * 10 + my_rand(mini);
 	}
 	tmp = ft_itoa(rand); //protected
 	if (!tmp)
@@ -43,7 +41,7 @@ static unsigned int	my_rand(t_mini *mini)
 	static unsigned int	seed;
 	int					fd;
 
-	fd = open("/dev/urando", O_RDONLY); // protected
+	fd = open("/dev/urandom", O_RDONLY); // protected
 	if (fd == -1) 
 		return (error_manager(mini, OPEN, "open", "/dev/urandom")); // protected
 	if (read(fd, &seed, sizeof(seed)) != sizeof(seed))
@@ -78,7 +76,6 @@ void	heredoc(t_mini *mini)
 				token = list_join(mini, token); //protected
 			}
 			readline_setup(mini, &line, "heredoc");
-
 			while (line && ft_strcmp(line, token->str))
 			{
 				while (*line)

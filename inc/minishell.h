@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 12:36:47 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 15:02:25 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 /* Includes */
 
 # include "libft.h"
+# include "printf.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -35,8 +36,6 @@
 # define BUFF_SIZE 4096
 # define PATH_MAX 4096
 
-# define ERROR_LEX "" //to define, etc..
-
 typedef enum e_type
 {
 	EMPTY = 0,
@@ -47,7 +46,6 @@ typedef enum e_type
 	INPUT,
 	HEREDOC,
 	PIPE,
-	END,
 	JOIN,
 	EXPAND
 }	t_type;
@@ -58,7 +56,7 @@ typedef enum e_builtin
 	CD, //skip when pipe
 	ECHO, //work with pipe
 	ENV, //work with pipe
-	EXIT, //update status but not exit
+	EXIT, //work with pipe but output devnull
 	EXPORT, //work with pipe without args
 	PWD, //work with pipe
 	UNSET, //skip when pipe
@@ -74,17 +72,21 @@ typedef enum e_error
 {
 	SUCCESS = 0,
 	ERROR = 1,
-	MISSING = 2,
-	PERMISSION = 13,
+	SYNTAX = 2,
+	END = 0,
+	MISSING = 1,
+	F_PERM = 1,
+	X_PERM = 126,
 	DIRECTORY = 126,
 	EXE = 127,
 	MALLOC = 128,
 	QUOTE = 129,
 	INTERUPT = 130,
 	QUIT = 131,
-	PARSE = 132,
+	PARSE = 2,
 	OPEN = 133,
-	READ = 134
+	READ = 134,
+	FCT = 135,
 }	t_error;
 
 /* Structures */
@@ -140,13 +142,13 @@ typedef struct s_mini
 
 /* Builtin */
 
-int			mini_cd(t_mini *mini);
-int			mini_echo(t_mini *mini);
-int			mini_env(t_mini *mini);
-int			mini_exit(t_mini *mini);
-int			mini_export(t_mini *mini);
-int			mini_pwd(t_mini *mini);
-int			mini_unset(t_mini *mini);
+int			mini_cd(t_mini *mini, t_cmd *cmd);
+int			mini_echo(t_mini *mini, t_cmd *cmd);
+int			mini_env(t_mini *mini, t_cmd *cmd);
+int			mini_exit(t_mini *mini, t_cmd *cmd);
+int			mini_export(t_mini *mini, t_cmd *cmd);
+int			mini_pwd(t_mini *mini, t_cmd *cmd);
+int			mini_unset(t_mini *mini, t_cmd *cmd);
 
 /* Env */
 
@@ -172,7 +174,7 @@ void		reinit(t_mini **mini);
 
 void		cmd_exec(t_mini *mini);
 int			cmd_size(t_cmd *h_cmd);
-void		exec_builtin(t_mini *mini);
+int			exec_builtin(t_mini *mini, t_cmd *cmd);
 void		fd_handler(t_mini *mini, t_cmd *cmd);
 int			arg_exists(char **args, int index);
 
@@ -180,7 +182,6 @@ int			arg_exists(char **args, int index);
 
 void		close_fds(int *fd);
 void		delete_heredoc(t_mini *mini);
-int			backward_dir(t_mini *mini);
 
 /* Free */
 
@@ -195,17 +196,17 @@ int			clean_exit(t_mini *mini);
 void		sig_handler(int code);
 
 /* Errors */
-
 int			error_manager(t_mini *mini, int err, char *fct, char *str);
-void		lexer_err(t_mini *mini, char *str, int err, char c);
-void		parser_err(t_mini *mini, char *str, int err);
-void		export_err(t_mini *mini, int error, char *arg);
+int			export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 
 // lexer
 void		lexer(t_mini *mini);
 int			is_spechar(char c);
+int			is_space(int c);
+int			is_spe_builtin(char *str);
 int			is_spe_expand(char c);
+void		lexer_err(t_mini *mini, char *str, int err, char c);
 char		*syntax_check(t_mini *mini, char *str, int *quote);
 char		*string_handler(t_mini *mini, char *str, int *quote);
 char		*s_quote_handler(t_mini *mini, char *str, int *quote);
@@ -222,8 +223,8 @@ void		delete_heredoc(t_mini *mini);
 void		parser(t_mini *mini);
 void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
-char		**add_args(t_mini *mini,t_cmd **cmd, char *str);
+char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
-
+void		parser_err(t_mini *mini, char *str, int err);
 #endif

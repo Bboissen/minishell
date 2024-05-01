@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:36:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 11:09:16 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 15:07:28 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,20 @@ static size_t	check_n(char **args)
  * @param mini The mini structure containing the command and its arguments.
  * @return int Returns SUCCESS after executing the command.
  */
-int	mini_echo(t_mini *mini)
+int	mini_echo(t_mini *mini, t_cmd *cmd)
 {
 	size_t	i;
 	int		n_opt;
 	char	**args;
 	int		fd;
 
-	if (mini->cmd->fd[1] != -1)
-		fd = mini->cmd->fd[1];
+	(void)mini;
+	if (cmd->fd[1] != -1)
+		fd = cmd->fd[1];
 	else
 		fd = STDOUT_FILENO;
 	n_opt = FALSE;
-	args = mini->cmd->args;
+	args = cmd->args;
 	if (!args)
 		return (ft_putchar_fd('\n', fd), SUCCESS);
 	i = 0;

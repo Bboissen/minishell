@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 10:41:12 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 16:53:59 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	is_in_env(t_env *env, char *name, char *value)
 	return (FALSE);
 }
 
-int	mini_export(t_mini *mini)
+int	mini_export(t_mini *mini, t_cmd *cmd)
 {
 	t_env	*env;
 	char	*name;
@@ -97,17 +97,17 @@ int	mini_export(t_mini *mini)
 	name = NULL;
 	value = NULL;
 	env = mini->h_env;
-	if (!arg_exists(mini->cmd->args, i))
+	if (!arg_exists(cmd->args, i))
 		return (print_sorted_env(mini), SUCCESS);
-	while (arg_exists(mini->cmd->args, i))
+	while (arg_exists(cmd->args, i))
 	{
 		name = malloc(sizeof(char) * BUFF_SIZE);
 		if (!name)
 			error_manager(mini, MALLOC, NULL, NULL);
-		get_env_name(name, mini->cmd->args[i]);
+		get_env_name(name, cmd->args[i]);
 		if (!is_valid_env(name))
-			export_err(mini, EINVAL, mini->cmd->args[i]);
-		value = ft_strdup(mini->cmd->args[i] + ft_strlen(name) + 1);
+			export_err(mini, ERROR, cmd->args[i]);
+		value = ft_strdup(cmd->args[i] + ft_strlen(name) + 1);
 		if (!is_in_env(env, name, value))
 			env_add(mini, name, value);
 		free(name);

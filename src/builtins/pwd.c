@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:09:58 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 11:12:12 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 15:07:38 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@
  * @return {int} - Returns SUCCESS if the current working directory was 
  * printed successfully, ERROR otherwise.
  */
-int	mini_pwd(t_mini *mini)
+int	mini_pwd(t_mini *mini, t_cmd *cmd)
 {
 	char	cwd[PATH_MAX];
 	int		fd;
 
-	if (mini->cmd->fd[1] != -1)
-		fd = mini->cmd->fd[1];
+	(void)mini;
+	if (cmd->fd[1] != -1)
+		fd = cmd->fd[1];
 	else
 		fd = STDOUT_FILENO;
 	if (getcwd(cwd, PATH_MAX))

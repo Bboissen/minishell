@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:03:28 by bbsn              #+#    #+#             */
-/*   Updated: 2024/04/26 10:44:44 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 10:36:37 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,10 @@ void	parser_err(t_mini *mini, char *str, int err)
 
 	sig = get_sig();
 	sig->status = err;
+	if (err != MALLOC && err != EXE)
+		ft_printfd(STDERR_FILENO, "%s: %s: %s\n", mini->name, str, strerror(err));
 	if (err == EXE)
 		ft_printfd(STDERR_FILENO, "%s: %s: command not found\n", mini->name, str);
-	else if(err == PERMISSION)
-		ft_printfd(STDERR_FILENO, "%s: permission denied %s\n", mini->name, str);
-	else if(err == MISSING)
-		ft_printfd(STDERR_FILENO, "%s: no such file or directory: %s\n", mini->name, str);
-	else
+	else if (err == MALLOC)
 		error_manager(mini, MALLOC, NULL, NULL);
 }

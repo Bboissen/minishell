@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 10:47:46 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 16:35:52 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,16 @@ static void	link_env(t_mini *mini, char *args)
 	}
 }
 
-int	mini_unset(t_mini *mini)
+int	mini_unset(t_mini *mini, t_cmd *cmd)
 {
 	char	**args;
 	t_env	*env;
 	int		i;
 
-	args = mini->cmd->args;
+	args = cmd->args;
 	env = mini->h_env;
 	i = 0;
+	
 	while (args[i])
 	{
 		if (!ft_strncmp(args[i], env->name,
