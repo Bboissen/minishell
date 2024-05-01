@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:36:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 08:37:55 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/01 11:09:16 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,16 @@ int	mini_echo(t_mini *mini)
 	size_t	i;
 	int		n_opt;
 	char	**args;
+	int		fd;
 
+	if (mini->cmd->fd[1] != -1)
+		fd = mini->cmd->fd[1];
+	else
+		fd = STDOUT_FILENO;
 	n_opt = FALSE;
 	args = mini->cmd->args;
 	if (!args)
-		return (ft_putchar_fd('\n', STDOUT_FILENO), SUCCESS);
+		return (ft_putchar_fd('\n', fd), SUCCESS);
 	i = 0;
 	if (check_n(args))
 	{
@@ -63,12 +68,12 @@ int	mini_echo(t_mini *mini)
 	}
 	while (args && args[i] != (void *)0)
 	{
-		ft_printfd(STDOUT_FILENO, args[i]);
+		ft_printfd(fd, args[i]);
 		if (args[i + 1])
-			write(STDOUT_FILENO, " ", 1);
+			write(fd, " ", 1);
 		i++;
 	}
 	if (!n_opt)
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', fd);
 	return (SUCCESS);
 }
