@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 17:23:20 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 10:41:12 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,21 +68,16 @@ char	*get_env_name(char *dest, const char *src)
 	return (dest);
 }
 
-static int	is_in_env(t_env *env, char *args)
+static int	is_in_env(t_env *env, char *name, char *value)
 {
-	char	var_name[BUFF_SIZE];
-	char	env_name[BUFF_SIZE];
-
-	get_env_name(var_name, args);
-	while (env && env->next)
+	while (env)
 	{
-		get_env_name(env_name, env->name);
-		if (ft_strcmp(var_name, env_name) == 0)
+		if (ft_strcmp(name, env->name) == 0)
 		{
 			if (env->value)
 			{
 				ft_memdel(env->value);
-				env->value = ft_strdup(args);
+				env->value = ft_strdup(value);
 			}
 			return (TRUE);
 		}
@@ -104,19 +99,20 @@ int	mini_export(t_mini *mini)
 	env = mini->h_env;
 	if (!arg_exists(mini->cmd->args, i))
 		return (print_sorted_env(mini), SUCCESS);
-	while (arg_exists(mini->cmd->args, i++))
+	while (arg_exists(mini->cmd->args, i))
 	{
 		name = malloc(sizeof(char) * BUFF_SIZE);
 		if (!name)
 			error_manager(mini, MALLOC, NULL, NULL);
-		get_env_name(name, mini->cmd->args[0]);
+		get_env_name(name, mini->cmd->args[i]);
 		if (!is_valid_env(name))
-			export_err(mini, EINVAL, mini->cmd->args[0]);
-		value = ft_strdup(mini->cmd->args[0] + ft_strlen(name) + 1);
-		if (!is_in_env(env, name))
+			export_err(mini, EINVAL, mini->cmd->args[i]);
+		value = ft_strdup(mini->cmd->args[i] + ft_strlen(name) + 1);
+		if (!is_in_env(env, name, value))
 			env_add(mini, name, value);
 		free(name);
 		free(value);
+		i++;
 	}
-	return ;
+	return (SUCCESS);
 }
