@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 17:28:47 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:32:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_mini	*mini;
 	t_sig	*sig;
+	int		err;
 	// int		i;
 
 	if (ac != 1)
@@ -85,7 +86,7 @@ int	main(int ac, char **av, char **env)
 			expand_join(&mini);
 		}
 		if (mini->h_token)
-			parser(mini);
+			err = parser(mini);
 		// printf("\n-----------------------------------------------\n");
 		// printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
 		// printf("-----------------------------------------------\n");
@@ -109,6 +110,8 @@ int	main(int ac, char **av, char **env)
 		mini->env = mini->h_env;
 		if (mini->cmd)
 			cmd_exec(mini);
+		if (err != 0)
+			get_sig()->status = err;
 		reinit(&mini);
 	}
 	return (clean_exit(mini));

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:02:25 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:29:49 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,8 @@ typedef enum e_error
 	ERROR = 1,
 	SYNTAX = 2,
 	END = 0,
-	MISSING = 1,
-	F_PERM = 1,
-	X_PERM = 126,
+	MISSING = 125,
+	PERM = 126,
 	DIRECTORY = 126,
 	EXE = 127,
 	MALLOC = 128,
@@ -220,7 +219,7 @@ char		*expand_line(t_mini *mini, char *str, int fd);
 void		delete_heredoc(t_mini *mini);
 
 //parser
-void		parser(t_mini *mini);
+int		parser(t_mini *mini);
 void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_mini *mini, t_cmd **cmd, char *str);

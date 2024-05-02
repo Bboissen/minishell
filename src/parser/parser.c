@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/01 10:34:23 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:31:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip);
 
 //protected random iteration
-void	parser(t_mini *mini)
+int	parser(t_mini *mini)
 {
 	t_token	*token;
 	t_cmd	*cmd;
@@ -28,6 +28,7 @@ void	parser(t_mini *mini)
 	skip = 0;
 	token = mini->h_token;
 	init_cmd(mini, &cmd, skip); //protected random iteration
+	get_sig()->status = 0;
 	while (token)
 	{
 		skip = 0;
@@ -41,12 +42,14 @@ void	parser(t_mini *mini)
 			if (cmd)
 				new_cmd(&mini, &cmd, &arg_flag);
 			init_cmd(mini, &cmd, skip); //protected random iteration
+			get_sig()->status = 0;
 			arg_flag = 0;
 			token = token->next;
 		}
 	}
 	if (cmd)
 		new_cmd(&mini, &cmd, &arg_flag);
+	return (get_sig()->status);
 }
 //protected random iteration
 static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
@@ -110,10 +113,14 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
 	if ((*cmd)->args && (*cmd)->args[0])
 		stat((*cmd)->args[0], &st);
-	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0))
+	if ((*cmd)->builtin != NONE || ((*cmd)->args && !S_ISDIR(st.st_mode) && access((*cmd)->args[0], X_OK) == 0))
 		(*arg_flag)++;
+	else if ((*cmd)->args && access((*cmd)->args[0], F_OK) == -1)
+		return (parser_err(mini, (*token)->str, MISSING), cmd_skip(mini, cmd, token), ERROR);
+	else if ((*cmd)->args && S_ISDIR(st.st_mode))
+		return (parser_err(mini, (*token)->str, DIRECTORY), cmd_skip(mini, cmd, token), ERROR);
 	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || 
-         (st.st_uid == 0 && !(st.st_mode & S_IXOTH))))
+         (st.st_uid == 0 && !(st.st_mode & S_IXOTH)) || S_ISDIR(st.st_mode)))
 		 {
 			parser_err(mini, (*token)->str, errno);
 			get_sig()->status = 126;
