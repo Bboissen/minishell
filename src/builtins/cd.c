@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:03:53 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:56:22 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,5 @@ int	mini_cd(t_mini *mini, t_cmd *cmd)
 		return (backward_dir(mini, cmd), SUCCESS);
 	if (access(args[0], F_OK) == -1)
 		args[0] = add_home_path(mini, args[0]);
-	change(mini, args[0]);
-	return (SUCCESS);
+	return (change(mini, args[0]));
 }

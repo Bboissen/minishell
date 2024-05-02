@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 16:36:54 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:54:34 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	free_node(t_mini *mini, t_env *env)
 {
 	if (mini->env == env && env->next == NULL)
 	{
+		dprintf(2, "unset: %s\n", env->name);
 		ft_memdel(mini->env->name);
 		mini->env->name = NULL;
 		ft_memdel(mini->env->value);
@@ -70,12 +71,12 @@ int	mini_unset(t_mini *mini, t_cmd *cmd)
 	{
 		if (!ft_strncmp(args[i], env->name,
 				env_size(env->name)))
-		{
-			if (env->next)
-				env = env->next;
-			free_node(mini, env);
-		}
-		link_env(mini, args[i]);
+			{
+				free_node(mini, env);
+				link_env(mini, args[i]);
+			}
+		if (env->next)
+			env = env->next;
 		i++;
 	}
 	return (SUCCESS);

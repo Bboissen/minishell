@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/01 17:02:25 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:56:59 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	cd_err_next(t_mini *mini, int err, char *arg)
 	sig->status = err;
 	if (err == ERROR)
 		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-Too many arguments\n", mini->name, arg);
+too many arguments\n", mini->name, arg);
 	else if (err == MISSING)
 		ft_printfd(STDERR_FILENO, "%s: cd: \
 %d not set\n\n", mini->name, arg);
