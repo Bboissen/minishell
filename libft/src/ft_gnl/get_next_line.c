@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 17:35:46 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 09:40:03 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/02 09:50:27 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * @brief Checks if there is an endline character in the source string.
  * 
  * @param src The source string to check.
- * @return int Returns the index of the endline character plus one if it exists,
+ * @return {int} Returns the index of the endline character plus one if it exists,
  * otherwise returns FALSE.
  */
 static int	check_endline(char *src)
@@ -38,7 +38,7 @@ static int	check_endline(char *src)
  * 
  * @param buffer The buffer containing the data to extract.
  * @param line The existing line to append to.
- * @return char* Returns a pointer to the new line, or NULL if an error occurred.
+ * @return {char*} Returns a pointer to the new line, or NULL if an error occurred.
  */
 static char	*extract_buffer_in_line(char *buffer, char *line)
 {
@@ -69,7 +69,7 @@ static char	*extract_buffer_in_line(char *buffer, char *line)
  * @param buffer_dest The destination buffer to erase.
  * @param buffer_src The source buffer to extract from.
  * @param line A pointer to the line to extract to.
- * @return int Returns TRUE if successful, otherwise returns FALSE.
+ * @return {int} Returns TRUE if successful, otherwise returns FALSE.
  */
 static int	erase_printed_buff(char *buffer_dest, char *buffer_src, char **line)
 {
@@ -96,7 +96,8 @@ static int	erase_printed_buff(char *buffer_dest, char *buffer_src, char **line)
  * @param fd The file descriptor to read from.
  * @param buffer The buffer to extract a line from.
  * @param line The existing line to append to.
- * @return char* Returns a pointer to the new line, or NULL if an error occurred.
+ * @return {char*} Returns a pointer to the new line,
+ * or NULL if an error occurred.
  */
 static char	*read_and_extract(int fd, char *buffer, char *line)
 {
@@ -125,7 +126,7 @@ static char	*read_and_extract(int fd, char *buffer, char *line)
  * @brief Gets the next line from a file descriptor.
  * 
  * @param fd The file descriptor to get the next line from.
- * @return char* Returns a pointer to the next line,
+ * @return {char*} Returns a pointer to the next line,
  * or NULL if an error occurred.
  */
 char	*get_next_line(int fd)

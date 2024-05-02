@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 11:05:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 09:36:29 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/02 10:17:15 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	*ft_memset(void *str, int c, size_t len);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 
 /*ft_printfd*/
-int		seq_write(int fd, char *s, int len);
 int		ft_printfd(int fd, const char *format, ...);
 int		converter(int fd, char c, va_list ptr);
 
