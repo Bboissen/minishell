@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 17:54:12 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 17:26:30 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Signal handler for SIGINT and SIGQUIT signals.
+ * 
+ * This function is called when a SIGINT or SIGQUIT signal is received.
+ * It updates the status of the signal and prints a message to 
+ * the standard error.
+ * 
+ * @param code The signal code. Can be either SIGINT or SIGQUIT.
+ */
 void	sig_handler(int code)
 {
 	t_sig	*sig;
@@ -20,32 +29,37 @@ void	sig_handler(int code)
 	if (code == SIGINT)
 	{
 		sig->status = INTERUPT;
-		sig->sig = 1;
-		ft_putstr_fd("\n", STDERR);
+		ft_putstr_fd("\n", STDERR_FILENO);
 		rl_on_new_line();
-		rl_redisplay();
+		rl_replace_line("", 0);
+		if (sig->working != TRUE)
+			rl_redisplay();
 	}
 	else if (code == SIGQUIT)
 	{
-		sig->status = QUIT;
-		print_sigquit_message(code);
-		sig->sig = 1;
+		if (sig->working == TRUE)
+		{
+			sig->status = QUIT;
+			ft_printfd(STDERR_FILENO, "Quit  (core dumped)\n");
+		}
 	}
 }
 
 /**
- * @brief Initializes the signal handling structure.
+ * @brief Initializes the signal handling.
  * 
- * @param mini The main structure of the program.
+ * This function initializes the signal handling by setting the default status 
+ * and ignoring all signals except SIGINT and SIGQUIT, 
+ * which are handled by sig_handler.
  */
 void	sig_init(void)
 {
 	t_sig	*sig;
 
 	sig = get_sig();
-	sig->status = 0;
-	sig->sig = 0;
-	sig->exit = 0;
+	sig->status = SUCCESS;
+	sig->working = FALSE;
+	sig->exit = FALSE;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 }

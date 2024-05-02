@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 08:44:06 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/04/30 11:16:42 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,11 @@ void	set_env(t_env **env, char *name, char *value)
  * @return {char*} - Returns the value of the environment variable if
  * found, NULL otherwise.
  */
-char	*get_env(t_env *env, char *name)
+char	*get_env_value(t_mini *mini, char *name)
 {
+	t_env	*env;
+
+	env = mini->h_env;
 	while (env != NULL)
 	{
 		if (strcmp(env->name, name) == 0)
@@ -85,8 +88,9 @@ void	sort_env(char **tab, int env_len)
 	char	*tmp;
 
 	ordered = FALSE;
-	while (tab && ordered == FALSE)
+	while (!ordered)
 	{
+		ordered = TRUE;
 		i = -1;
 		while (++i < env_len - 1)
 		{
@@ -95,10 +99,12 @@ void	sort_env(char **tab, int env_len)
 				tmp = tab[i];
 				tab[i] = tab[i + 1];
 				tab[i + 1] = tmp;
-				ordered = TRUE;
+				ordered = FALSE;
 			}
 		}
 		env_len--;
+		if (env_len == 0)
+			ordered = TRUE;
 	}
 }
 
@@ -107,20 +113,17 @@ void	sort_env(char **tab, int env_len)
  * 
  * @param {t_env*} env - The environment to print.
  */
-void	print_sorted_env(t_env *h_env)
+void	print_sorted_env(t_mini *mini)
 {
 	int		i;
 	char	**tab;
-	t_env	*env;
 
-	env = h_env;
-	tab = env_to_tab(env);
+	tab = env_to_tab(mini);
 	sort_env(tab, str_env_len(tab));
 	i = 0;
 	while (tab[i])
 	{
-		ft_putstr("declare -x ");
-		ft_putendl(tab[i]);
+		ft_printfd(STDOUT_FILENO, "declare -x %s\n", tab[i]);
 		i++;
 	}
 	free_tab(tab);

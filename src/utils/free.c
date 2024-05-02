@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 16:40:43 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/04/29 17:11:36 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,24 @@ void	free_tab(char **tab)
  * 
  * @param cmd The head of the linked list of commands.
  */
-void	free_cmd(t_cmd *cmd)
+void	free_cmd(t_cmd **cmd)
 {
 	t_cmd	*tmp;
 
-	while (cmd)
+	while ((*cmd))
 	{
-		tmp = cmd->next;
-		if (cmd->args)
-			free_tab(cmd->args);
-		if (cmd->in)
-			free(cmd->in);
-		if (cmd->out)
-			free(cmd->out);
-		close_fds(cmd->fd);
-		free(cmd);
-		cmd = tmp;
+		tmp = (*cmd)->next;
+		if ((*cmd)->args)
+			free_tab((*cmd)->args);
+		if ((*cmd)->in)
+			free((*cmd)->in);
+		if ((*cmd)->out)
+			free((*cmd)->out);
+		close_fds((*cmd)->fd);
+		free((*cmd));
+		(*cmd) = tmp;
 	}
+	(*cmd) = NULL;
 }
 
 /**
@@ -63,18 +64,22 @@ void	free_cmd(t_cmd *cmd)
  * 
  * @param token The head of the linked list of tokens.
  */
-void	free_token(t_token *token)
+void	free_token(t_token **token)
 {
 	t_token	*tmp;
 
-	while (token)
+	while ((*token))
 	{
-		tmp = token->next;
-		if (token->str)
-			ft_memdel(token->str);
-		ft_memdel(token);
-		token = tmp;
+		tmp = (*token)->next;
+		if ((*token)->str)
+		{
+			free((*token)->str);
+			(*token)->str = NULL;
+		}
+		free((*token));
+		(*token) = tmp;
 	}
+	(*token) = NULL;
 }
 
 /**
@@ -89,8 +94,10 @@ void	free_env(t_env *env)
 	while (env)
 	{
 		tmp = env->next;
-		ft_memdel(env->name);
-		ft_memdel(env->value);
+		if (env->name)
+			ft_memdel(env->name);
+		if (env->value)
+			ft_memdel(env->value);
 		ft_memdel(env);
 		env = tmp;
 	}
@@ -112,15 +119,18 @@ int	clean_exit(t_mini *mini)
 		status = sig->status;
 	else
 		exit(MALLOC);
+	mini->env = mini->h_env;
+	mini->token = mini->h_token;
+	mini->cmd = mini->h_cmd;
 	if (mini->token)
-		free_token(mini->token);
+		free_token(&(mini->token));
 	if (mini->cmd)
-		free_cmd(mini->cmd);
+		free_cmd(&(mini->cmd));
 	if (mini->env)
 		free_env(mini->env);
-	if (sig->exit == 1)
-		ft_putstr_fd("exit\n", 2);
+	if (mini->rl)
+		free(mini->rl);
+	rl_clear_history();
 	free(mini);
 	exit(status);
-	return (status);
 }

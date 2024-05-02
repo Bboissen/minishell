@@ -3,52 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/17 11:27:51 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/01 16:56:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	print_error(int error, const char *arg)
+static int	is_valid_env(const char *name)
 {
-	int	i;
+	int		i;
 
-	if (error == -1)
-		ft_putstr_fd("export: not valid in this context: ", STDERR);
-	else if (error == 0 || error == -3)
-		ft_putstr_fd("export: not a valid identifier: ", STDERR);
 	i = 0;
-	while (arg[i] && (arg[i] != '=' || error == -3))
+	if (!ft_strcmp(name, "") || ft_isdigit(name[i]) || !ft_strcmp(name, "="))
+		return (FALSE);
+	while (name[i] && name[i] != '=')
 	{
-		write(STDERR, &arg[i], 1);
+		if (!ft_isalnum(name[i]))
+			return (FALSE);
 		i++;
 	}
-	write(STDERR, "\n", 1);
-	return (ERROR);
+	return (TRUE);
 }
 
-int	env_add(const char *value, t_env *env)
+static int	env_add(t_mini *mini, char *name, char *value)
 {
 	t_env	*new;
 	t_env	*tmp;
 
-	if (env && env->value == NULL)
-	{
-		env->value = ft_strdup(value);
-		return (SUCCESS);
-	}
 	new = malloc(sizeof(t_env));
 	if (!new)
-		return (-1);
+		error_manager(mini, MALLOC, NULL, NULL);
+	new->name = ft_strdup(name);
 	new->value = ft_strdup(value);
-	while (env && env->next && env->next->next)
-		env = env->next;
-	tmp = env->next;
-	env->next = new;
-	new->next = tmp;
+	new->next = NULL;
+	if (mini->env == NULL)
+	{
+		mini->env = new;
+		mini->h_env = new;
+	}
+	else
+	{
+		tmp = mini->env;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
 	return (SUCCESS);
 }
 
@@ -66,20 +68,17 @@ char	*get_env_name(char *dest, const char *src)
 	return (dest);
 }
 
-int	is_in_env(t_env *env, char *args)
+static int	is_in_env(t_env *env, char *name, char *value)
 {
-	char	var_name[BUFF_SIZE];
-	char	env_name[BUFF_SIZE];
-
-	get_env_name(var_name, args);
-	while (env && env->next)
+	while (env)
 	{
-		get_env_name(env_name, env->value);
-		if (ft_strcmp(var_name, env_name) == 0)
+		if (ft_strcmp(name, env->name) == 0)
 		{
 			if (env->value)
+			{
 				ft_memdel(env->value);
-			env->value = ft_strdup(args);
+				env->value = ft_strdup(value);
+			}
 			return (TRUE);
 		}
 		env = env->next;
@@ -87,31 +86,33 @@ int	is_in_env(t_env *env, char *args)
 	return (FALSE);
 }
 
-int	mini_export(char **args, t_env *env)
+int	mini_export(t_mini *mini, t_cmd *cmd)
 {
-	int	new_env;
-	int	error;
+	t_env	*env;
+	char	*name;
+	char	*value;
+	int		i;
 
-	new_env = 0;
-	if (!args[1])
-		print_sorted_env(secret);
-	else
+	i = 0;
+	name = NULL;
+	value = NULL;
+	env = mini->h_env;
+	if (!arg_exists(cmd->args, i))
+		return (print_sorted_env(mini), SUCCESS);
+	while (arg_exists(cmd->args, i))
 	{
-		error = is_valid_env(args[1]);
-		if (args[1][0] == '=')
-			error = -3;
-		if (error <= 0)
-			return (print_error(error, args[1]));
-		if (error == 2)
-			new_env = 1;
-		else
-			new_env = is_in_env(env, args[1]);
-		if (new_env == 0)
-		{
-			if (error == 1)
-				env_add(args[1], env);
-			env_add(args[1], secret);
-		}
+		name = malloc(sizeof(char) * BUFF_SIZE);
+		if (!name)
+			error_manager(mini, MALLOC, NULL, NULL);
+		get_env_name(name, cmd->args[i]);
+		if (!is_valid_env(name))
+			export_err(mini, EINVAL, cmd->args[i]);
+		value = ft_strdup(cmd->args[i] + ft_strlen(name) + 1);
+		if (!is_in_env(env, name, value))
+			env_add(mini, name, value);
+		free(name);
+		free(value);
+		i++;
 	}
-	return (SUCCESS);
+	return (get_sig()->status);
 }

@@ -6,17 +6,12 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/16 09:49:10 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 13:54:25 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Calculate the size of an environment variable up to the '=' character.
- * @param {char*} env - The environment variable.
- * @return {size_t} - Returns the size of the environment variable.
- */
 static size_t	env_size(char *env)
 {
 	size_t	i;
@@ -27,11 +22,6 @@ static size_t	env_size(char *env)
 	return (i);
 }
 
-/**
- * Free the memory allocated for an environment variable node.
- * @param {t_mini*} mini - The main structure of the shell.
- * @param {t_env*} env - The environment variable node to free.
- */
 static void	free_node(t_mini *mini, t_env *env)
 {
 	if (mini->env == env && env->next == NULL)
@@ -47,55 +37,46 @@ static void	free_node(t_mini *mini, t_env *env)
 	ft_memdel(env);
 }
 
-/**
- * Link the environment variables in the shell, skipping the one to be unset.
- * @param {t_mini*} mini - The main structure of the shell.
- * @param {char**} args - The arguments for the unset command.
- * @return {int} - Returns SUCCESS if the linking was successful.
- */
-static int	link_env(t_mini *mini, char **args)
+static void	link_env(t_mini *mini, char *args)
 {
 	t_env	*tmp;
 
 	while (mini->env && mini->env->next)
 	{
-		if (ft_strncmp(args[1], mini->env->next->value,
-				env_size(mini->env->next->)) == 0)
+		if (ft_strncmp(args, mini->env->next->name,
+				env_size(mini->env->next->name)) == 0)
 		{
 			tmp = mini->env->next->next;
 			free_node(mini, mini->env->next);
 			mini->env->next = tmp;
-			return (SUCCESS);
+			return ;
 		}
 		mini->env = mini->env->next;
 	}
 }
 
-/**
- * Unset an environment variable in the shell.
- * @param {t_mini*} mini - The main structure of the shell.
- * @return {int} - Returns SUCCESS if the variable was unset successfully.
- */
-int	mini_unset(t_mini *mini)
+int	mini_unset(t_mini *mini, t_cmd *cmd)
 {
 	char	**args;
 	t_env	*env;
+	int		i;
 
-	args = mini->cmd->args;
+	args = cmd->args;
 	env = mini->h_env;
-	if ((args[1]))
+	i = 0;
+	if (arg_exists(args, 0) == FALSE)
+		return (SUCCESS);
+	while (args[i])
 	{
-		if (!ft_strncmp(args[1], env->name,
+		if (!ft_strncmp(args[i], env->name,
 				env_size(env->name)))
 		{
-			if (env->next)
-				env = env->next;
-			return (free_node(mini, env), SUCCESS);
+			free_node(mini, env);
+			link_env(mini, args[i]);
 		}
-		link_env(mini, args);
-		return (SUCCESS);
+		if (env->next)
+			env = env->next;
+		i++;
 	}
-	return (ft_printfd(2,
-			"minishell: unset: '%s': not a valid identifier\n",
-			mini->cmd->args[1]), SUCCESS);
+	return (SUCCESS);
 }

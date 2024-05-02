@@ -16,13 +16,3 @@ int	seq_write(int fd, char *s, int len)
 {
 	return (write(fd, s, len));
 }
-
-int	ft_putstr_fd(char *s, int fd)
-{
-	return (write(fd, s, ft_strlen(s)));
-}
-
-int	ft_putchar_fd(char c, int fd)
-{
-	return (write(fd, &c, 1));
-}
