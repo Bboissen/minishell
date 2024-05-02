@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 10:29:49 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:14:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,8 @@ typedef enum e_builtin
 	UNSET, //skip when pipe
 }	t_builtin;
 
-typedef enum e_bool
-{
-	FALSE = 0,
-	TRUE
-}	t_bool;
-
 typedef enum e_error
 {
-	SUCCESS = 0,
-	ERROR = 1,
 	SYNTAX = 2,
 	END = 0,
 	MISSING = 125,
