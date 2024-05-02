@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/01 10:39:57 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:21:08 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ void	heredoc(t_mini *mini)
 	t_token	*token;
 	char	*line;
 	int		fd;
+	t_sig	*sig;
 
+	sig = get_sig();
 	token = mini->h_token;
 	while (token)
 	{

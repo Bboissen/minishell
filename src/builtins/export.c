@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 16:56:13 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 18:35:50 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static int	is_valid_env(const char *name)
 	int		i;
 
 	i = 0;
-	if (!ft_strcmp(name, "") || ft_isdigit(name[i]) || !ft_strcmp(name, "="))
+	if (!ft_strcmp(name, "") || ft_isdigit(name[i]) || name[i] == '=')
 		return (FALSE);
-	while (name[i] && name[i] != '=')
+	while (name[i] && (name[i] != '=' || name[i] != '\0'))
 	{
-		if (!ft_isalnum(name[i]))
+		if (!ft_isalnum(name[i]) && name[i] != '_')
 			return (FALSE);
 		i++;
 	}
@@ -37,7 +37,10 @@ static int	env_add(t_mini *mini, char *name, char *value)
 	if (!new)
 		error_manager(mini, MALLOC, NULL, NULL);
 	new->name = ft_strdup(name);
-	new->value = ft_strdup(value);
+	if (value)
+		new->value = ft_strdup(value);
+	else
+		new->value = NULL;
 	new->next = NULL;
 	if (mini->env == NULL)
 	{
@@ -106,12 +109,25 @@ int	mini_export(t_mini *mini, t_cmd *cmd)
 			error_manager(mini, MALLOC, NULL, NULL);
 		get_env_name(name, cmd->args[i]);
 		if (!is_valid_env(name))
+		{
 			export_err(mini, EINVAL, cmd->args[i]);
-		value = ft_strdup(cmd->args[i] + ft_strlen(name) + 1);
+			i++;
+			continue ;
+		}
+		if (!ft_strcmp(name, "_"))
+		{
+			i++;
+			continue ;
+		}
+		if (strchr(cmd->args[i], '='))
+			value = ft_strdup(cmd->args[i] + ft_strlen(name) + 1);
+		else
+			value = NULL;
 		if (!is_in_env(env, name, value))
 			env_add(mini, name, value);
 		free(name);
-		free(value);
+		if (value)
+			free(value);
 		i++;
 	}
 	return (get_sig()->status);

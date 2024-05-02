@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:47:19 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/19 16:14:52 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:53:55 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Duplicates the string 'str' up to 'n' characters.
+ * 
+ * @param str The string to duplicate.
+ * @param n The number of characters to duplicate.
+ * @return {char *} The duplicated string.
+ */
 char	*ft_strndup(const char *str, int n)
 {
 	int		i;

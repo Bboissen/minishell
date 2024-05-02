@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/02 11:36:17 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 18:56:39 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static void	cd_err_next(t_mini *mini, int err, char *arg)
 	sig = get_sig();
 	sig->status = err;
 	if (err == ERROR)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-too many arguments\n", mini->name, arg);
+		ft_printfd(STDERR_FILENO, "%s: cd: \
+too many arguments\n", mini->name);
 	else if (err == MISSING)
 		ft_printfd(STDERR_FILENO, "%s: cd: \
 %d not set\n\n", mini->name, arg);

@@ -1,12 +1,12 @@
-pipex42 exec part to adapter
-full exec_cmd part
+# // -----export-----
+# // export _= => takes the same value as the last command executed path
 
-reinit infinite loops ?
+# // -----cd-----
+# // cd '' ''
 
-builtin exit, numeric argument only if, return 2
-builtin export with set and add
-remake verif env variable not starting with a number
-
-error manager
-norminette
-recheck commentaries
+# // -----exit-----
+# // exit -0 => conditionnal jump
+# // not exiting with any argument issue
+# // exit ' 3' => should exit with 3
+# // exit 9223372036854775807 => should exit with 2
+# // exit 18446744073709551615 => should exit with 2

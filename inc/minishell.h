@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 14:15:54 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 15:26:09 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,27 +53,20 @@ typedef enum e_type
 typedef enum e_builtin
 {
 	NONE = 0,
-	CD, //skip when pipe
-	ECHO, //work with pipe
-	ENV, //work with pipe
-	EXIT, //work with pipe but output devnull
-	EXPORT, //work with pipe without args
-	PWD, //work with pipe
-	UNSET, //skip when pipe
+	CD,
+	ECHO,
+	ENV,
+	EXIT,
+	EXPORT,
+	PWD,
+	UNSET,
 }	t_builtin;
-
-typedef enum e_bool
-{
-	FALSE = 0,
-	TRUE
-}	t_bool;
 
 typedef enum e_error
 {
-	SUCCESS = 0,
-	ERROR = 1,
-	SYNTAX = 2,
 	END = 0,
+	PARSE = 2,
+	SYNTAX = 2,
 	MISSING = 125,
 	PERM = 126,
 	DIRECTORY = 126,
@@ -82,7 +75,6 @@ typedef enum e_error
 	QUOTE = 129,
 	INTERUPT = 130,
 	QUIT = 131,
-	PARSE = 2,
 	OPEN = 133,
 	READ = 134,
 	FCT = 135,
@@ -120,6 +112,7 @@ typedef struct s_cmd
 	char			**args;
 	char			*in;
 	char			*out;
+	int				append;
 	int				fd[2];
 	int				pid;
 	t_builtin		builtin;

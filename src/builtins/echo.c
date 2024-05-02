@@ -3,40 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:36:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:07:28 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:34:23 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * @brief Checks if the '-n' option is present in the arguments.
- * 
- * @param args The array of arguments.
- * @return size_t Returns FALSE if '-n' option is present, TRUE otherwise.
- */
+
 static size_t	check_n(char **args)
 {
 	size_t	j;
+	size_t	k;
 
 	j = 0;
-	while (args[0][j])
+	while (args[j])
 	{
-		if (args[0][j] == '-' && args[0][j++] && args[0][j] == 'n')
+		if (args[j][0] == '-')
 		{
-			while (args[0][j] == 'n')
+			k = 1;
+			while (args[j][k] == 'n')
+				k++;
+			if (args[j][k] == '\0')
 				j++;
-			if (args[0][j])
-				return (FALSE);
-			return (TRUE);
+			else
+				break ;
 		}
 		else
-			return (FALSE);
+			break ;
 	}
-	return (FALSE);
+	return (j);
 }
 
 /**
@@ -61,12 +59,9 @@ int	mini_echo(t_mini *mini, t_cmd *cmd)
 	args = cmd->args;
 	if (!args)
 		return (ft_putchar_fd('\n', fd), SUCCESS);
-	i = 0;
-	if (check_n(args))
-	{
+	i = check_n(args);
+	if (i > 0)
 		n_opt = TRUE;
-		i++;
-	}
 	while (args && args[i] != (void *)0)
 	{
 		ft_printfd(fd, args[i]);

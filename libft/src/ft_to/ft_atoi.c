@@ -6,12 +6,19 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 15:24:53 by gdumas            #+#    #+#             */
-/*   Updated: 2023/11/16 10:48:51 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:56:07 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Converts the initial portion of the string
+ * pointed to by 'str' to an integer.
+ * 
+ * @param str The string to convert.
+ * @return {int} The converted integer.
+ */
 int	ft_atoi(const char *str)
 {
 	long long	result;

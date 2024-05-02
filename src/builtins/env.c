@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:35:11 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:04:15 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 18:19:34 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,10 @@ int	mini_env(t_mini *mini, t_cmd *cmd)
 	env = mini->h_env;
 	while (env)
 	{
-		if (ft_printfd(fd, "%s=%s\n", env->name, env->value) < 0)
-		{
-			perror("printf");
-			return (errno);
-		}
+		if (!env->value)
+			ft_printfd(fd, "%s\n", env->name);
+		else
+			ft_printfd(fd, "%s=%s\n", env->name, env->value);
 		env = env->next;
 	}
 	return (SUCCESS);

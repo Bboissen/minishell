@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 11:05:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/25 14:28:33 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:10:58 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
+
+typedef enum e_bool
+{
+	FALSE = 0,
+	TRUE
+}	t_bool;
+
+typedef enum e_return
+{
+	SUCCESS = 0,
+	ERROR = 1,
+}	t_return;
 
 char	*get_next_line(int fd);
 
@@ -76,8 +88,6 @@ void	*ft_memset(void *str, int c, size_t len);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 
 /*ft_printfd*/
-size_t	ft_strlen(const char *s);
-int		seq_write(int fd, char *s, int len);
 int		ft_printfd(int fd, const char *format, ...);
 int		converter(int fd, char c, va_list ptr);
 

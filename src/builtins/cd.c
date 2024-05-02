@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 11:35:26 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 18:56:24 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,29 +47,34 @@ static char	*add_home_path(t_mini *mini, char *path)
  *
  * @param mini The main structure of the minishell.
  * @param path The path to change to.
- * @return SUCCESS if the directory was changed successfully, ERROR otherwise.
+ * @return {int} SUCCESS if the directory was changed successfully,
+ * ERROR otherwise.
  */
 static int	change(t_mini *mini, char *path)
 {
-	char	*pwd;
+	char	*old_pwd;
+	char	*new_pwd;
 
-	pwd = getcwd(NULL, 0);
-	if (!chdir(path))
+	old_pwd = getcwd(NULL, 0);
+	if (chdir(path) == 0)
 	{
-		if (pwd)
+		new_pwd = getcwd(NULL, 0);
+		if (new_pwd)
 		{
-			set_env(&mini->h_env, "OLDPWD", pwd);
-			ft_memdel(pwd);
+			set_env(&mini->h_env, "PWD", new_pwd);
+			free(new_pwd);
 		}
-		pwd = getcwd(NULL, 0);
-		if (pwd)
+		if (old_pwd)
 		{
-			set_env(&mini->h_env, "PWD", pwd);
-			ft_memdel(pwd);
+			set_env(&mini->h_env, "OLDPWD", old_pwd);
+			free(old_pwd);
 		}
 		return (SUCCESS);
 	}
-	return (ft_memdel(pwd), cd_err(mini, errno, path), ERROR);
+	else
+		if (old_pwd)
+			free(old_pwd);
+	return (cd_err(mini, errno, path), ERROR);
 }
 
 /**
@@ -77,9 +82,10 @@ static int	change(t_mini *mini, char *path)
  * stored in the OLDPWD environment variable.
  *
  * @param mini The main structure of the minishell.
- * @return ERROR if the command was '-', SUCCESS otherwise.
+ * @return {int} ERROR if the command was '-',
+ * SUCCESS otherwise.
  */
-int	backward_dir(t_mini *mini, t_cmd *cmd)
+static int	backward_dir(t_mini *mini, t_cmd *cmd)
 {
 	char	*tmp;
 	char	**args;
@@ -103,7 +109,8 @@ int	backward_dir(t_mini *mini, t_cmd *cmd)
  * or to the home directory if no arguments are given.
  *
  * @param mini The main structure of the minishell.
- * @return SUCCESS if the directory was changed successfully, ERROR otherwise.
+ * @return {int} SUCCESS if the directory was changed successfully,
+ * ERROR otherwise.
  */
 int	mini_cd(t_mini *mini, t_cmd *cmd)
 {

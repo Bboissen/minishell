@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/01 16:27:01 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:00:28 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	is_spe_expand(char c)
 
 int	is_spe_builtin(char *str)
 {
-	if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0 || ft_strcmp(str, "env") == 0)
+	if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0 || ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0)
 		return (1);
 	else
 		return (0);
