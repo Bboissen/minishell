@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 14:39:32 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/19 12:07:28 by gdumas           ###   ########.fr       */
+/*   Created: 2024/04/15 13:51:59 by gdumas            #+#    #+#             */
+/*   Updated: 2024/04/26 09:08:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putendl_fd(char *str, int fd)
+char	*ft_strcat(char *dest, const char *src)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (str && str[i])
-	{
-		write(fd, &str[i], 1);
+	j = 0;
+	while (dest[i] != '\0')
 		i++;
+	while (src[j] != '\0')
+	{
+		dest[i + j] = src[j];
+		j++;
 	}
-	i += write(fd, "\n", 1);
-	return (i);
+	dest[i + j] = '\0';
+	return (dest);
 }

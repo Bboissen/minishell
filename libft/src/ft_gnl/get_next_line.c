@@ -3,30 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 17:35:46 by gdumas            #+#    #+#             */
-/*   Updated: 2024/01/31 13:27:40 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 09:40:03 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	check_endline(char *src)
+/**
+ * @brief Checks if there is an endline character in the source string.
+ * 
+ * @param src The source string to check.
+ * @return int Returns the index of the endline character plus one if it exists,
+ * otherwise returns FALSE.
+ */
+static int	check_endline(char *src)
 {
 	int	i;
 
 	i = 0;
 	if (!src)
-		return (0);
+		return (FALSE);
 	while (src[i] && src[i] != '\n')
 		i++;
 	if (src[i] == '\n')
 		return (i + 1);
-	return (0);
+	return (FALSE);
 }
 
-char	*extract_buffer_in_line(char *buffer, char *line)
+/**
+ * @brief Extracts a line from the buffer and appends it to the existing line.
+ * 
+ * @param buffer The buffer containing the data to extract.
+ * @param line The existing line to append to.
+ * @return char* Returns a pointer to the new line, or NULL if an error occurred.
+ */
+static char	*extract_buffer_in_line(char *buffer, char *line)
 {
 	char	*new_line;
 	int		i;
@@ -49,13 +63,21 @@ char	*extract_buffer_in_line(char *buffer, char *line)
 	return (free(line), new_line);
 }
 
-int	erase_printed_buff(char *buffer_dest, char *buffer_src, char **line)
+/**
+ * @brief Erases the printed buffer and extracts a line from the source buffer.
+ * 
+ * @param buffer_dest The destination buffer to erase.
+ * @param buffer_src The source buffer to extract from.
+ * @param line A pointer to the line to extract to.
+ * @return int Returns TRUE if successful, otherwise returns FALSE.
+ */
+static int	erase_printed_buff(char *buffer_dest, char *buffer_src, char **line)
 {
 	int	i;
 
 	i = 0;
 	if (!buffer_dest[0] || buffer_src == buffer_dest)
-		return (1);
+		return (TRUE);
 	while (buffer_src[i])
 	{
 		buffer_dest[i] = buffer_src[i];
@@ -64,11 +86,19 @@ int	erase_printed_buff(char *buffer_dest, char *buffer_src, char **line)
 	buffer_dest[i] = '\0';
 	(*line) = extract_buffer_in_line(buffer_dest, (*line));
 	if (!(*line))
-		return (0);
-	return (1);
+		return (FALSE);
+	return (TRUE);
 }
 
-char	*read_and_extract(int fd, char *buffer, char *line)
+/**
+ * @brief Reads data from a file descriptor and extracts a line from the buffer.
+ * 
+ * @param fd The file descriptor to read from.
+ * @param buffer The buffer to extract a line from.
+ * @param line The existing line to append to.
+ * @return char* Returns a pointer to the new line, or NULL if an error occurred.
+ */
+static char	*read_and_extract(int fd, char *buffer, char *line)
 {
 	ssize_t	bytesread;
 
@@ -91,6 +121,13 @@ char	*read_and_extract(int fd, char *buffer, char *line)
 	return (free(line), NULL);
 }
 
+/**
+ * @brief Gets the next line from a file descriptor.
+ * 
+ * @param fd The file descriptor to get the next line from.
+ * @return char* Returns a pointer to the next line,
+ * or NULL if an error occurred.
+ */
 char	*get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1] = "";

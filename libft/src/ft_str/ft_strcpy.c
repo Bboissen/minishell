@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_char.c                                   :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 09:51:31 by gdumas            #+#    #+#             */
-/*   Updated: 2024/01/31 12:43:40 by gdumas           ###   ########.fr       */
+/*   Created: 2024/04/15 13:52:14 by gdumas            #+#    #+#             */
+/*   Updated: 2024/04/15 13:52:46 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_printchar(int c)
-{
-	unsigned char	ch;
-
-	ch = (unsigned char)c;
-	return (write(1, &ch, 1));
-}
-
-int	ft_printstr(char *str)
+char	*ft_strcpy(char *dest, const char *src)
 {
 	int	i;
 
 	i = 0;
-	if (str == NULL)
-		return (write(1, "(null)", 6));
-	while (str[i])
+	while (src[i] != '\0')
 	{
-		write(1, &str[i], 1);
+		dest[i] = src[i];
 		i++;
 	}
-	return (i);
+	dest[i] = '\0';
+	return (dest);
 }
