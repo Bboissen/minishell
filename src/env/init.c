@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 11:16:36 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 17:25:07 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@
 void	readline_setup(t_mini *mini, char **rl, char *str)
 {
 	char	*prompt;
+	t_sig	*sig;
 
+	
+	sig = get_sig();
 	prompt = ft_strjoin(str, " > ");
 	if (!prompt)
 		error_manager(mini, MALLOC, NULL, NULL);
@@ -38,6 +41,7 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
 	rl_on_new_line();
 	free(prompt);
 }
+
 
 /**
  * Initialize the mini structure with the given environment.
