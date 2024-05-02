@@ -6,12 +6,17 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 11:17:42 by gdumas            #+#    #+#             */
-/*   Updated: 2024/03/04 13:50:43 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:42:34 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Outputs the integer 'n' to the standard output.
+ * 
+ * @param n The integer to output.
+ */
 void	ft_putnbr(int n)
 {
 	long	nbr;

@@ -6,12 +6,23 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:47:22 by gdumas            #+#    #+#             */
-/*   Updated: 2023/11/13 16:21:35 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:52:06 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Appends the NUL-terminated string 'src' to the end of 'dest'.
+ * It will append at most 'dstsize - strlen(dest) - 1' characters.
+ * It will then NUL-terminate, unless 'dstsize'
+ * is 0 or the original 'dest' string was longer than 'dstsize'.
+ * 
+ * @param dest The destination string.
+ * @param src The source string.
+ * @param dstsize The size of the destination buffer.
+ * @return {size_t} The total length of the string it tried to create.
+ */
 size_t	ft_strlcat(char *dest, const char *src, size_t dstsize)
 {
 	size_t	i;

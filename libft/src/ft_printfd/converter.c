@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   converter.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:06:32 by bboissen          #+#    #+#             */
-/*   Updated: 2024/03/19 12:11:55 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 10:16:24 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Gets the next line from a file descriptor.
+ * 
+ * @param fd The file descriptor to get the next line from.
+ * @return {char*} Returns a pointer to the next line,
+ * or NULL if an error occurred.
+ */
 static int	str_to_print(int fd, va_list ptr)
 {
 	char	*str;
@@ -23,6 +30,14 @@ static int	str_to_print(int fd, va_list ptr)
 		return (ft_putstr_fd("(null)", fd));
 }
 
+/**
+ * @brief Prints a pointer.
+ * 
+ * @param fd The file descriptor to print to.
+ * @param ptr The pointer to print.
+ * @param c The conversion specifier.
+ * @return {int} Returns the number of characters printed.
+ */
 static int	ptr_to_print(int fd, va_list ptr, char c)
 {
 	char				*base;
@@ -49,6 +64,15 @@ static int	ptr_to_print(int fd, va_list ptr, char c)
 		return (ft_putstr_fd("(nil)", fd));
 }
 
+/**
+ * @brief Prints an unsigned integer.
+ * 
+ * @param fd The file descriptor to print to.
+ * @param ptr The pointer to the unsigned integer.
+ * @param base The base to print the number in.
+ * @param c The conversion specifier.
+ * @return {int} Returns the number of characters printed.
+ */
 static int	uint_to_print(int fd, va_list ptr, char *base, char c)
 {
 	unsigned int	nbr;
@@ -57,6 +81,15 @@ static int	uint_to_print(int fd, va_list ptr, char *base, char c)
 	return (ft_putnbr_base(fd, nbr, base, c));
 }
 
+/**
+ * @brief Prints an integer.
+ * 
+ * @param fd The file descriptor to print to.
+ * @param ptr The pointer to the integer.
+ * @param base The base to print the number in.
+ * @param c The conversion specifier.
+ * @return {int} Returns the number of characters printed.
+ */
 static int	int_to_print(int fd, va_list ptr, char *base, char c)
 {
 	int	count;
@@ -80,6 +113,16 @@ static int	int_to_print(int fd, va_list ptr, char *base, char c)
 	return (count);
 }
 
+/**
+ * @brief Converts a variable argument list to a string
+ * and prints it to a file descriptor.
+ * 
+ * @param fd The file descriptor to print to.
+ * @param c The format character.
+ * @param ptr The variable argument list to convert.
+ * @return {int} Returns the number of characters printed,
+ * or -1 if c is empty, or -2 if an error occurred.
+ */
 int	converter(int fd, char c, va_list ptr)
 {
 	if (c == 'd' || c == 'i')

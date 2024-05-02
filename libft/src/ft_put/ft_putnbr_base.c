@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_base.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:24:43 by bboissen          #+#    #+#             */
-/*   Updated: 2024/03/19 11:45:55 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 10:29:18 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Tests if a string is a valid base.
+ * 
+ * @param str The string to test.
+ * @return {int} Returns 1 if the string is a valid base, and 0 otherwise.
+ */
 static int	ft_test_base(char *str)
 {
 	int	i;
@@ -39,6 +45,17 @@ static int	ft_test_base(char *str)
 	return (r);
 }
 
+/**
+ * @brief Writes an unsigned long long number
+ * to a file descriptor in a given base.
+ * 
+ * @param fd The file descriptor to write to.
+ * @param nb The number to write.
+ * @param str The base to write the number in.
+ * @param l_base The length of the base.
+ * @return {int} Returns the number of bytes written,
+ * or -1 if an error occurred.
+ */
 static int	ft_ulong_base(int fd,
 unsigned long long nb, char *str, unsigned int l_base)
 {
@@ -57,6 +74,17 @@ unsigned long long nb, char *str, unsigned int l_base)
 	return (count);
 }
 
+/**
+ * @brief Writes an unsigned int number to a
+ * file descriptor in a given base.
+ * 
+ * @param fd The file descriptor to write to.
+ * @param nb The number to write.
+ * @param str The base to write the number in.
+ * @param len_base The length of the base.
+ * @return {int} Returns the number of bytes written,
+ * or -1 if an error occurred.
+ */
 static int	ft_int_base(int fd,
 unsigned int nb, char *str, unsigned int len_base)
 {
@@ -75,6 +103,16 @@ unsigned int nb, char *str, unsigned int len_base)
 	return (count);
 }
 
+/**
+ * @brief Writes a number to a file descriptor in a given base.
+ * 
+ * @param fd The file descriptor to write to.
+ * @param nbr The number to write.
+ * @param base The base to write the number in.
+ * @param c The format character.
+ * @return int Returns the number of bytes written,
+ * or FALSE if the base is not valid.
+ */
 int	ft_putnbr_base(int fd, unsigned long long nbr, char *base, char c)
 {
 	int	n;
@@ -87,5 +125,5 @@ int	ft_putnbr_base(int fd, unsigned long long nbr, char *base, char c)
 		else if (c == 'u' || c == 'p' || c == 'x' || c == 'X')
 			return (ft_ulong_base(fd, nbr, base, n));
 	}
-	return (0);
+	return (FALSE);
 }

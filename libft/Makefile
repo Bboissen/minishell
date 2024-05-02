@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
+#    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 13:27:07 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/25 14:27:34 by bboissen         ###   ########.fr        #
+#    Updated: 2024/05/02 09:31:23 by talibabtou       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,8 +67,7 @@ MEM_SRC =	ft_bzero	\
 			ft_realloc
 
 PFD_SRC	=	converter		\
-			printf_fd		\
-			seq_write
+			printf_fd
 
 PUT_SRC =	ft_putchar_fd	\
 			ft_putchar		\
