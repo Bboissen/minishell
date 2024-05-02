@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 17:35:46 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 09:50:27 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/02 14:58:38 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
  * @brief Checks if there is an endline character in the source string.
  * 
  * @param src The source string to check.
- * @return {int} Returns the index of the endline character plus one if it exists,
- * otherwise returns FALSE.
+ * @return {int} Returns the index of the endline character
+ * plus one if it exists, otherwise returns FALSE.
  */
 static int	check_endline(char *src)
 {
@@ -38,7 +38,8 @@ static int	check_endline(char *src)
  * 
  * @param buffer The buffer containing the data to extract.
  * @param line The existing line to append to.
- * @return {char*} Returns a pointer to the new line, or NULL if an error occurred.
+ * @return {char*} Returns a pointer to the new line,
+ * or NULL if an error occurred.
  */
 static char	*extract_buffer_in_line(char *buffer, char *line)
 {

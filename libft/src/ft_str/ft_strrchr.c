@@ -6,12 +6,20 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 11:17:37 by gdumas            #+#    #+#             */
-/*   Updated: 2023/11/13 13:06:14 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:54:58 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Locates the last occurrence of 'c' in the string 's'.
+ * 
+ * @param s The string to search.
+ * @param c The character to search for.
+ * @return {char *} A pointer to the located character,
+ * or NULL if the character does not appear in the string.
+ */
 char	*ft_strrchr(char *s, int c)
 {
 	char	*last;
@@ -27,5 +35,5 @@ char	*ft_strrchr(char *s, int c)
 			return (last + i);
 		i--;
 	}
-	return (0);
+	return (NULL);
 }

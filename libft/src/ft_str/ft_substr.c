@@ -6,12 +6,20 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 10:25:34 by gdumas            #+#    #+#             */
-/*   Updated: 2023/11/13 13:06:14 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:55:50 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Allocates and returns a substring from the string 's'.
+ * 
+ * @param s The string from which to create the substring.
+ * @param start The start index of the substring in the string 's'.
+ * @param len The maximum length of the substring.
+ * @return {char *} The substring.
+ */
 char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
 	size_t	i;

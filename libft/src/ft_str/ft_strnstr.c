@@ -6,12 +6,22 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:08:44 by gdumas            #+#    #+#             */
-/*   Updated: 2023/11/13 13:06:14 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:54:45 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Locates the first occurrence of the null-terminated string 'little'
+ * in the string 'big', where not more than 'len' characters are searched.
+ * 
+ * @param big The string to search in.
+ * @param little The string to search for.
+ * @param len The maximum number of characters to search.
+ * @return {char *} A pointer to the first occurrence of 'little' in 'big',
+ * or NULL if 'little' is not found in 'big'.
+ */
 char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
 	size_t	i;
@@ -32,5 +42,5 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 		i++;
 		j = 0;
 	}
-	return (0);
+	return (NULL);
 }

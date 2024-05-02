@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 09:35:47 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/02 14:38:04 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ typedef enum e_error
 	ERROR = 1,
 	SYNTAX = 2,
 	END = 0,
-	MISSING = 1,
-	F_PERM = 1,
 	X_PERM = 126,
 	DIRECTORY = 126,
 	EXE = 127,

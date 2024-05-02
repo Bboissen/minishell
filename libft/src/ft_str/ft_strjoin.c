@@ -6,12 +6,20 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:53:15 by gdumas            #+#    #+#             */
-/*   Updated: 2023/11/13 13:23:26 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 14:50:56 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief Allocates (with malloc(3)) and returns a new string, which is the
+ * result of the concatenation of 's1' and 's2'.
+ * 
+ * @param s1 The prefix string.
+ * @param s2 The suffix string.
+ * @return {char *} The new string. NULL if the allocation fails.
+ */
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*out;
