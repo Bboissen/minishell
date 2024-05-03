@@ -3,15 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/02 20:01:18 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/03 13:13:21 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
+int readline_hook()
+{
+	rl_done = 0;
+	if (get_sig()->status == INTERUPT)
+	{
+		rl_done = 1;
+	}
+	return (0);
+}
 static unsigned int	my_rand(t_mini *mini);
 static void	expand_heredoc(t_mini *mini, t_token **token);
  // protected
@@ -56,10 +66,9 @@ void	heredoc(t_mini *mini)
 {
 	t_token	*token;
 	char	*line;
+	char	*p_line;
 	int		fd;
-	// t_sig	*sig;
 
-	// sig = get_sig();
 	token = mini->h_token;
 	while (token)
 	{
@@ -77,8 +86,10 @@ void	heredoc(t_mini *mini)
 				expand_heredoc(mini, &token); //protected random iteration
 				token = list_join(mini, token); //protected
 			}
+			rl_event_hook = readline_hook;
 			readline_setup(mini, &line, "heredoc");
-			while (line && ft_strcmp(line, token->str))
+			p_line = line;
+			while (line && ft_strcmp(line, token->str) && get_sig()->status != INTERUPT)
 			{
 				while (*line)
 				{
@@ -88,9 +99,19 @@ void	heredoc(t_mini *mini)
 						write(fd, line++, 1);
 				}
 				write(fd, "\n", 1);
+				ft_memdel(p_line);
 				readline_setup(mini, &line, "heredoc");
+				p_line = line;
 			}
+			if (p_line)
+				ft_memdel(p_line);
+			rl_event_hook = NULL;
 			close(fd);
+			if (get_sig()->status == INTERUPT)
+			{
+				free_token(&mini->h_token);
+				return ;
+			}
 			if (!line)
 				return (lexer_err(mini, token->str, END, 0));
 			free(token->str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 17:26:30 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 11:40:44 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	sig_handler(int code)
 	if (code == SIGINT)
 	{
 		sig->status = INTERUPT;
+		if (sig->working == FALSE)
+			ft_putstr_fd("^C", STDERR_FILENO);
 		ft_putstr_fd("\n", STDERR_FILENO);
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -40,8 +42,10 @@ void	sig_handler(int code)
 		if (sig->working == TRUE)
 		{
 			sig->status = QUIT;
-			ft_printfd(STDERR_FILENO, "Quit  (core dumped)\n");
+			ft_printfd(STDERR_FILENO, "Quit (core dumped)\n");
 		}
+		else
+			return ;
 	}
 }
 
@@ -62,4 +66,5 @@ void	sig_init(void)
 	sig->exit = FALSE;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
+	rl_catch_signals = 0;
 }

@@ -2,7 +2,6 @@
 # // export _= => takes the same value as the last command executed path
 
 # // -----cd-----
-# // cd '' ''
+# // cd '' '' too many arguments, return error
 
-# // -----exit-----
-# // not exiting with any argument issues
+cd create OLDPWD when deleted

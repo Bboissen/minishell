@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 18:46:27 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 13:16:47 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	str_env_len(char **env_tab)
 }
 
 /**
- * @brief Sets or updates an environment variable in the environment list.
+ * @brief Updates an environment variable in the environment list.
  * 
  * @param t_env** env - The pointer to the environment list.
  * @param char* name - The name of the environment variable to set.
@@ -31,26 +31,22 @@ static int	str_env_len(char **env_tab)
  * If the environment variable already exists, its value is updated.
  * If it does not exist, a new environment variable is created.
  */
-void	set_env(t_env **env, char *name, char *value)
+int	set_env(t_env **env, char *name, char *value)
 {
-	t_env	*tmp;
+	t_env		*tmp;
 
 	tmp = *env;
 	while (tmp)
 	{
-		if (strcmp(tmp->name, name) == 0)
+		if (ft_strcmp(tmp->name, name) == 0)
 		{
-			free(tmp->value);
+			ft_memdel(tmp->value);
 			tmp->value = strdup(value);
-			return ;
+			return (TRUE);
 		}
 		tmp = tmp->next;
 	}
-	tmp = malloc(sizeof(t_env));
-	tmp->name = strdup(name);
-	tmp->value = strdup(value);
-	tmp->next = *env;
-	*env = tmp;
+	return (FALSE);
 }
 
 /**

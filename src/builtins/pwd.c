@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:09:58 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:07:38 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 13:46:52 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,8 @@ int	mini_pwd(t_mini *mini, t_cmd *cmd)
 	if (getcwd(cwd, PATH_MAX))
 		return (ft_printfd(fd, "%s\n", cwd), SUCCESS);
 	else
+	{
+		ft_printfd(STDERR_FILENO, "minishell: pwd: %s\n", strerror(errno));
 		return (ERROR);
+	}
 }

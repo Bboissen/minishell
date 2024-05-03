@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 20:16:34 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/03 14:37:35 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int			mini_unset(t_mini *mini, t_cmd *cmd);
 t_sig		*get_sig(void);
 char		**env_to_tab(t_mini *mini);
 char		*get_env_value(t_mini *mini, char *name);
-void		set_env(t_env **env, char *name, char *value);
+int			set_env(t_env **env, char *name, char *value);
 void		print_sorted_env(t_mini *mini);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
@@ -196,7 +196,7 @@ void		cd_err(t_mini *mini, int err, char *arg);
 void		lexer(t_mini *mini);
 int			is_spechar(char c);
 int			is_space(int c);
-int			is_spe_builtin(char *str);
+int			is_spe_builtin(t_token *token);
 int			is_spe_expand(char c);
 void		lexer_err(t_mini *mini, char *str, int err, char c);
 char		*syntax_check(t_mini *mini, char *str, int *quote);

@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 18:35:50 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 13:16:54 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,6 @@ char	*get_env_name(char *dest, const char *src)
 	return (dest);
 }
 
-static int	is_in_env(t_env *env, char *name, char *value)
-{
-	while (env)
-	{
-		if (ft_strcmp(name, env->name) == 0)
-		{
-			if (env->value)
-			{
-				ft_memdel(env->value);
-				env->value = ft_strdup(value);
-			}
-			return (TRUE);
-		}
-		env = env->next;
-	}
-	return (FALSE);
-}
-
 int	mini_export(t_mini *mini, t_cmd *cmd)
 {
 	t_env	*env;
@@ -123,7 +105,7 @@ int	mini_export(t_mini *mini, t_cmd *cmd)
 			value = ft_strdup(cmd->args[i] + ft_strlen(name) + 1);
 		else
 			value = NULL;
-		if (!is_in_env(env, name, value))
+		if (!set_env(&env, name, value))
 			env_add(mini, name, value);
 		free(name);
 		if (value)

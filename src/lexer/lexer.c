@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/02 14:00:28 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 14:38:14 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,12 @@ void	lexer(t_mini *mini)
 	quote = 0;
 	while (str && *str != 0)
 	{
-		while (quote == 0 && *str && ft_isspace(*str))
+		while (str && quote == 0 && *str && ft_isspace(*str))
+		{
 			str++;
+			if (mini->token && (mini->token->join == JOIN))
+				mini->token->join = 0;
+		}
 		str = syntax_check(mini, str, &quote);
 		str = string_handler(mini, str, &quote);
 		str = s_quote_handler(mini, str, &quote);
@@ -83,10 +87,16 @@ int	is_spe_expand(char c)
 		return (0);
 }
 
-int	is_spe_builtin(char *str)
+int	is_spe_builtin(t_token *token)
 {
-	if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0 || ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0)
-		return (1);
-	else
-		return (0);
+	char	*str;
+
+	while (token && token->type != PIPE)
+	{
+		str = token->str;
+		if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0 || ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0 || ft_strcmp(str, "ls") == 0)
+			return (1);
+		token = token->prev;
+	}
+	return (0);
 }

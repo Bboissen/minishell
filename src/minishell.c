@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 20:03:57 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/03 12:58:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int ac, char **av, char **env)
 	init_mini(&mini, env, av[0]);
 	while (sig->exit == FALSE)
 	{
+		err = 0;
 		readline_setup(mini, &(mini->rl), mini->name);
 		lexer(mini);
 		// mini->token = mini->h_token;
@@ -52,10 +53,9 @@ int	main(int ac, char **av, char **env)
 		// }
 		// mini->token = mini->h_token;
 		if (mini->token)
-		{
 			heredoc(mini);
+		if (mini->token)
 			expand_join(&mini);
-		}
 		if (mini->h_token)
 			err = parser(mini);
 		// printf("\n-----------------------------------------------\n");

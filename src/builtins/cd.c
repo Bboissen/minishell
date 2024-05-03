@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 18:56:24 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 12:46:51 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	change(t_mini *mini, char *path)
 	char	*old_pwd;
 	char	*new_pwd;
 
-	old_pwd = getcwd(NULL, 0);
+	old_pwd = getcwd(NULL, 0); // get PWD
 	if (chdir(path) == 0)
 	{
 		new_pwd = getcwd(NULL, 0);
@@ -123,6 +123,8 @@ int	mini_cd(t_mini *mini, t_cmd *cmd)
 		return (cd_err(mini, ERROR, NULL), ERROR);
 	else if (arg_exists(args, 1) && ft_strequ(args[0], "--"))
 		args++;
+	if (args && args[0] && args[0][0] == '\0')
+		return (SUCCESS);
 	if (!args || (ft_strequ(args[0], "~") && !args[1]))
 	{
 		if (!get_env_value(mini, "HOME"))

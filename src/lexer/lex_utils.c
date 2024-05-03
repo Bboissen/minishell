@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/01 16:26:48 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 14:09:12 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ char	*syntax_check(t_mini *mini, char *str, int *quote)
 {
 	t_type	options[3];
 
-	while (str && *quote == 0 && *str && ft_isspace(*str))
-	{
-		str++;
-		if (mini->token && (mini->token->join == JOIN))
-			mini->token->join = 0;
-	}
+	// while (str && *quote == 0 && *str && ft_isspace(*str))
+	// {
+	// 	str++;
+	// 	if (mini->token && (mini->token->join == JOIN))
+	// 		mini->token->join = 0;
+	// }
 	if (*quote != 0 || !*str || is_spechar(*str) != 2)
 		return (str);
 	if (((*str == '|' && (!mini->token || mini->token->type == PIPE)) || (mini->token && (mini->token->type == APPEND
@@ -82,8 +82,8 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*quote == 0 && mini->token && is_spe_builtin(mini->token->str))
-		return(new_token(mini, "", options), str);
+	if (*quote == 0 && mini->token && is_spe_builtin(mini->token))
+		return(new_token(mini, "\0", options), str);
 	if (*quote == 0)
 		return (str);
 	start = str;
@@ -117,8 +117,8 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*quote == 0 && mini->token && is_spe_builtin(mini->token->str))
-		return(new_token(mini, "", options), str);
+	if (*quote == 0 && mini->token && is_spe_builtin(mini->token))
+		return(new_token(mini, "\0", options), str);
 	else if (*quote == 0)
 		return (str);
 	start = str;
