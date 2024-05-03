@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 17:29:36 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 13:07:16 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	main(int ac, char **av, char **env)
 	init_mini(&mini, env, av[0]); //protected random iteration
 	while (sig->exit == FALSE)
 	{
+		err = 0;
 		readline_setup(mini, &(mini->rl), mini->name); //protected
 		lexer(mini); //protected
 		mini->token = mini->h_token;
@@ -85,10 +86,9 @@ int	main(int ac, char **av, char **env)
 		}
 		mini->token = mini->h_token;
 		if (mini->token)
-		{
 			heredoc(mini); //protected random iteration
+		if (mini->token)
 			expand_join(&mini);
-		}
 		if (mini->h_token)
 			err = parser(mini);
 		printf("\n-----------------------------------------------\n");
@@ -112,7 +112,7 @@ int	main(int ac, char **av, char **env)
 		ft_printfd(1,"\n\n");
 		mini->cmd = mini->h_cmd;
 		mini->env = mini->h_env;
-		if (mini->cmd)
+		if (mini->cmd && (mini->cmd->builtin != NONE || mini->cmd->args))
 			cmd_exec(mini);
 		if (err != 0)
 			get_sig()->status = err;

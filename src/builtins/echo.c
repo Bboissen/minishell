@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:36:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:07:28 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 10:21:26 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	mini_echo(t_mini *mini, t_cmd *cmd)
 		n_opt = TRUE;
 		i++;
 	}
-	while (args && args[i] != (void *)0)
+	while (args && args[i] != (void *)0 && get_sig()->status != INTERUPT)
 	{
 		ft_printfd(fd, args[i]);
 		if (args[i + 1])
