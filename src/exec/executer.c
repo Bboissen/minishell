@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 10:35:40 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 16:12:12 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds)
 	else
 	{
 		exec_builtin(mini, cmd);
-		exit(sig->status);
+		clean_exit(mini);
 	}
 }
 
@@ -75,6 +75,7 @@ void	cmd_exec(t_mini *mini)
 	int		initial_fds[2];
 
 	sig = get_sig();
+	status = 0;
 	sig->working = TRUE;
 	mini->cmd = mini->h_cmd;
 	initial_fds[0] = dup(STDIN_FILENO);

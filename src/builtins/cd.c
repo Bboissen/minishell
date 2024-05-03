@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 12:46:51 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 16:07:21 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,14 @@ static char	*add_home_path(t_mini *mini, char *path)
 		if (tmp1)
 		{
 			tmp2 = ft_substr(path, 1, ft_strlen(path));
+			if (!tmp2)
+				return (error_manager(mini, MALLOC, NULL, NULL), NULL);
+			ft_memdel(path);
 			path = ft_strjoin(tmp1, tmp2);
+			if (!path)
+				return (error_manager(mini, MALLOC, NULL, NULL), NULL);
 		}
 	}
-	ft_memdel(tmp1);
 	ft_memdel(tmp2);
 	return (path);
 }
@@ -55,26 +59,25 @@ static int	change(t_mini *mini, char *path)
 	char	*old_pwd;
 	char	*new_pwd;
 
-	old_pwd = getcwd(NULL, 0); // get PWD
+	old_pwd = ft_strdup(get_env_value(mini, "PWD"));
 	if (chdir(path) == 0)
 	{
 		new_pwd = getcwd(NULL, 0);
 		if (new_pwd)
 		{
 			set_env(&mini->h_env, "PWD", new_pwd);
-			free(new_pwd);
+			ft_memdel(new_pwd);
 		}
 		if (old_pwd)
 		{
 			set_env(&mini->h_env, "OLDPWD", old_pwd);
-			free(old_pwd);
+			ft_memdel(old_pwd);
 		}
 		return (SUCCESS);
 	}
 	else
-		if (old_pwd)
-			free(old_pwd);
-	return (cd_err(mini, errno, path), ERROR);
+		ft_memdel(old_pwd);
+	return (cd_err(mini, DIRECTORY, path), ERROR);
 }
 
 /**
@@ -128,11 +131,11 @@ int	mini_cd(t_mini *mini, t_cmd *cmd)
 	if (!args || (ft_strequ(args[0], "~") && !args[1]))
 	{
 		if (!get_env_value(mini, "HOME"))
-			return (cd_err(mini, MISSING, "HOME"), ERROR);
+			return (cd_err(mini, MISSING, NULL), ERROR);
 		home = ft_strdup(get_env_value(mini, "HOME"));
 		if (!home)
 			return (error_manager(mini, MALLOC, NULL, NULL), ERROR);
-		return (change(mini, home), SUCCESS);
+		return (change(mini, home), free(home), SUCCESS);
 	}
 	if (args && args[0][0] == '-' && !args[0][1])
 		return (backward_dir(mini, cmd), SUCCESS);

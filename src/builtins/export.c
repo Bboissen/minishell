@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 13:16:54 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 17:26:39 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,16 @@ static int	env_add(t_mini *mini, char *name, char *value)
 	if (!new)
 		error_manager(mini, MALLOC, NULL, NULL);
 	new->name = ft_strdup(name);
+	if (!new->name)
+		return (ft_memdel(name), ft_memdel(value), ft_memdel(new),
+			error_manager(mini, MALLOC, NULL, NULL), ERROR);
 	if (value)
+	{
 		new->value = ft_strdup(value);
+		if (!new->value)
+			return (ft_memdel(name), ft_memdel(value), ft_memdel(new->name),
+				ft_memdel(new), error_manager(mini, MALLOC, NULL, NULL), ERROR);
+	}
 	else
 		new->value = NULL;
 	new->next = NULL;
@@ -102,14 +110,19 @@ int	mini_export(t_mini *mini, t_cmd *cmd)
 			continue ;
 		}
 		if (strchr(cmd->args[i], '='))
+		{
 			value = ft_strdup(cmd->args[i] + ft_strlen(name) + 1);
+			if (!value)
+				return (error_manager(mini, MALLOC, NULL, NULL),
+					ft_memdel(name), ERROR);
+		}
 		else
 			value = NULL;
 		if (!set_env(&env, name, value))
 			env_add(mini, name, value);
-		free(name);
+		ft_memdel(name);
 		if (value)
-			free(value);
+			ft_memdel(value);
 		i++;
 	}
 	return (get_sig()->status);

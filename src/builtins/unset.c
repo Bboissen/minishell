@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 13:33:09 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 16:48:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,11 @@ static void	free_node(t_mini *mini, t_env *env)
 	if (mini->env == env && env->next == NULL)
 	{
 		ft_memdel(mini->env->name);
-		mini->env->name = NULL;
 		ft_memdel(mini->env->value);
-		mini->env->value = NULL;
 		mini->env->next = NULL;
 		return ;
 	}
+	ft_memdel(env->name);
 	ft_memdel(env->value);
 	ft_memdel(env);
 }
@@ -64,7 +63,7 @@ int	mini_unset(t_mini *mini, t_cmd *cmd)
 	args = cmd->args;
 	env = mini->h_env;
 	i = 0;
-	while (args[i])
+	while (arg_exists(args, i))
 	{
 		if (!ft_strncmp(args[i], env->name,
 				env_size(env->name)))
