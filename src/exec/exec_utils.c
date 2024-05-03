@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:54:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 17:01:54 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:02:24 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	fd_handler(t_mini *mini, t_cmd *cmd)
 	}
 	if (cmd->out != NULL)
 	{
-		out = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->append == 1)
+			out = open(cmd->out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			out = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		dup2(out, STDOUT_FILENO);
 		close(out);
 	}

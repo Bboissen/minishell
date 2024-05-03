@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 11:16:42 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 13:16:47 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,41 +23,37 @@ static int	str_env_len(char **env_tab)
 }
 
 /**
- * Sets or updates an environment variable in the environment list.
+ * @brief Updates an environment variable in the environment list.
  * 
- * @param {t_env**} env - The pointer to the environment list.
- * @param {char*} name - The name of the environment variable to set.
- * @param {char*} value - The value to set the environment variable to.
+ * @param t_env** env - The pointer to the environment list.
+ * @param char* name - The name of the environment variable to set.
+ * @param char* value - The value to set the environment variable to.
  * If the environment variable already exists, its value is updated.
  * If it does not exist, a new environment variable is created.
  */
-void	set_env(t_env **env, char *name, char *value)
+int	set_env(t_env **env, char *name, char *value)
 {
-	t_env	*tmp;
+	t_env		*tmp;
 
 	tmp = *env;
 	while (tmp)
 	{
-		if (strcmp(tmp->name, name) == 0)
+		if (ft_strcmp(tmp->name, name) == 0)
 		{
-			free(tmp->value);
+			ft_memdel(tmp->value);
 			tmp->value = strdup(value);
-			return ;
+			return (TRUE);
 		}
 		tmp = tmp->next;
 	}
-	tmp = malloc(sizeof(t_env));
-	tmp->name = strdup(name);
-	tmp->value = strdup(value);
-	tmp->next = *env;
-	*env = tmp;
+	return (FALSE);
 }
 
 /**
  * Retrieves the value of an environment variable by its name.
  * 
- * @param {t_env*} env - The environment list.
- * @param {char*} name - The name of the environment variable.
+ * @param t_env* env - The environment list.
+ * @param char* name - The name of the environment variable.
  * @return {char*} - Returns the value of the environment variable if
  * found, NULL otherwise.
  */
@@ -76,12 +72,12 @@ char	*get_env_value(t_mini *mini, char *name)
 }
 
 /**
- * Sort an array of strings in ascending order.
+ * @brief Sort an array of strings in ascending order.
  * 
- * @param {char**} tab - The array to sort.
- * @param {int} env_len - The length of the array.
+ * @param char** tab - The array to sort.
+ * @param int env_len - The length of the array.
  */
-void	sort_env(char **tab, int env_len)
+static void	sort_env(char **tab, int env_len)
 {
 	int		ordered;
 	int		i;
@@ -109,9 +105,9 @@ void	sort_env(char **tab, int env_len)
 }
 
 /**
- * Print the environment variables in sorted order.
+ * @brief Print the environment variables in sorted order.
  * 
- * @param {t_env*} env - The environment to print.
+ * @param t_env* env - The environment to print.
  */
 void	print_sorted_env(t_mini *mini)
 {

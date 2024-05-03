@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 14:07:21 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 17:20:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ typedef struct s_cmd
 	char			*out;
 	int				fd[2];
 	int				pid;
+	int				append;
 	t_builtin		builtin;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
@@ -146,11 +147,11 @@ int			mini_unset(t_mini *mini, t_cmd *cmd);
 t_sig		*get_sig(void);
 char		**env_to_tab(t_mini *mini);
 char		*get_env_value(t_mini *mini, char *name);
-void		set_env(t_env **env, char *name, char *value);
+int			set_env(t_env **env, char *name, char *value);
 void		print_sorted_env(t_mini *mini);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
-t_token		*list_join(t_mini *mini, t_token *token);
+t_token		*list_join(t_token *token);
 
 /* Init */
 

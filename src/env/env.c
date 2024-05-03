@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/30 14:52:19 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 18:07:08 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,24 @@ static size_t	size_env_tab(t_env *env_lst)
 static char	*append_name_value(t_env *env_lst, int i, int j, int k)
 {
 	char	*env_str;
+	size_t	size;
 
-	env_str = malloc(sizeof(char) * (ft_strlen(env_lst->name)
-				+ ft_strlen(env_lst->value) + 4));
+	size = ft_strlen(env_lst->name) + 1;
+	if (env_lst->value)
+		size += ft_strlen(env_lst->value) + 1;
+	env_str = malloc(sizeof(char) * size);
 	if (!env_str)
 		return (NULL);
 	if (env_lst->name)
 	{
 		while (env_lst->name[++j])
 			env_str[++i] = env_lst->name[j];
-		env_str[++i] = '=';
 	}
 	if (env_lst->value)
 	{
-		// env_str[++i] = '\"';
+		env_str[++i] = '=';
 		while (env_lst->value[++k])
 			env_str[++i] = env_lst->value[k];
-		// env_str[++i] = '\"';
 	}
 	env_str[++i] = '\0';
 	return (env_str);

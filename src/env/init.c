@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 11:16:36 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/03 16:25:28 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
  * @param {t_mini*} mini - The main structure of the shell.
  * @param {char*} str - The string to be used as the base of the prompt.
  */
+//protected random iteration
 void	readline_setup(t_mini *mini, char **rl, char *str)
 {
 	char	*prompt;
 
-	prompt = ft_strjoin(str, " > ");
+	prompt = ft_strjoin(str, " > "); //protected random iteration
 	if (!prompt)
 		error_manager(mini, MALLOC, NULL, NULL);
 	*rl = readline(prompt);
@@ -33,7 +34,7 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
 		free(prompt);
 		clean_exit(mini);
 	}
-	if (*rl != NULL && ft_strcmp(*rl, "") != SUCCESS)
+	if (*rl != NULL && ft_strcmp(*rl, "") != SUCCESS && ft_strcmp(str, "heredoc"))
 		add_history(*rl);
 	rl_on_new_line();
 	free(prompt);

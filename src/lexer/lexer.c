@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/03 14:07:07 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:36:22 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static int	odd_quote(char *str);
 
-//protected random iteration
 void	lexer(t_mini *mini)
 {
 	int		quote;
@@ -91,12 +90,12 @@ int	is_spe_builtin(t_token *token)
 {
 	char 	*str;
 	
-	// printf("add: %p\n", mini->token);
 	while (token && token->type != PIPE)
 	{
 		str = token->str;
-		printf("str %s\n", str);
-		if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0 || ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0 || ft_strcmp(str, "ls") == 0)
+		if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0
+			|| ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0
+			|| ft_strcmp(str, "ls") == 0)
 			return (1);
 		token = token->prev;
 	}

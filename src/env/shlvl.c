@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/23 16:00:17 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 17:33:29 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,14 @@ static int	get_lvl(const char *str)
  * 
  * @param {t_env*} env - The environment to increment the shell level in.
  */
-//protected
+//to protect
 void	increment_shell_level(t_mini **mini)
 {
 	char	*shell_level_value;
 	int		shell_level;
 	char	*shlvl;
 
-	shell_level_value = expand_token(mini, "SHLVL"); //protected random iteration
+	shell_level_value = expand_token(mini, "SHLVL"); //NULL if malloc issue
 	shell_level = get_lvl(shell_level_value) + 1;
 	if (shell_level_value)
 		ft_memdel(shell_level_value);
@@ -77,13 +77,13 @@ void	increment_shell_level(t_mini **mini)
 		if (!ft_strcmp((*mini)->env->name, "SHLVL"))
 		{
 			ft_memdel((*mini)->env->value);
-			shlvl = ft_itoa(shell_level); //protected
+			shlvl = ft_itoa(shell_level); //to protect
 			if (!shlvl)
 			{
 				(*mini)->env->value = NULL;
 				error_manager(*mini, MALLOC, NULL, NULL);
 			}
-			(*mini)->env->value = ft_strdup(shlvl); //protected
+			(*mini)->env->value = ft_strdup(shlvl); //to protect
 			if (!(*mini)->env->value)
 			{
 				ft_memdel(shlvl);

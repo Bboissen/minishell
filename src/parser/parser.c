@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/02 10:31:46 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:00:48 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
 		else
 		{
+			if ((*token)->type == APPEND)
+				(*cmd)->append = 1;
+			else
+				(*cmd)->append = 0;
 			if ((*cmd)->out)
 				free((*cmd)->out);
 			(*cmd)->out = ft_strdup((*token)->next->str); //protected random iteration
@@ -147,6 +151,7 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 	(*cmd)->fd[0] = -1;
 	(*cmd)->fd[1] = -1;
 	(*cmd)->pid = -1;
+	(*cmd)->append = 0;
 	(*cmd)->builtin = NONE;
 	(*cmd)->prev = NULL;
 	(*cmd)->next = NULL;
