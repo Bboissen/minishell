@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 15:26:09 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/02 20:16:34 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ int			error_manager(t_mini *mini, int err, char *fct, char *str);
 int			export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 
-// lexer
+/* Lexer */
 void		lexer(t_mini *mini);
 int			is_spechar(char c);
 int			is_space(int c);
@@ -206,12 +206,12 @@ char		*d_quote_handler(t_mini *mini, char *str, int *quote);
 char		*var_handler(t_mini *mini, char *str, int *quote);
 char		*random_file(t_mini *mini);
 
-//heredoc
+/* Heredoc */
 void		heredoc(t_mini *mini);
 char		*expand_line(t_mini *mini, char *str, int fd);
 void		delete_heredoc(t_mini *mini);
 
-//parser
+/* Parser */
 int			parser(t_mini *mini);
 void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
@@ -219,4 +219,5 @@ char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 void		parser_err(t_mini *mini, char *str, int err);
+
 #endif

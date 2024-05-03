@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 15:49:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 09:23:25 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,30 +41,29 @@ int	arg_exists(char **args, int index)
  */
 static int	ft_atoi_exit(const char *str, int i, int *overflow)
 {
-	int			j;
 	long		neg;
 	long long	sum;
 
 	neg = 1;
 	sum = 0;
-	j = 0;
+	while (str[i] && ft_isspace(str[i]))
+		i++;
 	if (str[i] && (str[i] == '-' || str[i] == '+'))
 		if (str[i++] == '-')
 			neg *= -1;
 	while (str[i] && (ft_isspace(str[i]) || str[i] == '0'))
 		i++;
-	while (str[i] >= '0' && str[i] <= '9' && ++j)
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		sum = (sum * 10) + (str[i] - 48);
-		if (((i == 18 && neg == 1) && (str[i] > '7' && str[i] <= '9'))
-			|| ((i == 19 && neg == -1) && (str[i] == '9')))
+		if (sum > LLONG_MAX / 10
+			|| (sum == LLONG_MAX / 10 && str[i] - '0' > LLONG_MAX % 10))
+		{
 			*overflow = 1;
+			break ;
+		}
+		sum = (sum * 10) + (str[i] - 48);
 		i++;
 	}
-	while (str[i++])
-		j++;
-	if ((j > 19 && neg == 1) || (j > 20 && neg == -1))
-		*overflow = 1;
 	return (sum * neg);
 }
 
@@ -76,12 +75,14 @@ static int	ft_atoi_exit(const char *str, int i, int *overflow)
  * @param overflow The error flag.
  * @return {int} ERROR if the argument is not numeric, SUCCESS otherwise.
  */
-static int	validate_numeric_argument(t_mini *mini, t_cmd *cmd, t_sig *sig, int overflow)
+static int	validate_numeric_argument(t_mini *mini, t_cmd *cmd,
+	t_sig *sig, int overflow)
 {
 	int	i;
 
 	i = 0;
-	if (cmd->args[0][i] == '-' || cmd->args[0][i] == '+')
+	if (cmd->args[0][i] == '-' || cmd->args[0][i] == '+'
+		|| cmd->args[0][i] == ' ')
 		i++;
 	while (cmd->args[0][i])
 	{
@@ -111,10 +112,12 @@ int	mini_exit(t_mini *mini, t_cmd *cmd)
 
 	sig = get_sig();
 	narg = 0;
+	overflow = 0;
 	if (cmd->args)
 	{
 		narg = ft_atoi_exit(cmd->args[0], 0, &overflow);
-		if (validate_numeric_argument(mini, cmd, sig, overflow) == ERROR)
+		if (validate_numeric_argument(mini, cmd, sig, overflow) == ERROR
+			|| narg > INT_MAX || narg < INT_MIN)
 			return (sig->status);
 		sig->status = narg % 256;
 	}

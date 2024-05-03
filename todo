@@ -5,8 +5,4 @@
 # // cd '' ''
 
 # // -----exit-----
-# // exit -0 => conditionnal jump
-# // not exiting with any argument issue
-# // exit ' 3' => should exit with 3
-# // exit 9223372036854775807 => should exit with 2
-# // exit 18446744073709551615 => should exit with 2
+# // not exiting with any argument issues
