@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 13:07:16 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 14:09:41 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,9 @@
 
 // TOFIX
 
-//-----lexer-----
-// ls ""
-// echo'' bonjour should not join
-// echo"""""""""""""""""""""""""""""""""""""""""""""""""""""""""" bonjour
-
 // -----parser-----
 // add append in cmd->structure type booleen
 // cat << << bar => bash: syntax error near unexpected token `<<'
-
-// -----export-----
-// export SHLVL=" 3"
-
-// -----cmd_exec-----
-// > file should not exec
-
-// -----signal-----
-// ctrl + c in a menu (/bin/ tab) quit the menu
-// ctrl + c does not update the signal status
-// ctrl + c in a heredoc does not quit the heredoc
 
 // -----valgrind-----
 // clear?
@@ -101,7 +85,7 @@ int	main(int ac, char **av, char **env)
 			if (mini->cmd->args)
 			{
 				while(mini->cmd->args[i])
-					printf("%s ", mini->cmd->args[i++]);
+					printf("|%s", mini->cmd->args[i++]);
 				printf("%-5s ", " ");
 			}
 			else
