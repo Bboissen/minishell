@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/01 17:24:25 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 10:35:40 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *initial_fds)
 	}
 	fd_handler(mini, cmd);
 	cmd->fd[0] = initial_fds[0];
-	// cmd->fd[1] = initial_fds[1];
 	if (!cmd->out)
 		dup2(initial_fds[1], STDOUT_FILENO);
 	cmd->pid = exec(mini, cmd, initial_fds);
@@ -72,7 +71,7 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *initial_fds)
 void	cmd_exec(t_mini *mini)
 {
 	t_sig	*sig;
-	int status;
+	int		status;
 	int		initial_fds[2];
 
 	sig = get_sig();
@@ -90,7 +89,9 @@ void	cmd_exec(t_mini *mini)
 	while (mini->cmd)
 	{
 		waitpid(mini->cmd->pid, &(status), 0);
-		if (mini->cmd->builtin == NONE || cmd_size(mini->h_cmd) != 1) //issue when only 1 classic function after a fail
+		if (WIFSIGNALED(status))
+			sig->status = 128 + WTERMSIG(status);
+		else if (mini->cmd->builtin == NONE || cmd_size(mini->h_cmd) != 1)
 			sig->status = WEXITSTATUS(status);
 		close_fds(mini->cmd->fd);
 		mini->cmd = mini->cmd->next;
