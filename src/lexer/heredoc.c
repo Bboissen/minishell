@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/03 17:36:57 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 11:58:19 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static unsigned int	my_rand(t_mini *mini)
 	return (seed % 10);
 }
 
-//to protect
+//protected random iteration
 void	heredoc(t_mini *mini)
 {
 	t_token	*token;
@@ -82,7 +82,9 @@ void	heredoc(t_mini *mini)
 			if (fd == -1)
 				error_manager(mini, errno, "open", token->str);
 			token = token->next;
-			while (token && token->join == JOIN)
+			if (token->expand == EXPAND)
+				expand_heredoc(mini, &token, fd); //protected random iteration
+			while (token && (token->join == JOIN))
 			{
 				expand_heredoc(mini, &token, fd); //protected random iteration
 				token = list_join(token); //protected random iteration
@@ -97,10 +99,11 @@ void	heredoc(t_mini *mini)
 			p_line = line;
 			while (line && ft_strcmp(line, token->str) && get_sig()->status != INTERUPT)
 			{
+				printf("line = %s %s\n", line, token->str);
 				while (*line)
 				{
 					if (*line == '$')
-						line = expand_line(mini, line + 1, fd); //to protect
+						line = expand_line(mini, line + 1, fd); //protected random iteration
 					else
 						write(fd, line++, 1);
 				}
@@ -128,7 +131,7 @@ void	heredoc(t_mini *mini)
 		token = token->next;
 	}
 }
-//to protect
+//protected random iteration
 char	*expand_line(t_mini *mini, char *str, int fd)
 {
 	char	*start;
@@ -140,7 +143,7 @@ char	*expand_line(t_mini *mini, char *str, int fd)
 		str++;
 	end = *str;
 	*str = '\0';
-	var = expand_token(&mini, start); //to protect
+	var = expand_token(&mini, start); //protected random iteration
 	if (!var)
 	{
 		close(fd);
@@ -152,14 +155,15 @@ char	*expand_line(t_mini *mini, char *str, int fd)
 	return (str++);
 }
 
-//to protect
+//protected random iteration
 static void	expand_heredoc(t_mini *mini, t_token **token, int fd)
 {
 	char	*new_str;
 
 	if ((*token)->expand == EXPAND)
 	{
-		new_str = ft_strjoin("$", (*token)->str); //to protect
+
+		new_str = ft_strjoin("$", (*token)->str); //protected random iteration
 		if (!new_str)
 		{
 			close(fd);
@@ -169,9 +173,9 @@ static void	expand_heredoc(t_mini *mini, t_token **token, int fd)
 		(*token)->str = new_str;
 		(*token)->expand = 0;
 	}
-	if ((*token)->next->expand == EXPAND)
+	if ((*token)->next && (*token)->next->expand == EXPAND)
 	{
-		new_str = ft_strjoin("$", (*token)->next->str); //to protect
+		new_str = ft_strjoin("$", (*token)->next->str); //protected random iteration
 		if (!new_str)
 		{
 			close(fd);

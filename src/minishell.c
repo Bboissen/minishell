@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 17:39:42 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 12:36:14 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,15 @@
 //history to fix
 // ~/Desktop
 // issue in heredoc when SIGINT and go back to heredoc
-// << END$lsdkhfj'dsfadsf'adsfasd''
+// should not expand in heredoc if delimiter
+// echo'dsfas'$PATH'sdfsdf' conditional jump
 
 int	main(int ac, char **av, char **env)
 {
 	t_mini	*mini;
 	t_sig	*sig;
 	int		err;
-	// int		i;
+	int		i;
 
 	if (ac != 1)
 		return (ERROR);
@@ -57,38 +58,37 @@ int	main(int ac, char **av, char **env)
 			mini->token = mini->token->next;
 		}
 		mini->token = mini->h_token;
-		getchar();
 		if (mini->token)
 			heredoc(mini); //protected random iteration
-		// if (mini->token)
-		// 	expand_join(&mini);
-		// if (mini->h_token)
-		// 	err = parser(mini);
-		// printf("\n-----------------------------------------------\n");
-		// printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
-		// printf("-----------------------------------------------\n");
-		// mini->cmd = mini->h_cmd;
-		// while (mini->cmd)
-		// {
-		// 	i = 0;
-		// 	if (mini->cmd->args)
-		// 	{
-		// 		while(mini->cmd->args[i])
-		// 			printf("|%s", mini->cmd->args[i++]);
-		// 		printf("%-5s ", " ");
-		// 	}
-		// 	else
-		// 		printf("|%-10s\t|", "NULL");
-		// 	printf("|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
-		// 	mini->cmd = mini->cmd->next;
-		// }
-		// ft_printfd(1,"\n\n");
-		// mini->cmd = mini->h_cmd;
-		// mini->env = mini->h_env;
-		// if (mini->cmd && (mini->cmd->builtin != NONE || mini->cmd->args))
-		// 	cmd_exec(mini);
-		// if (err != 0)
-		// 	get_sig()->status = err;
+		if (mini->token)
+			expand_join(&mini); //protected random iteration
+		if (mini->h_token)
+			err = parser(mini);
+		printf("\n-----------------------------------------------\n");
+		printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
+		printf("-----------------------------------------------\n");
+		mini->cmd = mini->h_cmd;
+		while (mini->cmd)
+		{
+			i = 0;
+			if (mini->cmd->args)
+			{
+				while(mini->cmd->args[i])
+					printf("|%s", mini->cmd->args[i++]);
+				printf("%-5s ", " ");
+			}
+			else
+				printf("|%-10s\t|", "NULL");
+			printf("|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
+			mini->cmd = mini->cmd->next;
+		}
+		ft_printfd(1,"\n\n");
+		mini->cmd = mini->h_cmd;
+		mini->env = mini->h_env;
+		if (mini->cmd && (mini->cmd->builtin != NONE || mini->cmd->args))
+			cmd_exec(mini);
+		if (err != 0)
+			get_sig()->status = err;
 		reinit(&mini);
 	}
 	return (clean_exit(mini));

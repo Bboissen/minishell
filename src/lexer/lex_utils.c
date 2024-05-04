@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/03 15:38:26 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 11:11:58 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*quote == 0 && mini->token && is_spe_builtin(mini->token))
+	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
 		return(new_token(mini, "\0", options), str);
 	if (*quote == 0)
 		return (str);
@@ -119,7 +119,7 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*quote == 0 && mini->token && is_spe_builtin(mini->token))
+	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
 		return(new_token(mini, "\0", options), str);
 	else if (*quote == 0)
 		return (str);

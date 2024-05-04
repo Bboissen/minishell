@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 17:39:10 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 12:36:00 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
  * @param {t_mini*} mini - The main structure of the shell.
  */
 //protected random iteration
-// $E"N"D"asydty"
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
@@ -27,12 +26,18 @@ void	expand_join(t_mini **mini)
 	{
 		if ((*mini)->token->expand)
 		{
-			tmp = expand_token(mini, (*mini)->token->str); //NULL for malloc issue
+			tmp = expand_token(mini, (*mini)->token->str); //protected random iteration
+			if (!tmp)
+				error_manager((*mini), MALLOC, NULL, NULL);
 			free((*mini)->token->str);
 			(*mini)->token->str = tmp;
 			(*mini)->token->expand = 0;
 			if (!tmp[0] && (*mini)->token->join)
-				(*mini)->token = list_join((*mini)->token);//now return NULL for malloc issue
+			{
+				(*mini)->token = list_join((*mini)->token); //protected random iteration
+				if (!(*mini)->token)
+					error_manager((*mini), MALLOC, NULL, NULL);
+			}
 			else if (!tmp[0])
 			{
 				if ((*mini)->token == (*mini)->h_token && !(*mini)->token->next)
@@ -59,7 +64,9 @@ void	expand_join(t_mini **mini)
 		{
 			if ((*mini)->token == (*mini)->h_token)
 				(*mini)->h_token = (*mini)->token->next;	
-			(*mini)->token = list_join((*mini)->token); //now return NULL for malloc issue
+			(*mini)->token = list_join((*mini)->token); //protected random iteration
+			if (!(*mini)->token)
+					error_manager((*mini), MALLOC, NULL, NULL);
 		}
 		else
 			(*mini)->token = (*mini)->token->next;
@@ -72,6 +79,7 @@ void	expand_join(t_mini **mini)
  * @param {char*} str - The string to be expanded.
  * @return {char*} - Returns the expanded string.
  */
+//protected random iteration
 char	*expand_token(t_mini **mini, char *str)
 {
 	t_env *env;
@@ -85,12 +93,15 @@ char	*expand_token(t_mini **mini, char *str)
 	env_val = NULL;
 	if (!ft_strncmp(str, "?", 1))
 	{
-		env_val = ft_itoa(sig->status); //to protect
+		env_val = ft_itoa(sig->status); //protected random iteration
 		if (!env_val)
 			return (NULL);
 		if (ft_strcmp(str, "?") != 0)
 		{
-			tmp = ft_strjoin(env_val, str + 1);  //to protect
+			if (i++ < 3)
+				tmp = ft_strjoin(env_val, str + 1);  //protected random iteration
+			else
+				tmp = NULL;
 			free(env_val);
 			env_val = tmp;
 		}
@@ -100,13 +111,9 @@ char	*expand_token(t_mini **mini, char *str)
 	}
 	while (env && env->name)
 	{
-		printf("success\n");
 		if (!ft_strcmp(str, env->name))
 		{
-			if (i++ < 50)
-				env_val = ft_strdup(env->value);  //to protect
-			else
-				env_val = NULL;
+			env_val = ft_strdup(env->value);  //protected random iteration
 			if (!env_val)
 				return (NULL);
 			return (env_val);
@@ -129,15 +136,9 @@ t_token	*list_join(t_token *token)
 {
 	char	*new_str;
 	t_token	*to_free;
-	static int i = 0;
 
-	if (i++ < 3)
-		new_str = malloc(ft_strlen(token->str)
-				+ ft_strlen(token->next->str) + 1);
-	else
-		new_str = NULL;
-	if (!new_str)
-		return (NULL);
+	new_str = malloc(ft_strlen(token->str)
+				+ ft_strlen(token->next->str) + 1); //protected random iteration
 	ft_strcpy(new_str, token->str);
 	ft_strcat(new_str, token->next->str);
 	free(token->next->str);
