@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:54:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 15:02:24 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 16:04:10 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,25 @@ void	fd_handler(t_mini *mini, t_cmd *cmd)
 	int	in;
 	int	out;
 
-	(void)mini;
 	if (cmd->in != NULL)
 	{
-		in = open(cmd->in, O_RDONLY);
-		dup2(in, STDIN_FILENO);
+		in = open(cmd->in, O_RDONLY); //protected
+		if (in == -1)
+			error_manager(mini, errno, NULL, cmd->in);
+		if (dup2(in, STDIN_FILENO) == -1)//protected
+			error_manager(mini, DUP, NULL, NULL);
 		close(in);
 	}
 	if (cmd->out != NULL)
 	{
 		if (cmd->append == 1)
-			out = open(cmd->out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			out = open(cmd->out, O_WRONLY | O_CREAT | O_APPEND, 0644);//protected
 		else
-			out = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		dup2(out, STDOUT_FILENO);
+			out = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);//protected
+		if (out == -1)
+			error_manager(mini, errno, NULL, cmd->out);
+		if (dup2(out, STDOUT_FILENO) == -1)//protected
+			error_manager(mini, DUP, NULL, NULL);
 		close(out);
 	}
 }

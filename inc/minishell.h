@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 17:20:13 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 15:35:37 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef enum e_error
 	QUOTE = 129,
 	INTERUPT = 130,
 	QUIT = 131,
+	DUP = 132,
 	PARSE = 2,
 	OPEN = 133,
 	READ = 134,

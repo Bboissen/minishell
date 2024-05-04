@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 16:12:14 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 16:02:49 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void	cmd_exec(t_mini *mini)
 	mini->cmd = mini->h_cmd;
 	initial_fds[0] = dup(STDIN_FILENO);
 	initial_fds[1] = dup(STDOUT_FILENO);
+	// if (initial_fds[0] == -1 || initial_fds[1]  == -1)
+	// 	error_manager(mini, DUP, NULL, NULL);
 	if (mini->cmd->builtin != NONE && cmd_size(mini->cmd) == 1)
 	{
 		fd_handler(mini, mini->cmd);

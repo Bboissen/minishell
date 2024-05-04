@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:51:27 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/03 15:49:03 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 15:35:01 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ int	error_manager(t_mini *mini, int err, char *fct, char *str)
 	if (mini && err == MALLOC)
 	{
 		ft_printfd(STDERR_FILENO, "%s: memory allocation failed\n", mini->name);
+		return (clean_exit(mini));
+	}
+	if (mini && err == DUP)
+	{
+		ft_printfd(STDERR_FILENO, "%s: duplication of fd failed\n", mini->name);
 		return (clean_exit(mini));
 	}
 	else if (fct)

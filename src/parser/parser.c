@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/03 15:00:48 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 15:42:58 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,12 @@ int	parser(t_mini *mini)
 static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 {
 	int	fd;
-	
+		
 	fd = -1;
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
 		if (access((*token)->next->str, R_OK) == -1)
-		{
-			// printf("access error\n");
 			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
-		}
 		else
 		{
 			if ((*cmd)->in)
@@ -99,7 +96,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	(*token) = (*token)->next->next;
 	return (0);
 }
-//protected random iteration
+//to protect
 static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 {
 	struct stat	st;
@@ -112,7 +109,7 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	}
 	(*cmd)->builtin = check_blt(cmd, (*token)->str, arg_flag);
 	if ((*cmd)->builtin == NONE && !ft_strchr((*token)->str, '/'))
-		path_finder(mini, cmd, (*token)->str);
+		path_finder(mini, cmd, (*token)->str); //to protect
 	else if (ft_strchr((*token)->str, '/'))
 		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
 	if ((*cmd)->args && (*cmd)->args[0])
@@ -146,7 +143,11 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 	if (skip == 0)
 		(*cmd)->in = NULL;
 	else
-		(*cmd)->in = ft_strdup("/dev/null");
+	{
+		(*cmd)->in = ft_strdup("/dev/null"); //protected random iteration
+		if (!(*cmd)->in)
+			return (free((*cmd)), error_manager(mini, MALLOC, NULL, NULL));
+	}
 	(*cmd)->out = NULL;
 	(*cmd)->fd[0] = -1;
 	(*cmd)->fd[1] = -1;
