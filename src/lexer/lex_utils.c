@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/03 14:09:12 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:39:49 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static char	*token_typer(t_type type[3], char *str);
 static void	new_token(t_mini *mini, char *str, t_type options[3]);
+static char	*home_handler(t_mini *mini, char *str);
 
 char	*syntax_check(t_mini *mini, char *str, int *quote)
 {
@@ -27,8 +28,10 @@ char	*syntax_check(t_mini *mini, char *str, int *quote)
 	// }
 	if (*quote != 0 || !*str || is_spechar(*str) != 2)
 		return (str);
-	if (((*str == '|' && (!mini->token || mini->token->type == PIPE)) || (mini->token && (mini->token->type == APPEND
-					|| mini->token->type == TRUNC || mini->token->type == INPUT
+	if (((*str == '|' && (!mini->token || mini->token->type == PIPE)) 
+					|| (mini->token && (mini->token->type == APPEND
+					|| mini->token->type == TRUNC
+					|| mini->token->type == INPUT
 					|| mini->token->type == HEREDOC))))
 	{
 		lexer_err(mini, NULL, PARSE, *str);
@@ -51,6 +54,8 @@ char	*string_handler(t_mini *mini, char *str, int *quote)
 		str++;
 	if (!str || !*str || *quote != 0 || is_spechar(*str) != 0)
 		return (str);
+	if (*str == '~')
+		return (home_handler(mini, str));
 	start = str;
 	while (*str && !ft_isspace(*str) && is_spechar(*str) == 0)
 		str++;
@@ -82,7 +87,7 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*quote == 0 && mini->token && is_spe_builtin(mini->token))
+	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
 		return(new_token(mini, "\0", options), str);
 	if (*quote == 0)
 		return (str);
@@ -117,7 +122,7 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	options[0] = STR;
 	options[1] = 0;
 	options[2] = 0;
-	if (*quote == 0 && mini->token && is_spe_builtin(mini->token))
+	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
 		return(new_token(mini, "\0", options), str);
 	else if (*quote == 0)
 		return (str);
@@ -221,7 +226,7 @@ static void	new_token(t_mini *mini, char *str, t_type options[3])
 	{
 		new_token->str = ft_strdup(str); //protected random iteration
 		if (!new_token->str)
-			return (free(new_token), lexer_err(mini, NULL, MALLOC, 0));
+			return (ft_memdel(new_token), lexer_err(mini, NULL, MALLOC, 0));
 	}
 	else
 		new_token->str = NULL;
@@ -241,4 +246,18 @@ static void	new_token(t_mini *mini, char *str, t_type options[3])
 		mini->token->next = new_token;
 		mini->token = mini->token->next;
 	}
+}
+
+static char	*home_handler(t_mini *mini, char *str)
+{
+	t_type	options[3];
+
+	options[0] = STR;
+	options[1] = 0;
+	options[2] = EXPAND;
+	str++;
+	if (*str && ((is_spechar(*str) == 1 || is_spe_expand(*str))))
+		options[1] = JOIN;
+	new_token(mini, "HOME", options);
+	return (str);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 17:53:43 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 19:32:56 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int			set_env(t_mini *mini, t_env **env, char *name, char *value);
 void		print_sorted_env(t_mini *mini);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
-t_token		*list_join(t_mini *mini, t_token *token);
+t_token		*list_join(t_token *token);
 
 /* Init */
 
@@ -164,14 +164,15 @@ void		increment_shell_level(t_mini **mini);
 void		sig_init(void);
 void		readline_setup(t_mini *mini, char **rl, char *str);
 void		reinit(t_mini **mini);
+void		sig_handler(int code);
 
 /* Exec */
 
+int			arg_exists(char **args, int index);
 void		cmd_exec(t_mini *mini);
 int			cmd_size(t_cmd *h_cmd);
 int			exec_builtin(t_mini *mini, t_cmd *cmd);
 void		fd_handler(t_mini *mini, t_cmd *cmd);
-int			arg_exists(char **args, int index);
 int			set_fd(t_cmd *cmd);
 
 /* Stds & fds */
@@ -181,16 +182,12 @@ void		delete_heredoc(t_mini *mini);
 
 /* Free */
 
-void		free_token(t_token **token);
-void		free_env(t_env *env);
-void		free_tab(char **tab);
-void		free_cmd(t_cmd **cmd);
 int			clean_exit(t_mini *mini);
 void		clean_export(t_env *new, char *name, char *value, int flag);
-
-/* Signals */
-
-void		sig_handler(int code);
+void		free_cmd(t_cmd **cmd);
+void		free_env(t_env *env);
+void		free_tab(char **tab);
+void		free_token(t_token **token);
 
 /* Errors */
 int			error_manager(t_mini *mini, int err, char *fct, char *str);

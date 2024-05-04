@@ -3,105 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 18:07:08 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 19:42:59 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Calculates the size of the environment list.
- * 
- * @param {t_env*} env_lst - The environment list.
- * @return {size_t} - Returns the number of nodes in the list.
- */
-static size_t	size_env_tab(t_env *env_lst)
-{
-	size_t	lst_len;
-
-	lst_len = 0;
-	while (env_lst)
-	{
-		lst_len++;
-		env_lst = env_lst->next;
-	}
-	return (lst_len);
-}
+static int		env_cpy(char **env_array, t_env **env, int *i);
+static size_t	size_env_tab(t_env *env_lst);
+static char		*append_name_value(t_env *env_lst, int i, int j, int k);
 
 /**
- * Appends the name and value of an environment variable into a string.
+ * Initializes the environment linked list from an 
+ * array of environment variables.
  * 
- * @param {t_env*} env_lst - The node of the environment list.
- * @return {char*} - Returns a string with the format "name=value".
+ * @param mini The mini structure.
+ * @param env_array The array of environment variables.
+ * @return {int} - Returns ERROR if memory allocation fails, 
+ * otherwise returns SUCCESS.
  */
-static char	*append_name_value(t_env *env_lst, int i, int j, int k)
+int	init_env(t_mini **mini, char **env_array)
 {
-	char	*env_str;
-	size_t	size;
-
-	size = ft_strlen(env_lst->name) + 1;
-	if (env_lst->value)
-		size += ft_strlen(env_lst->value) + 1;
-	env_str = malloc(sizeof(char) * size);
-	if (!env_str)
-		return (NULL);
-	if (env_lst->name)
-	{
-		while (env_lst->name[++j])
-			env_str[++i] = env_lst->name[j];
-	}
-	if (env_lst->value)
-	{
-		env_str[++i] = '=';
-		while (env_lst->value[++k])
-			env_str[++i] = env_lst->value[k];
-	}
-	env_str[++i] = '\0';
-	return (env_str);
-}
-
-/**
- * Converts the environment list into an array of strings.
- * 
- * @param {t_env*} env - The environment list.
- * @return {char**} - Returns an array of strings, each string 
- * being a name-value pair from the environment list.
- */
-char	**env_to_tab(t_mini *mini)
-{
-	t_env	*tmp;
-	char	**tab;
-	int		size;
+	t_env	*env;
+	t_env	*prev;
 	int		i;
 
-	if (!mini->h_env)
-		return (NULL);
-	size = size_env_tab(mini->h_env);
-	tab = malloc(sizeof(char *) * (size + 1));
-	if (!tab)
-		return (NULL);
-	tmp = mini->h_env;
-	i = 0;
-	while (tmp)
+	env = NULL;
+	prev = NULL;
+	i = -1;
+	while (env_array && env_array[++i])
 	{
-		tab[i++] = append_name_value(tmp, -1, -1, -1);
-		tmp = tmp->next;
+		if (env_cpy(env_array, &env, &i))
+			return (error_manager(*mini, MALLOC, NULL, NULL));
+		if (prev)
+			prev->next = env;
+		else
+		{
+			(*mini)->env = env;
+			(*mini)->h_env = (*mini)->env;
+		}
+		prev = env;
 	}
-	tab[i] = NULL;
-	mini->env = mini->h_env;
-	return (tab);
+	return (SUCCESS);
 }
 
 /**
  * Copies an environment variable from an array to a linked list.
  * 
- * @param {t_mini*} mini - The mini structure.
- * @param {char**} env_array - The array of environment variables.
- * @param {t_env*} env - The current node in the environment linked list.
- * @param {int} i - The index of the environment variable in the array.
+ * @param mini The mini structure.
+ * @param env_array The array of environment variables.
+ * @param env The current node in the environment linked list.
+ * @param i The index of the environment variable in the array.
  * @return {int} - Returns ERROR if memory allocation fails, 
  * otherwise returns SUCCESS.
  */
@@ -134,35 +89,84 @@ static int	env_cpy(char **env_array, t_env **env, int *i)
 }
 
 /**
- * Initializes the environment linked list from an 
- * array of environment variables.
+ * Converts the environment list into an array of strings.
  * 
- * @param {t_mini*} mini - The mini structure.
- * @param {char**} env_array - The array of environment variables.
- * @return {int} - Returns ERROR if memory allocation fails, 
- * otherwise returns SUCCESS.
+ * @param env The environment list.
+ * @return {char **} - Returns an array of strings, each string 
+ * being a name-value pair from the environment list.
  */
-int	init_env(t_mini **mini, char **env_array)
+char	**env_to_tab(t_mini *mini)
 {
-	t_env	*env;
-	t_env	*prev;
+	t_env	*tmp;
+	char	**tab;
+	int		size;
 	int		i;
 
-	env = NULL;
-	prev = NULL;
-	i = -1;
-	while (env_array && env_array[++i])
+	if (!mini->h_env)
+		return (NULL);
+	size = size_env_tab(mini->h_env);
+	tab = malloc(sizeof(char *) * (size + 1));
+	if (!tab)
+		return (NULL);
+	tmp = mini->h_env;
+	i = 0;
+	while (tmp)
 	{
-		if (env_cpy(env_array, &env, &i))
-			return (error_manager(*mini, MALLOC, NULL, NULL));
-		if (prev)
-			prev->next = env;
-		else
-		{
-			(*mini)->env = env;
-			(*mini)->h_env = (*mini)->env;
-		}
-		prev = env;
+		tab[i++] = append_name_value(tmp, -1, -1, -1);
+		tmp = tmp->next;
 	}
-	return (SUCCESS);
+	tab[i] = NULL;
+	mini->env = mini->h_env;
+	return (tab);
+}
+
+/**
+ * Calculates the size of the environment list.
+ * 
+ * @param env_lst The environment list.
+ * @return {size_t} - Returns the number of nodes in the list.
+ */
+static size_t	size_env_tab(t_env *env_lst)
+{
+	size_t	lst_len;
+
+	lst_len = 0;
+	while (env_lst)
+	{
+		lst_len++;
+		env_lst = env_lst->next;
+	}
+	return (lst_len);
+}
+
+/**
+ * Appends the name and value of an environment variable into a string.
+ * 
+ * @param env_lst The node of the environment list.
+ * @return {char *} - Returns a string with the format "name=value".
+ */
+static char	*append_name_value(t_env *env_lst, int i, int j, int k)
+{
+	char	*env_str;
+	size_t	size;
+
+	size = ft_strlen(env_lst->name) + 1;
+	if (env_lst->value)
+		size += ft_strlen(env_lst->value) + 1;
+	env_str = malloc(sizeof(char) * size);
+	if (!env_str)
+		return (NULL);
+	if (env_lst->name)
+	{
+		while (env_lst->name[++j])
+			env_str[++i] = env_lst->name[j];
+	}
+	if (env_lst->value)
+	{
+		env_str[++i] = '=';
+		while (env_lst->value[++k])
+			env_str[++i] = env_lst->value[k];
+	}
+	env_str[++i] = '\0';
+	return (env_str);
 }

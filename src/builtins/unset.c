@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:13:52 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 17:49:03 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 20:59:06 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static t_env	*unset_env_var(t_mini *mini, char *args,
+					t_env *curr, t_env *prev);
 static void		free_node(t_mini *mini, t_env *env);
 static size_t	env_size(char *env);
 
@@ -27,6 +29,7 @@ int	mini_unset(t_mini *mini, t_cmd *cmd)
 	char	**args;
 	t_env	*prev;
 	t_env	*curr;
+	t_env	*next;
 	int		i;
 
 	args = cmd->args;
@@ -37,21 +40,40 @@ int	mini_unset(t_mini *mini, t_cmd *cmd)
 		curr = mini->h_env;
 		while (curr)
 		{
-			if (!ft_strncmp(args[i], curr->name, env_size(curr->name)))
-			{
-				if (prev == NULL)
-					mini->h_env = curr->next;
-				else
-					prev->next = curr->next;
-				free_node(mini, curr);
-				break ;
-			}
-			prev = curr;
-			curr = curr->next;
+			next = unset_env_var(mini, args[i], curr, prev);
+			if (next != curr)
+				prev = curr;
+			curr = next;
 		}
 		i++;
 	}
 	return (SUCCESS);
+}
+
+/**
+ * @brief Unsets an environment variable.
+ *
+ * @param mini Pointer to the t_mini structure, 
+ * which contains the head of the environment variables list.
+ * @param args The name of the environment variable to be unset.
+ * @param curr Pointer to the current node in the environment variables list.
+ * @param prev Pointer to the previous node in the environment variables list.
+ */
+static t_env	*unset_env_var(t_mini *mini, char *args,
+			t_env *curr, t_env *prev)
+{
+	t_env	*next;
+
+	next = curr->next;
+	if (!ft_strncmp(args, curr->name, env_size(curr->name)))
+	{
+		if (prev == NULL)
+			mini->h_env = next;
+		else
+			prev->next = next;
+		free_node(mini, curr);
+	}
+	return (next);
 }
 
 /**

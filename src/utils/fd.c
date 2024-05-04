@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 18:07:29 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 19:47:05 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,15 @@ void	delete_heredoc(t_mini *mini)
 }
 
 /**
- * @brief Calculate the size of the command.
+ * @brief Sets the file descriptor for the command.
  * 
- * @param h_cmd The head of the command list.
- * @return {int} - The size of the command list.
+ * @param cmd A pointer to the command structure.
+ * @return {int} - The file descriptor to be used for the command.
  */
-int	cmd_size(t_cmd *h_cmd)
+int	set_fd(t_cmd *cmd)
 {
-	t_cmd	*tmp;
-	int		i;
-
-	tmp = h_cmd;
-	i = 0;
-	while (tmp)
-	{
-		tmp = tmp->next;
-		i++;
-	}
-	return (i);
+	if (cmd->fd[1] != -1)
+		return (cmd->fd[1]);
+	else
+		return (STDOUT_FILENO);
 }

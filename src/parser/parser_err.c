@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:03:28 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/02 10:22:55 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:41:02 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	parser_err(t_mini *mini, char *str, int err)
 
 	sig = get_sig();
 	sig->status = 1;
-	// printf("err = %d\n", err);
 	if (err == DIRECTORY)
 	{
 		sig->status = DIRECTORY;

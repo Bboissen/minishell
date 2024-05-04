@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/03 14:38:14 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 11:16:20 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static int	odd_quote(char *str);
 
-//protected random iteration
 void	lexer(t_mini *mini)
 {
 	int		quote;
@@ -89,12 +88,14 @@ int	is_spe_expand(char c)
 
 int	is_spe_builtin(t_token *token)
 {
-	char	*str;
-
+	char 	*str;
+	
 	while (token && token->type != PIPE)
 	{
 		str = token->str;
-		if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0 || ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0 || ft_strcmp(str, "ls") == 0)
+		if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0
+			|| ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0
+			|| ft_strcmp(str, "ls") == 0)
 			return (1);
 		token = token->prev;
 	}
