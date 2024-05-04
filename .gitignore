@@ -1,0 +1,6 @@
+obj/
+minishell
+valgrind_ignore_leaks.txt
+.vscode
+libft/libft.a
+libft/obj/
