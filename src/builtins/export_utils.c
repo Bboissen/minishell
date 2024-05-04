@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 11:16:09 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/04 14:34:42 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 16:49:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_env_name(char *dest, const char *src)
 	int	i;
 
 	i = 0;
-	while (src[i] && src[i] != '=' && ft_strlen(src) < BUFF_SIZE)
+	while (src[i] && src[i] != '=' && ft_strlen(src) < BUFF_SIZE - 1)
 	{
 		dest[i] = src[i];
 		i++;
@@ -79,4 +79,20 @@ int	is_valid_env(const char *name)
 		i++;
 	}
 	return (TRUE);
+}
+
+/**
+ * @brief Cleans up memory allocated for an exported environment variable.
+ *
+ * @param new A pointer to the new environment variable to be cleaned up.
+ * @param name A pointer to the name of the environment variable.
+ * @param value A pointer to the value of the environment variable.
+ */
+void	clean_export(t_env *new, char *name, char *value, int flag)
+{
+	ft_memdel(name);
+	ft_memdel(value);
+	if (flag)
+		ft_memdel(new->name);
+	ft_memdel(new);
 }

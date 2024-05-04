@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_err.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/04 12:00:09 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 16:35:18 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
  * @param mini Pointer to the mini shell structure.
  * @param error The error code.
  * @param arg The argument that caused the error.
- * @return int Returns the status of the error handling.
+ * @return {int} - Returns the status of the error handling.
  */
-int	export_err(t_mini *mini, int error, char *arg)
+void	export_err(t_mini *mini, int error, char *arg)
 {
 	t_sig	*sig;
 
@@ -29,7 +29,6 @@ int	export_err(t_mini *mini, int error, char *arg)
 	sig->status = 1;
 	ft_printfd(STDERR_FILENO, "%s: `%s': \
 not a valid identifier\n", mini->name, arg);
-	return (sig->status);
 }
 
 /**

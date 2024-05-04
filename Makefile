@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
+#    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/05/04 11:52:46 by talibabtou       ###   ########.fr        #
+#    Updated: 2024/05/04 16:31:33 by gdumas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,8 +49,8 @@ ERROR		=	builtin_err		\
 EXEC		=	exec_utils		\
 				executer
 				
-UTILS		=	fd				\
-				free			\
+UTILS		=	clean_exit		\
+				fd				\
 				signal
 
 MAIN		=	minishell

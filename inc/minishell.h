@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 14:30:10 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 16:39:58 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int			is_valid_env(const char *name);
 char		*get_env_name(char *dest, const char *src);
 void		get_env_value(t_mini *mini, char **value, char *arg, char *name);
 char		*return_env_value(t_mini *mini, char *name);
-int			set_env(t_env **env, char *name, char *value);
+int			set_env(t_mini *mini, t_env **env, char *name, char *value);
 void		print_sorted_env(t_mini *mini);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
@@ -186,6 +186,7 @@ void		free_env(t_env *env);
 void		free_tab(char **tab);
 void		free_cmd(t_cmd **cmd);
 int			clean_exit(t_mini *mini);
+void		clean_export(t_env *new, char *name, char *value, int flag);
 
 /* Signals */
 
@@ -193,7 +194,7 @@ void		sig_handler(int code);
 
 /* Errors */
 int			error_manager(t_mini *mini, int err, char *fct, char *str);
-int			export_err(t_mini *mini, int error, char *arg);
+void			export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 void		exit_err(t_mini *mini, int error, char *arg);
 
