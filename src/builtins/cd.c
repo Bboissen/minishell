@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 20:40:55 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 23:06:00 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,20 @@ int	mini_cd(t_mini *mini, t_cmd *cmd)
 
 	args = cmd->args;
 	home = return_env_value(mini, "HOME");
-	if (!home)
-		return (cd_err(mini, MISSING, "HOME"), ERROR);
 	if (arg_exists(args, 1) && !ft_strequ(args[0], "--"))
 		return (cd_err(mini, ERROR, NULL), ERROR);
 	else if (arg_exists(args, 1) && ft_strequ(args[0], "--"))
 		args++;
-	if (args && args[0] && args[0][0] == '\0')
+	if (arg_exists(args, 0) && args[0][0] == '\0')
 		return (SUCCESS);
 	if (args && args[0][0] == '-' && !args[0][1])
 		return (backward_dir(mini));
-	return (change(mini, args[0]));
+	if (arg_exists(args, 0))
+		return (change(mini, args[0]));
+	if (!home)
+		return (cd_err(mini, MISSING, "HOME"), ERROR);
+	else
+		return (change(mini, home));
 }
 
 /**
