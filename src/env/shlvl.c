@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shlvl.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 15:30:22 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 23:17:04 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,11 @@ void	increment_shell_level(t_mini **mini)
 	int		shell_level;
 
 	shell_level_value = expand_token(mini, "SHLVL");
+	if (!shell_level_value)
+		error_manager(*mini, MALLOC, NULL, NULL);
 	shell_level = get_lvl(shell_level_value) + 1;
-	ft_memdel(shell_level_value);
+	if (shell_level_value)
+		ft_memdel(shell_level_value);
 	while ((*mini)->env && (*mini)->env->name)
 	{
 		update_shell_level(mini, shell_level);

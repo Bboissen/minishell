@@ -6,16 +6,16 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 20:05:42 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 23:31:20 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		waitfor_commands(t_mini *mini, t_sig *sig, int *initial_fds);
-static void		piper(t_mini *mini, t_cmd *cmd, int *initial_fds);
-static pid_t	exec(t_mini *mini, t_cmd *cmd, int *initial_fds);
-static void		exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds);
+static void		waitfor_commands(t_mini *mini, t_sig *sig);
+static void		piper(t_mini *mini, t_cmd *cmd);
+static pid_t	exec(t_mini *mini, t_cmd *cmd);
+static void		exec_child(t_mini *mini, t_cmd *cmd);
 
 /**
  * @brief Executes the commands.
@@ -25,21 +25,20 @@ static void		exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds);
 void	cmd_exec(t_mini *mini)
 {
 	t_sig	*sig;
-	int		initial_fds[2];
 
 	sig = get_sig();
 	sig->working = TRUE;
 	mini->cmd = mini->h_cmd;
-	initial_fds[0] = dup(STDIN_FILENO);
-	initial_fds[1] = dup(STDOUT_FILENO);
+	mini->initial_fds[0] = dup(STDIN_FILENO);
+	mini->initial_fds[1] = dup(STDOUT_FILENO);
 	if (mini->cmd->builtin != NONE && cmd_size(mini->cmd) == 1)
 	{
 		fd_handler(mini, mini->cmd);
 		exec_builtin(mini, mini->cmd);
 	}
 	else
-		piper(mini, mini->cmd, initial_fds);
-	waitfor_commands(mini, sig, initial_fds);
+		piper(mini, mini->cmd);
+	waitfor_commands(mini, sig);
 	sig->working = FALSE;
 }
 
@@ -50,7 +49,7 @@ void	cmd_exec(t_mini *mini)
  * @param sig Pointer to the signal structure.
  * @param initial_fds Array of initial file descriptors.
  */
-static void	waitfor_commands(t_mini *mini, t_sig *sig, int *initial_fds)
+static void	waitfor_commands(t_mini *mini, t_sig *sig)
 {
 	int	status;
 
@@ -65,9 +64,9 @@ static void	waitfor_commands(t_mini *mini, t_sig *sig, int *initial_fds)
 		close_fds(mini->cmd->fd);
 		mini->cmd = mini->cmd->next;
 	}
-	dup2(initial_fds[0], STDIN_FILENO);
-	dup2(initial_fds[1], STDOUT_FILENO);
-	close_fds(initial_fds);
+	dup2(mini->initial_fds[0], STDIN_FILENO);
+	dup2(mini->initial_fds[1], STDOUT_FILENO);
+	close_fds(mini->initial_fds);
 }
 
 /**
@@ -77,7 +76,7 @@ static void	waitfor_commands(t_mini *mini, t_sig *sig, int *initial_fds)
  * @param cmd Pointer to the command structure.
  * @param initial_fds Array of initial file descriptors.
  */
-static void	piper(t_mini *mini, t_cmd *cmd, int *initial_fds)
+static void	piper(t_mini *mini, t_cmd *cmd)
 {
 	int		pipefd[2];
 
@@ -88,14 +87,14 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *initial_fds)
 			error_manager(mini, errno, "pipe", NULL);
 		cmd->fd[0] = pipefd[0];
 		cmd->fd[1] = pipefd[1];
-		cmd->pid = exec(mini, cmd, initial_fds);
+		cmd->pid = exec(mini, cmd);
 		cmd = cmd->next;
 	}
 	fd_handler(mini, cmd);
-	cmd->fd[0] = initial_fds[0];
+	cmd->fd[0] = mini->initial_fds[0];
 	if (!cmd->out)
-		dup2(initial_fds[1], STDOUT_FILENO);
-	cmd->pid = exec(mini, cmd, initial_fds);
+		dup2(mini->initial_fds[1], STDOUT_FILENO);
+	cmd->pid = exec(mini, cmd);
 }
 
 /**
@@ -106,13 +105,13 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *initial_fds)
  * @param initial_fds Array of initial file descriptors.
  * @return {pid_t} - Returns the process ID of the executed command.
  */
-static pid_t	exec(t_mini *mini, t_cmd *cmd, int *initial_fds)
+static pid_t	exec(t_mini *mini, t_cmd *cmd)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)
-		exec_child(mini, cmd, initial_fds);
+		exec_child(mini, cmd);
 	else if (pid > 0)
 	{
 		if (cmd->fd[0] != -1)
@@ -131,12 +130,12 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd, int *initial_fds)
  * @param cmd Pointer to the command structure.
  * @param initial_fds Array of initial file descriptors.
  */
-static void	exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds)
+static void	exec_child(t_mini *mini, t_cmd *cmd)
 {
 	if (!cmd->out)
 		dup2(cmd->fd[1], STDOUT_FILENO);
 	close_fds(cmd->fd);
-	close_fds(initial_fds);
+	close_fds(mini->initial_fds);
 	if (cmd->builtin == NONE)
 		execve(cmd->args[0], cmd->args, env_to_tab(mini));
 	else

@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 11:22:29 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 23:28:27 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	clean_exit(t_mini *mini)
 	mini->env = mini->h_env;
 	mini->token = mini->h_token;
 	mini->cmd = mini->h_cmd;
+	close_fds(mini->initial_fds);
 	if (mini->token)
 		free_token(&(mini->token));
 	if (mini->cmd)

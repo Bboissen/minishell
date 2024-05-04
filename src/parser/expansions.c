@@ -20,6 +20,7 @@
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
+	t_token	*tmp_token;
 
 	(*mini)->token = (*mini)->h_token;
 	while ((*mini)->token)
@@ -44,14 +45,21 @@ void	expand_join(t_mini **mini)
 					free_token(&(*mini)->h_token);
 				else
 				{
+					tmp_token = (*mini)->token;
 					if ((*mini)->token->prev)
+					{
 						(*mini)->token->prev->next = (*mini)->token->next;
+						(*mini)->token = (*mini)->token->prev;
+					}
 					else
+					{
 						(*mini)->h_token = (*mini)->token->next;
+						(*mini)->token = (*mini)->h_token;
+					}
 					if ((*mini)->token->next)
 						(*mini)->token->next->prev = (*mini)->token->prev;
-					free((*mini)->token->str);
-					free((*mini)->token);
+					free(tmp_token->str);
+					free(tmp_token);
 				}
 			}
 		}
@@ -86,7 +94,6 @@ char	*expand_token(t_mini **mini, char *str)
 	char	*env_val;
 	char 	*tmp;
 	t_sig	*sig;
-	static int i = 0;
 
 	sig = get_sig();
 	env = (*mini)->h_env;
@@ -98,10 +105,7 @@ char	*expand_token(t_mini **mini, char *str)
 			return (NULL);
 		if (ft_strcmp(str, "?") != 0)
 		{
-			if (i++ < 3)
-				tmp = ft_strjoin(env_val, str + 1);  //protected random iteration
-			else
-				tmp = NULL;
+			tmp = ft_strjoin(env_val, str + 1);  //protected random iteration
 			free(env_val);
 			env_val = tmp;
 		}

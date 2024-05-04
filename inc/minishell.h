@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 19:32:56 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 23:26:37 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ typedef struct s_mini
 {
 	char			*name;
 	char			*rl;
+	int				initial_fds[2];
 	t_token			*h_token;
 	t_token			*token;
 	t_env			*h_env;

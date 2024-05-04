@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 23:06:00 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 23:33:25 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ static int	change(t_mini *mini, char *path)
 	char	*new_pwd;
 
 	old_pwd = ft_strdup(return_env_value(mini, "PWD"));
+	if (!old_pwd)
+		return (error_manager(mini, MALLOC, NULL, NULL), ERROR);
 	if (chdir(path) == 0)
 	{
 		new_pwd = getcwd(NULL, 0);
