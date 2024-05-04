@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/04 16:35:18 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 18:20:36 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ void	cd_err(t_mini *mini, int err, char *arg)
 	if (err == errno)
 		ft_printfd(STDERR_FILENO, "%s: %s: %s\n",
 			mini->name, arg, strerror(err));
-	if (err == ERROR)
+	else if (err == ERROR)
 		ft_printfd(STDERR_FILENO, "%s: cd: \
 too many arguments\n", mini->name);
 	else if (err == MISSING)
 		ft_printfd(STDERR_FILENO, "%s: cd: \
-$HOME not set\n", mini->name);
+%s not set\n", mini->name, arg);
 	else if (err == DIRECTORY)
 		ft_printfd(STDERR_FILENO, "cd: error retrieving current directory: \
 getcwd: cannot access parent directories: No such file or directory\n");

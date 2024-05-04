@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 16:32:20 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 18:07:29 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	delete_heredoc(t_mini *mini)
 		{
 			if (unlink(current->next->str) == -1)
 			{
-				// perror
+				error_manager(mini, errno, "unlink", current->next->str);
 				current = current->next;
 			}
 		}

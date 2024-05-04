@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 17:49:44 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 18:19:45 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	change(t_mini *mini, char *path)
 	}
 	else
 		ft_memdel(old_pwd);
-	return (cd_err(mini, DIRECTORY, path), ERROR);
+	return (cd_err(mini, errno, path), ERROR);
 }
 
 /**

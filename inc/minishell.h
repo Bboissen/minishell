@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 16:39:58 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 17:53:43 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ void		sig_handler(int code);
 
 /* Errors */
 int			error_manager(t_mini *mini, int err, char *fct, char *str);
-void			export_err(t_mini *mini, int error, char *arg);
+void		export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 void		exit_err(t_mini *mini, int error, char *arg);
 
