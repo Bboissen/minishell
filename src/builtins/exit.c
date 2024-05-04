@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 14:52:43 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 18:09:48 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	mini_exit(t_mini *mini, t_cmd *cmd)
 		if (validate_numeric_argument(mini, cmd, overflow) == ERROR
 			|| narg > INT_MAX || narg < INT_MIN)
 		{
-			sig->status = narg;
 			sig->exit = TRUE;
 			return (sig->status);
 		}

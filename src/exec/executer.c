@@ -14,9 +14,6 @@
 
 static void	exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds)
 {
-	t_sig	*sig;
-
-	sig = get_sig();
 	if (!cmd->out)
 		dup2(cmd->fd[1], STDOUT_FILENO);
 	close_fds(cmd->fd);

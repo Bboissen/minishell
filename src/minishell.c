@@ -34,7 +34,8 @@ int	main(int ac, char **av, char **env)
 	t_mini	*mini;
 	t_sig	*sig;
 	int		err;
-	// int		i;
+	int		i;
+	static int k = 0;
 
 	if (ac != 1)
 		return (ERROR);
@@ -45,44 +46,44 @@ int	main(int ac, char **av, char **env)
 		err = 0;
 		readline_setup(mini, &(mini->rl), mini->name); //protected
 		lexer(mini); //protected
-		// mini->token = mini->h_token;
-		// printf( "\n------------------------------------------\n");
-		// printf("|type\t|%-20s|join|expand|\n", "string");
-		// printf("------------------------------------------\n");
-		// while (mini->token)
-		// {
-		// 	printf("|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
-		// 	mini->token = mini->token->next;
-		// }
-		// mini->token = mini->h_token;
+		mini->token = mini->h_token;
+		printf( "\n------------------------------------------\n");
+		printf("|type\t|%-20s|join|expand|\n", "string");
+		printf("------------------------------------------\n");
+		while (mini->token)
+		{
+			printf("|%d\t|%-20s|%-4d|%d|\n", mini->token->type, mini->token->str, mini->token->join, mini->token->expand);
+			mini->token = mini->token->next;
+		}
+		mini->token = mini->h_token;
 		if (mini->token)
 			heredoc(mini); //protected random iteration
 		if (mini->token)
 			expand_join(&mini); //protected random iteration
 		if (mini->h_token)
 			err = parser(mini); //protected random iteration
-		// printf("\n-----------------------------------------------\n");
-		// printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
-		// printf("-----------------------------------------------\n");
-		// mini->cmd = mini->h_cmd;
-		// while (mini->cmd)
-		// {
-		// 	i = 0;
-		// 	if (mini->cmd->args)
-		// 	{
-		// 		while(mini->cmd->args[i])
-		// 			printf("|%s", mini->cmd->args[i++]);
-		// 		printf("%-5s ", " ");
-		// 	}
-		// 	else
-		// 		printf("|%-10s\t|", "NULL");
-		// 	printf("|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
-		// 	mini->cmd = mini->cmd->next;
-		// }
-		// ft_printfd(1,"\n\n");
+		printf("\n-----------------------------------------------\n");
+		printf("|%-20s\t|builtin|%-10s|%-10s|\n", "cmd", "infile", "outfile");
+		printf("-----------------------------------------------\n");
+		mini->cmd = mini->h_cmd;
+		while (mini->cmd)
+		{
+			i = 0;
+			if (mini->cmd->args)
+			{
+				while(mini->cmd->args[i])
+					printf("|%s", mini->cmd->args[i++]);
+				printf("%-5s ", " ");
+			}
+			else
+				printf("|%-10s\t|", "NULL");
+			printf("|%-7d|%-10s|%-10s|\n", mini->cmd->builtin, mini->cmd->in, mini->cmd->out);
+			mini->cmd = mini->cmd->next;
+		}
+		ft_printfd(1,"\n\n");
 		mini->cmd = mini->h_cmd;
 		mini->env = mini->h_env;
-		if (mini->cmd && (mini->cmd->builtin != NONE || mini->cmd->args))
+		if (k++ < 1 && mini->cmd && (mini->cmd->builtin != NONE || mini->cmd->args))
 			cmd_exec(mini);
 		if (err != 0)
 			get_sig()->status = err;

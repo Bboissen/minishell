@@ -114,8 +114,6 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
 	if ((*cmd)->args && (*cmd)->args[0])
 		stat((*cmd)->args[0], &st);
-	// printf("%p\n", (*cmd)->args);
-	// getchar();
 	if ((*cmd)->builtin != NONE || ((*cmd)->args && !S_ISDIR(st.st_mode) && access((*cmd)->args[0], X_OK) == 0))
 		(*arg_flag)++;
 	else if ((*cmd)->args && access((*cmd)->args[0], F_OK) == -1)
