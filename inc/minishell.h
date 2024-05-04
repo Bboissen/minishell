@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 15:35:37 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 18:00:18 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,16 @@ int			mini_unset(t_mini *mini, t_cmd *cmd);
 
 t_sig		*get_sig(void);
 char		**env_to_tab(t_mini *mini);
-char		*get_env_value(t_mini *mini, char *name);
-int			set_env(t_env **env, char *name, char *value);
+void		get_env_value(t_mini *mini, char **value, char *name, char *arg);
+void		clean_export(t_env *new, char *name, char *value, int flag);
+char		*return_env_value(t_mini *mini, char *name);
+int			set_env(t_mini *mini, t_env **env, char *name, char *value);
 void		print_sorted_env(t_mini *mini);
 void		expand_join(t_mini **mini);
 char		*expand_token(t_mini **mini, char *str);
 t_token		*list_join(t_token *token);
+char		*get_env_name(char *dest, const char *src);
+int			is_valid_env(const char *name);
 
 /* Init */
 
@@ -170,6 +174,7 @@ int			cmd_size(t_cmd *h_cmd);
 int			exec_builtin(t_mini *mini, t_cmd *cmd);
 void		fd_handler(t_mini *mini, t_cmd *cmd);
 int			arg_exists(char **args, int index);
+int			set_fd(t_cmd *cmd);
 
 /* Stds & fds */
 
@@ -190,8 +195,9 @@ void		sig_handler(int code);
 
 /* Errors */
 int			error_manager(t_mini *mini, int err, char *fct, char *str);
-int			export_err(t_mini *mini, int error, char *arg);
+void		export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
+void		exit_err(t_mini *mini, int error, char *arg);
 
 // lexer
 void		lexer(t_mini *mini);

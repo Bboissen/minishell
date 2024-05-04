@@ -3,16 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_err.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/02 12:56:59 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 16:35:18 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	export_err(t_mini *mini, int error, char *arg)
+/**
+ * @brief Handles errors for the export command.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param error The error code.
+ * @param arg The argument that caused the error.
+ * @return {int} - Returns the status of the error handling.
+ */
+void	export_err(t_mini *mini, int error, char *arg)
 {
 	t_sig	*sig;
 
@@ -21,52 +29,54 @@ int	export_err(t_mini *mini, int error, char *arg)
 	sig->status = 1;
 	ft_printfd(STDERR_FILENO, "%s: `%s': \
 not a valid identifier\n", mini->name, arg);
-	return (sig->status);
 }
 
-static void	cd_err_next(t_mini *mini, int err, char *arg)
+/**
+ * @brief Handles errors for the cd command.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param err The error code.
+ * @param arg The argument that caused the error.
+ */
+void	cd_err(t_mini *mini, int err, char *arg)
 {
-	t_sig	*sig;
-
-	sig = get_sig();
-	sig->status = err;
+	get_sig()->status = err;
+	if (err == errno)
+		ft_printfd(STDERR_FILENO, "%s: %s: %s\n",
+			mini->name, arg, strerror(err));
 	if (err == ERROR)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-too many arguments\n", mini->name, arg);
+		ft_printfd(STDERR_FILENO, "%s: cd: \
+too many arguments\n", mini->name);
 	else if (err == MISSING)
 		ft_printfd(STDERR_FILENO, "%s: cd: \
-%d not set\n\n", mini->name, arg);
+$HOME not set\n", mini->name);
+	else if (err == DIRECTORY)
+		ft_printfd(STDERR_FILENO, "cd: error retrieving current directory: \
+getcwd: cannot access parent directories: No such file or directory\n");
 	else
 		error_manager(mini, MALLOC, NULL, NULL);
 }
 
-void	cd_err(t_mini *mini, int err, char *arg)
+/**
+ * @brief Handles errors for the exit command.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param error The error code.
+ * @param arg The argument that caused the error.
+ */
+void	exit_err(t_mini *mini, int error, char *arg)
 {
-	t_sig	*sig;
-
-	sig = get_sig();
-	sig->status = err;
-	if (err == EACCES)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-Permission denied\n", mini->name, arg);
-	else if (err == EIO)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-Input/output error\n", mini->name, arg);
-	else if (err == ELOOP)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-Too many symbolic links encountered\n", mini->name, arg);
-	else if (err == ENAMETOOLONG)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-Path is too long\n", mini->name, arg);
-	else if (err == ENOENT)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-No such file or directory\n", mini->name, arg);
-	else if (err == ENOTDIR)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-Not a directory\n", mini->name, arg);
-	else if (err == EFAULT)
-		ft_printfd(STDERR_FILENO, "%s: cd: %s: \
-Bad address\n", mini->name, arg);
-	else
-		cd_err_next(mini, err, arg);
+	if (error == SYNTAX)
+	{
+		ft_printfd(STDERR_FILENO,
+			"%s: exit: %s: numeric argument required\n",
+			mini->name, arg);
+		get_sig()->status = SYNTAX;
+	}
+	if (error == ERROR)
+	{
+		ft_printfd(STDERR_FILENO,
+			"%s: exit: too many arguments\n", mini->name);
+		get_sig()->status = ERROR;
+	}
 }

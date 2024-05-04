@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:09:58 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 13:46:52 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 11:45:22 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 /**
  * @brief Print the current working directory.
  * 
- * @return {int} - Returns SUCCESS if the current working directory was 
- * printed successfully, ERROR otherwise.
+ * @return {int} - Returns SUCCESS if the current working directory
+ * was printed successfully, ERROR otherwise.
  */
 int	mini_pwd(t_mini *mini, t_cmd *cmd)
 {

@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 15:40:32 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 18:01:31 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,7 @@
  * @return {int} - Returns the status of the shell execution.
  */
 
-//history to fix
-// ~/Desktop
 // issue in heredoc when SIGINT and go back to heredoc
-// should not expand in heredoc if delimiter
 // echo'dsfas'$PATH'sdfsdf' conditional jump
 
 int	main(int ac, char **av, char **env)
@@ -83,8 +80,8 @@ int	main(int ac, char **av, char **env)
 		// 	mini->cmd = mini->cmd->next;
 		// }
 		// ft_printfd(1,"\n\n");
-		// mini->cmd = mini->h_cmd;
-		// mini->env = mini->h_env;
+		mini->cmd = mini->h_cmd;
+		mini->env = mini->h_env;
 		if (mini->cmd && (mini->cmd->builtin != NONE || mini->cmd->args))
 			cmd_exec(mini);
 		if (err != 0)

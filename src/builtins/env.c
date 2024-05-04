@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:35:11 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 18:19:34 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 14:16:48 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * @brief Print the environment variables.
  * 
- * @param {t_mini*} mini - The main structure of the shell.
+ * @param mini The main structure of the shell.
  * @return {int} - Returns SUCCESS if the environment variables were 
  * printed successfully, the error number otherwise.
  */
@@ -24,10 +24,7 @@ int	mini_env(t_mini *mini, t_cmd *cmd)
 	t_env	*env;
 	int		fd;
 
-	if (cmd->fd[1] != -1)
-		fd = cmd->fd[1];
-	else
-		fd = STDOUT_FILENO;
+	fd = set_fd(cmd);
 	env = mini->h_env;
 	while (env)
 	{

@@ -6,7 +6,7 @@
 #    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/29 15:46:26 by bboissen         ###   ########.fr        #
+#    Updated: 2024/05/04 18:00:42 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ BUILTINS	=	cd			\
 				env			\
 				exit		\
 				export		\
+				export_utils	\
 				pwd			\
 				unset
 

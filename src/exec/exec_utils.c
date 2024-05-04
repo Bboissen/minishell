@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:54:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 17:17:46 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 14:16:54 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Executes the built-in commands in a mini shell.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
+ * @return {int} - Returns the status of the command execution.
+ */
 int	exec_builtin(t_mini *mini, t_cmd *cmd)
 {
 	t_sig	*sig;
@@ -33,29 +40,63 @@ int	exec_builtin(t_mini *mini, t_cmd *cmd)
 		sig->status = mini_exit(mini, cmd);
 	return (sig->status);
 }
-//protected
+
+/**
+ * @brief Handles file descriptors for input and output redirection.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
+ */
 void	fd_handler(t_mini *mini, t_cmd *cmd)
 {
 	int	in;
 	int	out;
 
+	(void)mini;
 	if (cmd->in != NULL)
 	{
-		in = open(cmd->in, O_RDONLY); //protected
-		if (in == -1)
-			error_manager(mini, errno, NULL, cmd->in);
+		in = open(cmd->in, O_RDONLY);
 		dup2(in, STDIN_FILENO);
 		close(in);
 	}
 	if (cmd->out != NULL)
 	{
-		if (cmd->append == 1)
-			out = open(cmd->out, O_WRONLY | O_CREAT | O_APPEND, 0644);//protected
-		else
-			out = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);//protected
-		if (out == -1)
-			error_manager(mini, errno, NULL, cmd->out);
+		out = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		dup2(out, STDOUT_FILENO);
 		close(out);
 	}
+}
+
+/**
+ * @brief Check if an argument exists at a given index.
+ * 
+ * @param args The array of arguments.
+ * @param index The index to check.
+ * @return {int} - 1 if an argument exists at the given index,
+ * FALSE otherwise.
+ */
+int	arg_exists(char **args, int index)
+{
+	int	i;
+
+	i = 0;
+	if (args == NULL)
+		return (FALSE);
+	while (args[i] != NULL)
+		i++;
+	return (i > index);
+}
+
+/**
+ * @brief Sets the file descriptor for the command.
+ * 
+ * @param cmd A pointer to the command structure.
+ * @return {int} - The file descriptor to be used for the command.
+ */
+int	set_fd(t_cmd *cmd)
+{
+	if (cmd->fd[1] != -1)
+		return (cmd->fd[1]);
+	else
+		return (STDOUT_FILENO);
 }
