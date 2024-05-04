@@ -3,20 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+         #
+#    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/03/06 16:42:10 by gdumas           ###   ########.fr        #
+#    Updated: 2024/04/29 15:46:26 by bboissen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Aliases #
 
 NAME		=	minishell
-CC			=	gcc
-FLAGS		=	-Werror -Wall -Wextra $(IFLAGS)
+CC			=	cc
+FLAGS		=	-Werror -Wall -Wextra -g3 $(IFLAGS)
 IFLAGS		=	-I $(INCS) -I $(LIBFT_DIR)includes/
-LFLAGS		=	-L libft -lft
+LFLAGS		=	-L libft -lft -lreadline
 
 INCS		=	inc/
 HEADER		=	$(addprefix $(INCS), minishell.h)
@@ -29,44 +29,49 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-BUILTINS	=	cd		\
-				echo	\
-				env		\
-				exit	\
-				export	\
-				pwd		\
+BUILTINS	=	cd			\
+				echo		\
+				env			\
+				exit		\
+				export		\
+				pwd			\
 				unset
 
 ENV			=	env			\
-				get_env		\
-				sort_env	\
-				shlvl
+				init		\
+				shlvl		\
+				sort_env
 
-EXEC		=	bin		\
-				builtin	\
-				exec
+ERROR		=	builtin_err		\
+				error_manager	
 
-MAIN		=	minishell	\
-				redir		\
+EXEC		=	exec_utils	\
+				executer
+				
+UTILS		=	fd			\
+				free		\
 				signal
 
-PARSING		=	line		\
-				tokens		\
-				expansions
+MAIN		=	minishell
 
-TOOLS		=	fd			\
-				free		\
-				token		\
-				type		\
-				expansions	\
-				parsing
+LEXER		=	lexer		\
+				lex_utils	\
+				heredoc		\
+				lexer_err
 
+PARSING		=	expansions		\
+ 				parser	\
+				parser_utils	\
+				parser_err
+				
 SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
 				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
+				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
+				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
+				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
 				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))		\
-				$(addprefix $(SRC_DIR)main/, $(addsuffix .c, $(MAIN)))			\
-				$(addprefix $(SRC_DIR)parsing/, $(addsuffix .c, $(PARSING)))	\
-				$(addprefix $(SRC_DIR)tools/, $(addsuffix .c, $(TOOLS)))
+				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
+				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
 
