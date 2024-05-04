@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:54:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 11:36:34 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 12:02:37 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Executes the built-in commands in a mini shell.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
+ * @return {int} - Returns the status of the command execution.
+ */
 int	exec_builtin(t_mini *mini, t_cmd *cmd)
 {
 	t_sig	*sig;
@@ -34,6 +41,12 @@ int	exec_builtin(t_mini *mini, t_cmd *cmd)
 	return (sig->status);
 }
 
+/**
+ * @brief Handles file descriptors for input and output redirection.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
+ */
 void	fd_handler(t_mini *mini, t_cmd *cmd)
 {
 	int	in;
@@ -52,4 +65,24 @@ void	fd_handler(t_mini *mini, t_cmd *cmd)
 		dup2(out, STDOUT_FILENO);
 		close(out);
 	}
+}
+
+/**
+ * @brief Check if an argument exists at a given index.
+ * 
+ * @param args The array of arguments.
+ * @param index The index to check.
+ * @return {int} - 1 if an argument exists at the given index,
+ * FALSE otherwise.
+ */
+int	arg_exists(char **args, int index)
+{
+	int	i;
+
+	i = 0;
+	if (args == NULL)
+		return (FALSE);
+	while (args[i] != NULL)
+		i++;
+	return (i > index);
 }

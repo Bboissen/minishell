@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 14:38:04 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 11:58:30 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,12 @@ typedef enum e_bool
 
 typedef enum e_error
 {
+	END = 0,
 	SUCCESS = 0,
 	ERROR = 1,
+	PARSE = 2,
 	SYNTAX = 2,
-	END = 0,
+	MISSING = 125,
 	X_PERM = 126,
 	DIRECTORY = 126,
 	EXE = 127,
@@ -81,7 +83,6 @@ typedef enum e_error
 	QUOTE = 129,
 	INTERUPT = 130,
 	QUIT = 131,
-	PARSE = 2,
 	OPEN = 133,
 	READ = 134,
 	FCT = 135,
@@ -225,4 +226,5 @@ char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 void		parser_err(t_mini *mini, char *str, int err);
+
 #endif
