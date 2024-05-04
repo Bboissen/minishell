@@ -27,7 +27,6 @@
  */
 
 // issue in heredoc when SIGINT and go back to heredoc
-// echo'dsfas'$PATH'sdfsdf' conditional jump
 
 int	main(int ac, char **av, char **env)
 {
