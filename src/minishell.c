@@ -35,7 +35,6 @@ int	main(int ac, char **av, char **env)
 	t_sig	*sig;
 	int		err;
 	int		i;
-	static int k = 0;
 
 	if (ac != 1)
 		return (ERROR);
@@ -83,7 +82,7 @@ int	main(int ac, char **av, char **env)
 		ft_printfd(1,"\n\n");
 		mini->cmd = mini->h_cmd;
 		mini->env = mini->h_env;
-		if (k++ < 1 && mini->cmd && (mini->cmd->builtin != NONE || mini->cmd->args))
+		if (mini->cmd && (mini->cmd->builtin != NONE || mini->cmd->args))
 			cmd_exec(mini);
 		if (err != 0)
 			get_sig()->status = err;

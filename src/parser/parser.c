@@ -97,6 +97,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	return (0);
 }
 //to protect
+// echo'dsfas'$PATH'sdfsdf'
 static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 {
 	struct stat	st;
@@ -114,10 +115,18 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
 	if ((*cmd)->args && (*cmd)->args[0])
 		stat((*cmd)->args[0], &st);
-	if ((*cmd)->builtin != NONE || ((*cmd)->args && !S_ISDIR(st.st_mode) && access((*cmd)->args[0], X_OK) == 0))
+	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0 && !S_ISDIR(st.st_mode)))
+	{
+		printf("cmd->args[0] = %s\n", (*cmd)->args[0]);
+		getchar();
 		(*arg_flag)++;
+	}
 	else if ((*cmd)->args && access((*cmd)->args[0], F_OK) == -1)
+	{
+		// printf("cmd->args[0] = %s\n", (*cmd)->args[0]);
+		// getchar();
 		return (parser_err(mini, (*token)->str, MISSING), cmd_skip(mini, cmd, token), ERROR);
+	}
 	else if ((*cmd)->args && S_ISDIR(st.st_mode))
 		return (parser_err(mini, (*token)->str, DIRECTORY), cmd_skip(mini, cmd, token), ERROR);
 	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || 

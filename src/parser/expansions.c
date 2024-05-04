@@ -33,7 +33,6 @@ void	expand_join(t_mini **mini)
 			free((*mini)->token->str);
 			(*mini)->token->str = tmp;
 			(*mini)->token->expand = 0;
-			printf("expand: %s\n", (*mini)->token->str);
 			if (!tmp[0] && (*mini)->token->join)
 			{
 				(*mini)->token = list_join((*mini)->token); //protected random iteration
@@ -66,7 +65,6 @@ void	expand_join(t_mini **mini)
 		}
 		(*mini)->token = (*mini)->token->next;
 	}
-	getchar();
 	(*mini)->token = (*mini)->h_token;
 	while ((*mini)->token)
 	{
