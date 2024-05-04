@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 16:02:49 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:18:21 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ static void	exec_child(t_mini *mini, t_cmd *cmd, int *initial_fds)
 	close_fds(cmd->fd);
 	close_fds(initial_fds);
 	if (cmd->builtin == NONE)
-	{
 		execve(cmd->args[0], cmd->args, env_to_tab(mini));
-	}
 	else
 	{
 		exec_builtin(mini, cmd);
@@ -45,6 +43,8 @@ static pid_t	exec(t_mini *mini, t_cmd *cmd, int *initial_fds)
 			dup2(cmd->fd[0], STDIN_FILENO);
 		close_fds(cmd->fd);
 	}
+	else
+		error_manager(mini, errno, "fork", NULL);
 	return (pid);
 }
 
@@ -55,7 +55,8 @@ static void	piper(t_mini *mini, t_cmd *cmd, int *initial_fds)
 	while (cmd->next)
 	{
 		fd_handler(mini, cmd);
-		pipe(pipefd);
+		if (pipe(pipefd) == -1)
+			error_manager(mini, errno, "pipe", NULL);
 		cmd->fd[0] = pipefd[0];
 		cmd->fd[1] = pipefd[1];
 		cmd->pid = exec(mini, cmd, initial_fds);
@@ -80,8 +81,6 @@ void	cmd_exec(t_mini *mini)
 	mini->cmd = mini->h_cmd;
 	initial_fds[0] = dup(STDIN_FILENO);
 	initial_fds[1] = dup(STDOUT_FILENO);
-	// if (initial_fds[0] == -1 || initial_fds[1]  == -1)
-	// 	error_manager(mini, DUP, NULL, NULL);
 	if (mini->cmd->builtin != NONE && cmd_size(mini->cmd) == 1)
 	{
 		fd_handler(mini, mini->cmd);

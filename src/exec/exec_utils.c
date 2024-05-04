@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:54:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 16:04:10 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:17:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	exec_builtin(t_mini *mini, t_cmd *cmd)
 		sig->status = mini_exit(mini, cmd);
 	return (sig->status);
 }
-
+//protected
 void	fd_handler(t_mini *mini, t_cmd *cmd)
 {
 	int	in;
@@ -44,8 +44,7 @@ void	fd_handler(t_mini *mini, t_cmd *cmd)
 		in = open(cmd->in, O_RDONLY); //protected
 		if (in == -1)
 			error_manager(mini, errno, NULL, cmd->in);
-		if (dup2(in, STDIN_FILENO) == -1)//protected
-			error_manager(mini, DUP, NULL, NULL);
+		dup2(in, STDIN_FILENO);
 		close(in);
 	}
 	if (cmd->out != NULL)
@@ -56,8 +55,7 @@ void	fd_handler(t_mini *mini, t_cmd *cmd)
 			out = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);//protected
 		if (out == -1)
 			error_manager(mini, errno, NULL, cmd->out);
-		if (dup2(out, STDOUT_FILENO) == -1)//protected
-			error_manager(mini, DUP, NULL, NULL);
+		dup2(out, STDOUT_FILENO);
 		close(out);
 	}
 }
