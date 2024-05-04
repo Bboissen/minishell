@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 16:55:55 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 14:42:32 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,11 @@ int	set_env(t_env **env, char *name, char *value)
 		if (ft_strcmp(tmp->name, name) == 0)
 		{
 			ft_memdel(tmp->value);
-			tmp->value = strdup(value);
-			return (TRUE);
+			if (value)
+			{
+				tmp->value = strdup(value);
+				return (TRUE);
+			}
 		}
 		tmp = tmp->next;
 	}
@@ -57,7 +60,7 @@ int	set_env(t_env **env, char *name, char *value)
  * @return {char*} - Returns the value of the environment variable if
  * found, NULL otherwise.
  */
-char	*get_env_value(t_mini *mini, char *name)
+char	*return_env_value(t_mini *mini, char *name)
 {
 	t_env	*env;
 

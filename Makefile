@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
+#    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/04/29 15:46:26 by bboissen         ###   ########.fr        #
+#    Updated: 2024/05/04 11:52:46 by talibabtou       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,38 +29,39 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-BUILTINS	=	cd			\
-				echo		\
-				env			\
-				exit		\
-				export		\
-				pwd			\
+BUILTINS	=	cd				\
+				echo			\
+				env				\
+				exit			\
+				export_utils	\
+				export			\
+				pwd				\
 				unset
 
-ENV			=	env			\
-				init		\
-				shlvl		\
+ENV			=	env				\
+				init			\
+				shlvl			\
 				sort_env
 
 ERROR		=	builtin_err		\
 				error_manager	
 
-EXEC		=	exec_utils	\
+EXEC		=	exec_utils		\
 				executer
 				
-UTILS		=	fd			\
-				free		\
+UTILS		=	fd				\
+				free			\
 				signal
 
 MAIN		=	minishell
 
-LEXER		=	lexer		\
-				lex_utils	\
-				heredoc		\
+LEXER		=	lexer			\
+				lex_utils		\
+				heredoc			\
 				lexer_err
 
 PARSING		=	expansions		\
- 				parser	\
+ 				parser			\
 				parser_utils	\
 				parser_err
 				
@@ -69,7 +70,7 @@ SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
 				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
 				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
 				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
-				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))		\
+				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))			\
 				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 
@@ -104,9 +105,9 @@ force			:
 
 
 clean			:
-				@if [ -d "$(OBJ_DIR)" ]; then				\
+				@if [ -d "$(OBJ_DIR)" ]; then					\
 					echo "Cleaning minishell obj/ directory";	\
-					rm -rf $(OBJ_DIR);						\
+					rm -rf $(OBJ_DIR);							\
 				fi
 				@make -sC libft clean
 

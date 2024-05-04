@@ -6,43 +6,51 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 16:07:21 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/04 14:54:57 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	change(t_mini *mini, char *path);
+static int	backward_dir(t_mini *mini, t_cmd *cmd);
+static char	*add_home_to_path(t_mini *mini, char *path);
+
 /**
- * @brief Adds the home path to the given path if it starts with '~/'.
+ * @brief Changes the current directory to the one specified in the arguments,
+ * or to the home directory if no arguments are given.
  *
  * @param mini The main structure of the minishell.
- * @param path The path to which the home path should be added.
- * @return The new path with the home path added, or the original 
- * path if it didn't start with '~/'. 
+ * @return {int} - SUCCESS if the directory was changed successfully,
+ * ERROR otherwise.
  */
-static char	*add_home_path(t_mini *mini, char *path)
+int	mini_cd(t_mini *mini, t_cmd *cmd)
 {
-	char	*tmp1;
-	char	*tmp2;
+	char	*home;
+	char	**args;
 
-	tmp1 = NULL;
-	tmp2 = NULL;
-	if (path && path[0] == '~' && (path[1] && path[1] == '/'))
+	home = NULL;
+	args = cmd->args;
+	if (arg_exists(args, 1) && !ft_strequ(args[0], "--"))
+		return (cd_err(mini, ERROR, NULL), ERROR);
+	else if (arg_exists(args, 1) && ft_strequ(args[0], "--"))
+		args++;
+	if (args && args[0] && args[0][0] == '\0')
+		return (SUCCESS);
+	if (!args || (ft_strequ(args[0], "~") && !args[1]))
 	{
-		tmp1 = get_env_value(mini, "HOME");
-		if (tmp1)
-		{
-			tmp2 = ft_substr(path, 1, ft_strlen(path));
-			if (!tmp2)
-				return (error_manager(mini, MALLOC, NULL, NULL), NULL);
-			ft_memdel(path);
-			path = ft_strjoin(tmp1, tmp2);
-			if (!path)
-				return (error_manager(mini, MALLOC, NULL, NULL), NULL);
-		}
+		if (!return_env_value(mini, "HOME"))
+			return (cd_err(mini, MISSING, "HOME"), ERROR);
+		home = ft_strdup(return_env_value(mini, "HOME"));
+		if (!home)
+			return (error_manager(mini, MALLOC, NULL, NULL), ERROR);
+		return (change(mini, home), free(home), SUCCESS);
 	}
-	ft_memdel(tmp2);
-	return (path);
+	if (args && args[0][0] == '-' && !args[0][1])
+		return (backward_dir(mini, cmd));
+	if (access(args[0], F_OK) == -1)
+		args[0] = add_home_to_path(mini, args[0]);
+	return (change(mini, args[0]));
 }
 
 /**
@@ -51,7 +59,7 @@ static char	*add_home_path(t_mini *mini, char *path)
  *
  * @param mini The main structure of the minishell.
  * @param path The path to change to.
- * @return {int} SUCCESS if the directory was changed successfully,
+ * @return {int} - SUCCESS if the directory was changed successfully,
  * ERROR otherwise.
  */
 static int	change(t_mini *mini, char *path)
@@ -59,7 +67,7 @@ static int	change(t_mini *mini, char *path)
 	char	*old_pwd;
 	char	*new_pwd;
 
-	old_pwd = ft_strdup(get_env_value(mini, "PWD"));
+	old_pwd = ft_strdup(return_env_value(mini, "PWD"));
 	if (chdir(path) == 0)
 	{
 		new_pwd = getcwd(NULL, 0);
@@ -85,7 +93,7 @@ static int	change(t_mini *mini, char *path)
  * stored in the OLDPWD environment variable.
  *
  * @param mini The main structure of the minishell.
- * @return {int} ERROR if the command was '-',
+ * @return {int} - ERROR if the command was '-',
  * SUCCESS otherwise.
  */
 static int	backward_dir(t_mini *mini, t_cmd *cmd)
@@ -94,52 +102,46 @@ static int	backward_dir(t_mini *mini, t_cmd *cmd)
 	char	**args;
 
 	args = cmd->args;
-	if (ft_strequ(args[0], "-"))
+	tmp = return_env_value(mini, "OLDPWD");
+	if (!tmp)
+		return (cd_err(mini, MISSING, "OLDPWD"), ERROR);
+	else
 	{
-		tmp = get_env_value(mini, "OLDPWD");
-		if (tmp)
-			change(mini, tmp);
-		tmp = get_env_value(mini, "PWD");
-		if (tmp)
-			ft_printfd(1, "%s\n", tmp);
-		return (ERROR);
+		tmp = return_env_value(mini, "OLDPWD");
+		ft_printfd(STDOUT_FILENO, "%s\n", tmp);
+		return (change(mini, tmp));
 	}
-	return (SUCCESS);
 }
 
 /**
- * @brief Changes the current directory to the one specified in the arguments,
- * or to the home directory if no arguments are given.
+ * @brief Adds the home path to the given path if it starts with '~/'.
  *
  * @param mini The main structure of the minishell.
- * @return {int} SUCCESS if the directory was changed successfully,
- * ERROR otherwise.
+ * @param path The path to which the home path should be added.
+ * @return {char *} - The new path with the home path added, or the original 
+ * path if it didn't start with '~/'. 
  */
-int	mini_cd(t_mini *mini, t_cmd *cmd)
+static char	*add_home_to_path(t_mini *mini, char *path)
 {
-	char	*home;
-	char	**args;
+	char	*home_path;
+	char	*sub_path;
 
-	home = NULL;
-	args = cmd->args;
-	if (arg_exists(args, 1) && !ft_strequ(args[0], "--"))
-		return (cd_err(mini, ERROR, NULL), ERROR);
-	else if (arg_exists(args, 1) && ft_strequ(args[0], "--"))
-		args++;
-	if (args && args[0] && args[0][0] == '\0')
-		return (SUCCESS);
-	if (!args || (ft_strequ(args[0], "~") && !args[1]))
+	home_path = NULL;
+	sub_path = NULL;
+	if (path && path[0] == '~' && (path[1] && path[1] == '/'))
 	{
-		if (!get_env_value(mini, "HOME"))
-			return (cd_err(mini, MISSING, NULL), ERROR);
-		home = ft_strdup(get_env_value(mini, "HOME"));
-		if (!home)
-			return (error_manager(mini, MALLOC, NULL, NULL), ERROR);
-		return (change(mini, home), free(home), SUCCESS);
+		home_path = return_env_value(mini, "HOME");
+		if (home_path)
+		{
+			sub_path = ft_substr(path, 1, ft_strlen(path));
+			if (!sub_path)
+				return (error_manager(mini, MALLOC, NULL, NULL), NULL);
+			ft_memdel(path);
+			path = ft_strjoin(home_path, sub_path);
+			if (!path)
+				return (error_manager(mini, MALLOC, NULL, NULL), NULL);
+		}
 	}
-	if (args && args[0][0] == '-' && !args[0][1])
-		return (backward_dir(mini, cmd), SUCCESS);
-	if (access(args[0], F_OK) == -1)
-		args[0] = add_home_path(mini, args[0]);
-	return (change(mini, args[0]));
+	ft_memdel(sub_path);
+	return (path);
 }
