@@ -238,4 +238,7 @@ int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 char		*path_checker(char *str, char *cmd, char **path, int *err);
 void		args_cleaner( t_mini *mini, t_cmd **cmd, char **new_cmd);
 
+/*Expansion*/
+void		token_join(t_mini **mini);
+void		token_refacto(t_mini **mini);
 #endif

@@ -20,7 +20,6 @@
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
-	t_token	*tmp_token;
 
 	(*mini)->token = (*mini)->h_token;
 	while ((*mini)->token)
@@ -40,45 +39,11 @@ void	expand_join(t_mini **mini)
 					error_manager((*mini), MALLOC, NULL, NULL);
 			}
 			else if (!tmp[0])
-			{
-				if ((*mini)->token == (*mini)->h_token && !(*mini)->token->next)
-					free_token(&(*mini)->h_token);
-				else
-				{
-					tmp_token = (*mini)->token;
-					if ((*mini)->token->prev)
-					{
-						(*mini)->token->prev->next = (*mini)->token->next;
-						(*mini)->token = (*mini)->token->prev;
-					}
-					else
-					{
-						(*mini)->h_token = (*mini)->token->next;
-						(*mini)->token = (*mini)->h_token;
-					}
-					if ((*mini)->token->next)
-						(*mini)->token->next->prev = (*mini)->token->prev;
-					free(tmp_token->str);
-					free(tmp_token);
-				}
-			}
+				token_refacto(mini);
 		}
 		(*mini)->token = (*mini)->token->next;
 	}
-	(*mini)->token = (*mini)->h_token;
-	while ((*mini)->token)
-	{
-		if ((*mini)->token->join)
-		{
-			if ((*mini)->token == (*mini)->h_token)
-				(*mini)->h_token = (*mini)->token->next;
-			(*mini)->token = list_join((*mini)->token);
-			if (!(*mini)->token)
-				error_manager((*mini), MALLOC, NULL, NULL);
-		}
-		else
-			(*mini)->token = (*mini)->token->next;
-	}
+	token_join(mini);
 }
 
 /**
@@ -156,6 +121,20 @@ t_token	*list_join(t_token *token)
 	free(to_free);
 	return (token);
 }
+
+void	cmd_filler(t_mini *mini, t_cmd **cmd, char *args)
+{
+	(*cmd)->args = malloc(sizeof(char *) * 2);
+	if ((*cmd)->args == NULL)
+	{
+		free_cmd(cmd);
+		free(args);
+		error_manager(mini, MALLOC, NULL, NULL);
+	}
+	(*cmd)->args[0] = args;
+	(*cmd)->args[1] = NULL;
+}
+
 int	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 {
 	t_env	*local_env;
@@ -180,16 +159,6 @@ int	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 	else if (err == -1)
 		return (err);
 	else
-	{
-		(*cmd)->args = malloc(sizeof(char *) * 2);
-		if ((*cmd)->args == NULL)
-		{
-			free_cmd(cmd);
-			free(args);
-			error_manager(mini, MALLOC, NULL, NULL);
-		}
-		(*cmd)->args[0] = args;
-		(*cmd)->args[1] = NULL;
-	}
+		cmd_filler(mini, cmd, args);
 	return (0);
 }
