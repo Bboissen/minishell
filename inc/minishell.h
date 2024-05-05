@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 16:07:39 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 19:02:13 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,10 +225,14 @@ void		delete_heredoc(t_mini *mini);
 
 /* Parser */
 int			parser(t_mini *mini);
-void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
+void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token, int err);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
+int			check_file(t_mini *mini, t_cmd **cmd, t_token **token);
+int			check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
+				int *arg_flag);
+
 
 #endif

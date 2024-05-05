@@ -6,17 +6,17 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 12:25:20 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 18:52:41 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * Initialize the mini structure with the given environment.
+ * @brief Initialize the mini structure with the given environment.
  * 
- * @param {t_mini*} mini - The main structure of the shell.
- * @param {char**} env - The environment for the shell.
+ * @param mini - The main structure of the shell.
+ * @param env - The environment for the shell.
  */
 void	init_mini(t_mini **mini, char **env, char *name)
 {
@@ -41,11 +41,11 @@ void	init_mini(t_mini **mini, char **env, char *name)
 }
 
 /**
- * Sets up and reads a line from the terminal with a custom prompt.
+ * @brief Sets up and reads a line from the terminal with a custom prompt.
  * 
- * @param {char*} rl - The string to store the read line.
- * @param {t_mini*} mini - The main structure of the shell.
- * @param {char*} str - The string to be used as the base of the prompt.
+ * @param rl - The string to store the read line.
+ * @param mini - The main structure of the shell.
+ * @param str - The string to be used as the base of the prompt.
  */
 void	readline_setup(t_mini *mini, char **rl, char *str)
 {
@@ -68,10 +68,10 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
 }
 
 /**
- * Reinitializes the mini structure and frees memory.
+ * @brief Reinitializes the mini structure and frees memory.
  * 
- * @param {t_mini*} mini - The mini structure to reinitialize.
- * @param {char*} rl - The readline string to free.
+ * @param mini - The mini structure to reinitialize.
+ * @param rl - The readline string to free.
  */
 void	reinit(t_mini **mini)
 {

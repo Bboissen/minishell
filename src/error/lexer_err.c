@@ -6,12 +6,20 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 10:34:17 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 10:04:30 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 18:43:52 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Lexer errors manager.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param str Pointer to the string where the error occurred.
+ * @param err Error code indicating the type of error.
+ * @param c Character near which the error occurred.
+ */
 void	lexer_err(t_mini *mini, char *str, int err, char c)
 {
 	get_sig()->status = SYNTAX;

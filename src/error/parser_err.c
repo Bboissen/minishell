@@ -6,12 +6,19 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:03:28 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/05 10:03:58 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 18:44:33 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Parser errors manager.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param str Pointer to the string where the error occurred.
+ * @param err Error code indicating the type of error.
+ */
 void	parser_err(t_mini *mini, char *str, int err)
 {
 	get_sig()->status = 1;

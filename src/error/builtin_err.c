@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_err.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/04 18:20:36 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/05 18:47:00 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief Handles errors for the export command.
+ * @brief export command error manager.
  * 
  * @param mini Pointer to the mini shell structure.
  * @param error The error code.
@@ -32,7 +32,7 @@ not a valid identifier\n", mini->name, arg);
 }
 
 /**
- * @brief Handles errors for the cd command.
+ * @brief cd command error manager.
  * 
  * @param mini Pointer to the mini shell structure.
  * @param err The error code.
@@ -58,7 +58,7 @@ getcwd: cannot access parent directories: No such file or directory\n");
 }
 
 /**
- * @brief Handles errors for the exit command.
+ * @brief exit command error manager.
  * 
  * @param mini Pointer to the mini shell structure.
  * @param error The error code.

@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 18:28:53 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 18:48:45 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int		cleanup_and_error_handling(t_mini *mini,
 static char		*expand_line(t_mini *mini, char *str, int fd);
 
 /**
- * @brief Handles the heredoc functionality in a shell.
+ * @brief Heredoc functionality of the shell.
  * 
  * @param mini Pointer to the mini shell structure.
  */
