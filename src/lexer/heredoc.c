@@ -6,28 +6,29 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 16:24:18 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 18:28:53 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		handle_file_and_token(t_mini *mini, t_token **token, int *fd);
-void		handle_line_reading_and_expansion(t_mini *mini,
-				t_token *token, char **line, int fd);
-void		handle_cleanup_and_error_handling(t_mini *mini,
-				t_token *token, char *line, int fd);
-static char	*expand_line(t_mini *mini, char *str, int fd);
+static int		file_and_token(t_mini *mini, t_token **token, int fd);
+static char		*line_reading_and_expansion(t_mini *mini,
+					t_token *token, char **line, int fd);
+static int		cleanup_and_error_handling(t_mini *mini,
+					t_token *token, char *line, int fd);
+static char		*expand_line(t_mini *mini, char *str, int fd);
 
 /**
- * @brief Handles the heredoc functionality in the shell.
+ * @brief Handles the heredoc functionality in a shell.
  * 
- * @param mini Pointer to the mini structure.
+ * @param mini Pointer to the mini shell structure.
  */
 void	heredoc(t_mini *mini)
 {
 	t_token	*token;
 	char	*line;
+	char	*p_line;
 	int		fd;
 
 	token = mini->h_token;
@@ -35,58 +36,62 @@ void	heredoc(t_mini *mini)
 	{
 		if (token->type == HEREDOC)
 		{
-			handle_file_and_token(mini, &token, &fd);
+			fd = file_and_token(mini, &token, fd);
 			rl_event_hook = readline_hook;
 			readline_setup(mini, &line, "heredoc");
-			handle_line_reading_and_expansion(mini, token, &line, fd);
-			if (line)
-				ft_memdel(line);
+			p_line = line_reading_and_expansion(mini, token, &line, fd);
+			if (p_line)
+				ft_memdel(p_line);
 			rl_event_hook = NULL;
-			handle_cleanup_and_error_handling(mini, token, line, fd);
+			if (cleanup_and_error_handling(mini, token, line, fd))
+				return ;
 		}
 		token = token->next;
 	}
 }
 
 /**
- * @brief Handles the file and token operations for the heredoc functionality.
+ * @brief Handles file and token operations for heredoc.
  * 
- * @param mini Pointer to the mini structure.
+ * @param mini Pointer to the mini shell structure.
  * @param token Double pointer to the token structure.
- * @param fd Pointer to the file descriptor.
+ * @param fd File descriptor.
+ * @return {int} - Heredoc file descriptor.
  */
-void	handle_file_and_token(t_mini *mini, t_token **token, int *fd)
+static int	file_and_token(t_mini *mini, t_token **token, int fd)
 {
 	(*token)->str = random_file(mini);
 	if (!(*token)->str)
 		error_manager(mini, MALLOC, NULL, NULL);
-	*fd = open((*token)->str, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (*fd == -1)
+	fd = open((*token)->str, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd == -1)
 		error_manager(mini, errno, "open", (*token)->str);
 	*token = (*token)->next;
 	if ((*token)->expand == EXPAND)
-		expand_heredoc(mini, token, *fd);
+		expand_heredoc(mini, token, fd);
 	while (*token && ((*token)->join == JOIN))
 	{
-		expand_heredoc(mini, token, *fd);
+		expand_heredoc(mini, token, fd);
 		*token = list_join(*token);
 		if (!*token)
 		{
-			close(*fd);
+			close(fd);
 			error_manager(mini, MALLOC, NULL, NULL);
 		}
 	}
+	return (fd);
 }
 
 /**
- * @brief Handles the line reading and expansion for the heredoc functionality.
+ * @brief Handles line reading and expansion for heredoc.
  * 
- * @param mini Pointer to the mini structure.
+ * @param mini Pointer to the mini shell structure.
  * @param token Pointer to the token structure.
- * @param line Double pointer to the line string.
+ * @param line Double pointer to the line.
  * @param fd File descriptor.
+ * @return {char *} - Pointer to the processed line.
  */
-void	handle_line_reading_and_expansion(t_mini *mini,
+static char	*line_reading_and_expansion(t_mini *mini,
 			t_token *token, char **line, int fd)
 {
 	char	*p_line;
@@ -95,7 +100,6 @@ void	handle_line_reading_and_expansion(t_mini *mini,
 	while (*line && ft_strcmp(*line, token->str)
 		&& get_sig()->status != INTERUPT)
 	{
-		printf("line = %s %s\n", *line, token->str);
 		while (**line)
 		{
 			if (**line == '$')
@@ -108,40 +112,16 @@ void	handle_line_reading_and_expansion(t_mini *mini,
 		readline_setup(mini, line, "heredoc");
 		p_line = *line;
 	}
+	return (p_line);
 }
 
 /**
- * @brief Handles the cleanup and error handling for the heredoc functionality.
+ * @brief Expands a line for heredoc.
  * 
- * @param mini Pointer to the mini structure.
- * @param token Pointer to the token structure.
- * @param line Pointer to the line string.
+ * @param mini Pointer to the mini shell structure.
+ * @param str Pointer to the string to expand.
  * @param fd File descriptor.
- */
-void	handle_cleanup_and_error_handling(t_mini *mini,
-			t_token *token, char *line, int fd)
-{
-	close(fd);
-	if (get_sig()->status == INTERUPT)
-	{
-		rl_done = 0;
-		free_token(&mini->h_token);
-		return ;
-	}
-	if (!line)
-		return (lexer_err(mini, token->str, END, 0));
-	free(token->str);
-	token->str = token->prev->str;
-	token->prev->str = NULL;
-}
-
-/**
- * @brief Expands the line for the heredoc functionality.
- * 
- * @param mini Pointer to the mini structure.
- * @param str Pointer to the string to be expanded.
- * @param fd File descriptor.
- * @return {char *} - Returns the expanded string.
+ * @return {char *} - Pointer to the expanded line.
  */
 static char	*expand_line(t_mini *mini, char *str, int fd)
 {
@@ -164,4 +144,31 @@ static char	*expand_line(t_mini *mini, char *str, int fd)
 	free(var);
 	*str = end;
 	return (str++);
+}
+
+/**
+ * @brief Handles cleanup and error handling for heredoc.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param token Pointer to the token structure.
+ * @param line Pointer to the line.
+ * @param fd File descriptor.
+ * @return {int} Status code (ERROR or SUCCESS).
+ */
+static int	cleanup_and_error_handling(t_mini *mini,
+			t_token *token, char *line, int fd)
+{
+	close(fd);
+	if (get_sig()->status == INTERUPT)
+	{
+		rl_done = 0;
+		free_token(&mini->h_token);
+		return (ERROR);
+	}
+	if (!line)
+		return (lexer_err(mini, token->str, END, 0), ERROR);
+	free(token->str);
+	token->str = token->prev->str;
+	token->prev->str = NULL;
+	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 12:24:24 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 16:13:59 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 18:30:50 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 static unsigned int	my_rand(t_mini *mini);
 static void			expand_inside(t_mini *mini, t_token *token, int fd);
 
+/**
+ * @brief Hook function for readline library to handle interrupts.
+ * 
+ * @return {int} Returns SUCCESS constant.
+ */
 int	readline_hook(void)
 {
 	rl_done = 0;
@@ -25,6 +30,12 @@ int	readline_hook(void)
 	return (SUCCESS);
 }
 
+/**
+ * @brief Generates a random file name in the /tmp directory.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @return {char *} - Returns a string containing the path to the random file.
+ */
 char	*random_file(t_mini *mini)
 {
 	char			*file;
@@ -46,6 +57,12 @@ char	*random_file(t_mini *mini)
 	return (file);
 }
 
+/**
+ * @brief Generates a random number using /dev/urandom as a seed.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @return {unsigned int} - Returns a random number.
+ */
 static unsigned int	my_rand(t_mini *mini)
 {
 	static unsigned int	seed;
@@ -61,6 +78,13 @@ static unsigned int	my_rand(t_mini *mini)
 	return (seed % 10);
 }
 
+/**
+ * @brief Expands the heredoc token and its next token if it exists.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param token Double pointer to the token structure.
+ * @param fd File descriptor.
+ */
 void	expand_heredoc(t_mini *mini, t_token **token, int fd)
 {
 	expand_inside(mini, *token, fd);
@@ -70,6 +94,13 @@ void	expand_heredoc(t_mini *mini, t_token **token, int fd)
 	}
 }
 
+/**
+ * @brief Expands the token if its expand flag is set.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param token Pointer to the token structure.
+ * @param fd File descriptor.
+ */
 static void	expand_inside(t_mini *mini, t_token *token, int fd)
 {
 	char	*new_str;

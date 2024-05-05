@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 15:53:37 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 18:02:02 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	main(int ac, char **av, char **env)
 {
 	t_mini	*mini;
 	int		err;
-
 
 	if (ac != 1)
 		return (ERROR);
