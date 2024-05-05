@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:17:13 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 11:40:54 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 12:11:38 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,7 @@ char	*var_handler(t_mini *mini, char *str, int *quote)
 	initialize_options(options);
 	if (flag == 1)
 		options[2] = EXPAND;
-	if ((*quote == 0 && (is_spechar(end) == 1 || is_spe_expand(end)))
-		|| (*quote == 1 && *(str + 1) && is_spechar(*(str + 1)) < 2)
-		|| (*quote == 1 && end != '"'))
-		options[1] = JOIN;
+	options[1] = is_join(&quote, &str, &end);
 	if (*start)
 		new_token(mini, start, options);
 	if (end == '"' && *quote == 1)

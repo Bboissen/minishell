@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:24:11 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 11:07:59 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 12:08:07 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 	return (str);
 }
 
-
 char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 {
 	char	*start;
@@ -85,4 +84,34 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	else
 		*str = end;
 	return (str);
+}
+
+/**
+ * @brief Checks if there are odd number of quotes in the string.
+ * 
+ * @param str Input string.
+ * @return Returns TRUE if there are odd number of quotes,
+ * otherwise returns FALSE.
+ */
+int	odd_quote(char *str)
+{
+	int		i;
+	int		s_quote;
+	int		d_quote;
+
+	i = 0;
+	s_quote = 0;
+	d_quote = 0;
+	if (str)
+	{
+		while (str[i])
+		{
+			if (str[i] == '\'' && d_quote != 1)
+				s_quote = (s_quote + 1) % 2;
+			else if (str[i] == '"' && s_quote != 1)
+				d_quote = (d_quote + 1) % 2;
+			i++;
+		}
+	}
+	return (s_quote % 2 || d_quote % 2);
 }

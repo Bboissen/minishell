@@ -6,13 +6,12 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 11:44:43 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 12:12:01 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	odd_quote(char *str);
 static char	*handle_all_tests(t_mini *mini, char *str, int *quote);
 static void	insert_new_token(t_mini *mini, t_token *new_token);
 
@@ -47,36 +46,6 @@ void	lexer(t_mini *mini)
 	if (mini->token && mini->token->join == JOIN)
 		mini->token->join = 0;
 	mini->token = mini->h_token;
-}
-
-/**
- * @brief Checks if there are odd number of quotes in the string.
- * 
- * @param str Input string.
- * @return Returns TRUE if there are odd number of quotes,
- * otherwise returns FALSE.
- */
-static int	odd_quote(char *str)
-{
-	int		i;
-	int		s_quote;
-	int		d_quote;
-
-	i = 0;
-	s_quote = 0;
-	d_quote = 0;
-	if (str)
-	{
-		while (str[i])
-		{
-			if (str[i] == '\'' && d_quote != 1)
-				s_quote = (s_quote + 1) % 2;
-			else if (str[i] == '"' && s_quote != 1)
-				d_quote = (d_quote + 1) % 2;
-			i++;
-		}
-	}
-	return (s_quote % 2 || d_quote % 2);
 }
 
 /**
@@ -144,4 +113,38 @@ static void	insert_new_token(t_mini *mini, t_token *new_token)
 		mini->token->next = new_token;
 		mini->token = mini->token->next;
 	}
+}
+
+/**
+ * @brief Determines the type of the token.
+ *
+ * @param type Array of token types.
+ * @param str Input string.
+ * @return {char *} - Returns the updated string pointer.
+ */
+char	*token_typer(t_type type[3], char *str)
+{
+	if (!str || *str == '|')
+		type[0] = PIPE;
+	else if (*str == '>')
+	{
+		if (*(str + 1) == '>')
+		{
+			type[0] = APPEND;
+			str++;
+		}
+		else
+			type[0] = TRUNC;
+	}
+	else if (*str == '<')
+	{
+		if (*(str + 1) == '<')
+		{
+			type[0] = HEREDOC;
+			str++;
+		}
+		else
+			type[0] = INPUT;
+	}
+	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 11:32:42 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 12:12:22 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,8 @@ int			is_spechar(char c);
 int			is_space(int c);
 int			is_spe_builtin(t_token *token);
 int			is_spe_expand(char c);
+t_type		is_join(int **quote, char **str, char *end);
+int			odd_quote(char *str);
 char		*syntax_check(t_mini *mini, char *str, int *quote);
 char		*string_handler(t_mini *mini, char *str, int *quote);
 char		*s_quote_handler(t_mini *mini, char *str, int *quote);
