@@ -233,5 +233,6 @@ int			check_write(t_mini *mini, t_cmd **cmd, t_token **token, int fd);
 int			check_access(t_mini *mini, t_cmd **cmd, t_token **token, struct stat st);
 int			check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
+char		*path_checker(char *str, char *cmd, char **path, int *err);
 
 #endif

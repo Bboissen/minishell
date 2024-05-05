@@ -12,28 +12,24 @@
 
 #include "minishell.h"
 
-static char	*path_checker(char *str, char *cmd, char **path, int *err);
-
-//protected random iteration
 void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token, int err)
 {
 	if (err == INPUT || err == HEREDOC
-			|| err == APPEND || err == TRUNC)
+		|| err == APPEND || err == TRUNC)
 		parser_err(mini, (*token)->next->str, errno);
 	else
 		parser_err(mini, (*token)->str, err);
 	while ((*token) && (*token)->type != PIPE)
 		(*token) = (*token)->next;
 	free_cmd(cmd);
-	if(mini->cmd)
+	if (mini->cmd)
 	{
 		if (mini->cmd->out)
 			free(mini->cmd->out);
-		mini->cmd->out = ft_strdup("/dev/null"); //protected random iteration
+		mini->cmd->out = ft_strdup("/dev/null");
 		if (mini->cmd->out == NULL)
 			error_manager(mini, MALLOC, NULL, NULL);
 	}
-
 }
 
 void	new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag)
@@ -52,7 +48,13 @@ void	new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag)
 	*arg_flag = 0;
 }
 
-//protected random iteration
+static void	args_cleaner( t_mini *mini, t_cmd **cmd, char **new_cmd)
+{
+	free_tab(new_cmd);
+	free_cmd(cmd);
+	error_manager(mini, MALLOC, NULL, NULL);
+}
+
 char	**add_args(t_mini *mini, t_cmd **cmd, char *str)
 {
 	int		i;
@@ -62,44 +64,41 @@ char	**add_args(t_mini *mini, t_cmd **cmd, char *str)
 	i = 0;
 	while ((*cmd)->args && (*cmd)->args[i])
 		i++;
-	new_cmd = malloc(sizeof(char *) * (i + 2)); //protected random iteration
+	new_cmd = malloc(sizeof(char *) * (i + 2));
 	if (!new_cmd)
 		return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), NULL);
 	j = 0;
 	while (j < i)
 	{
-		new_cmd[j] = ft_strdup((*cmd)->args[j]); //protected random iteration
+		new_cmd[j] = ft_strdup((*cmd)->args[j]);
 		if (!new_cmd[j])
-			return (free_tab(new_cmd), free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), NULL);
+			args_cleaner(mini, cmd, new_cmd);
 		j++;
 	}
-	new_cmd[j] = ft_strdup(str); //protected random iteration
+	new_cmd[j] = ft_strdup(str);
 	if (!new_cmd[j])
-			return (free_tab(new_cmd), free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), NULL);
+		args_cleaner(mini, cmd, new_cmd);
 	new_cmd[j + 1] = NULL;
 	if ((*cmd)->args)
 		free_tab((*cmd)->args);
 	return (new_cmd);
 }
 
-//protected random iteration
-static char	*path_checker(char *str, char *cmd, char **path, int *err)
+char	*path_checker(char *str, char *cmd, char **path, int *err)
 {
-	char	*buff;
-	int		i;
+	char		*buff;
+	int			i;
 	struct stat	st;
-	static int k = 0;
 
 	i = -1;
 	*err = -1;
-	k++;
 	while (path[++i] && *err == -1)
 	{
 		*err = 0;
-		buff = ft_strjoin(path[i], "/"); //protected random iteration
+		buff = ft_strjoin(path[i], "/");
 		if (buff == NULL)
 			return (NULL);
-		cmd = ft_strjoin(buff, str); //protected random iteration
+		cmd = ft_strjoin(buff, str);
 		if (cmd == NULL)
 			return (free(buff), NULL);
 		*err = stat(cmd, &st);
@@ -110,36 +109,4 @@ static char	*path_checker(char *str, char *cmd, char **path, int *err)
 	if (*err == -1)
 		return (NULL);
 	return (cmd);
-}
-//protected random iteration
-int	path_finder(t_mini *mini, t_cmd **cmd, char *str)
-{
-	t_env	*local_env;
-	int		err;
-	char	*args;
-	char	**path;
-
-	args = NULL;
-	local_env = mini->h_env;
-	while (local_env && ft_strcmp(local_env->name, "PATH"))
-		local_env = local_env->next;
-	path = ft_split(local_env->value, ':'); //protected random iteration
-	if (path)
-	{
-		args = path_checker(str, args, path, &err); //protected random iteration
-		free_tab(path);
-	}
-	if (path == NULL || (args == NULL && err == 0))
-		return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL));
-	else if (err == -1)
-		return (err);
-	else
-	{
-		(*cmd)->args = malloc(sizeof(char *) * 2); //protected random iteration
-		if ((*cmd)->args == NULL)
-			return (free_cmd(cmd), free(args), error_manager(mini, MALLOC, NULL, NULL));
-		(*cmd)->args[0] = args;
-		(*cmd)->args[1] = NULL;
-	}
-	return (0);
 }
