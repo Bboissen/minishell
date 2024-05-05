@@ -82,28 +82,6 @@ char	**add_args(t_mini *mini, t_cmd **cmd, char *str)
 	return (new_cmd);
 }
 
-t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag)
-{
-	if (ft_strcmp(str, "echo") == 0)
-		(*cmd)->builtin = ECHO;
-	else if (ft_strcmp(str, "cd") == 0)
-		(*cmd)->builtin = CD;
-	else if (ft_strcmp(str, "pwd") == 0)
-		(*cmd)->builtin = PWD;
-	else if (ft_strcmp(str, "export") == 0)
-		(*cmd)->builtin = EXPORT;
-	else if (ft_strcmp(str, "unset") == 0)
-		(*cmd)->builtin = UNSET;
-	else if (ft_strcmp(str, "env") == 0)
-		(*cmd)->builtin = ENV;
-	else if (ft_strcmp(str, "exit") == 0)
-		(*cmd)->builtin = EXIT;
-	else
-		(*cmd)->builtin = NONE;
-	if ((*cmd)->builtin != NONE)
-		*arg_flag = 1;
-	return ((*cmd)->builtin);
-}
 //protected random iteration
 static char	*path_checker(char *str, char *cmd, char **path, int *err)
 {

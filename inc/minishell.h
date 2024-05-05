@@ -228,6 +228,10 @@ void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token, int err);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
+int			check_file(t_mini *mini, t_cmd **cmd, t_token **token);
+int			check_write(t_mini *mini, t_cmd **cmd, t_token **token, int fd);
+int			check_access(t_mini *mini, t_cmd **cmd, t_token **token, struct stat st);
+int			check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 
 #endif

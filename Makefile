@@ -59,6 +59,7 @@ LEXER		=	heredoc			\
 
 PARSING		=	expansions		\
 				parser_utils	\
+				parser_check	\
 				parser
 
 UTILS		=	clean_exit		\
