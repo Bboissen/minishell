@@ -6,14 +6,14 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 12:24:24 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 16:06:07 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 16:13:59 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static unsigned int	my_rand(t_mini *mini);
-static void	expand_inside(t_mini *mini, t_token *token, int fd);
+static void			expand_inside(t_mini *mini, t_token *token, int fd);
 
 int	readline_hook(void)
 {
