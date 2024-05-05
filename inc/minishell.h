@@ -219,8 +219,10 @@ char		*home_handler(t_mini *mini, char *str);
 
 /* Heredoc */
 void		heredoc(t_mini *mini);
-char		*expand_line(t_mini *mini, char *str, int fd);
+// char		*expand_line(t_mini *mini, char *str, int fd);
+void		expand_heredoc(t_mini *mini, t_token **token, int fd);
 void		delete_heredoc(t_mini *mini);
+int			readline_hook(void);
 
 /* Parser */
 int			parser(t_mini *mini);

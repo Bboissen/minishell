@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 14:49:18 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 15:08:24 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,37 +149,3 @@ char	*token_typer(t_type type[3], char *str)
 	}
 	return (str);
 }
-
-// static char	*process_dquotes(char *str, int *quote)
-// {
-// 	if (*quote == 0 && (!str || *str != '"' ))
-// 		return (str);
-// 	while (*str == '"')
-// 	{
-// 		str++;
-// 		*quote = ((*quote) + 1) % 2;
-// 	}
-// 	return (str);
-// }
-
-// static void	create_token(t_mini *mini, char *start,
-// 				t_type *options, char end)
-// {
-// 	if (end == '$' || ((*(start + 1) && is_spechar(*(start + 1))
-// 				!= 2 && !ft_isspace(*(start + 1)))))
-// 		options[1] = JOIN;
-// 	if (strlen(start) > 0)
-// 		new_token(mini, start, options);
-// }
-
-// static char	*process_squotes(char *str, int *quote)
-// {
-// 	if (!str || *str != '\'' || *quote != 0)
-// 		return (str);
-// 	while (*str == '\'')
-// 	{
-// 		str++;
-// 		*quote = ((*quote) + 1) % 2;
-// 	}
-// 	return (str);
-// }

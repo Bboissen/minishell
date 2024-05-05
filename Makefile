@@ -52,6 +52,7 @@ EXEC		=	exec_utils		\
 				executer
 
 LEXER		=	heredoc			\
+				heredoc_utils	\
 				lex_checks		\
 				lex_quotes		\
 				lex_utils		\
