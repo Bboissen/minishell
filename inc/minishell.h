@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 23:26:37 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 11:32:42 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,8 @@ int			error_manager(t_mini *mini, int err, char *fct, char *str);
 void		export_err(t_mini *mini, int error, char *arg);
 void		cd_err(t_mini *mini, int err, char *arg);
 void		exit_err(t_mini *mini, int error, char *arg);
+void		lexer_err(t_mini *mini, char *str, int err, char c);
+void		parser_err(t_mini *mini, char *str, int err);
 
 /* Lexer */
 void		lexer(t_mini *mini);
@@ -202,13 +204,15 @@ int			is_spechar(char c);
 int			is_space(int c);
 int			is_spe_builtin(t_token *token);
 int			is_spe_expand(char c);
-void		lexer_err(t_mini *mini, char *str, int err, char c);
 char		*syntax_check(t_mini *mini, char *str, int *quote);
 char		*string_handler(t_mini *mini, char *str, int *quote);
 char		*s_quote_handler(t_mini *mini, char *str, int *quote);
 char		*d_quote_handler(t_mini *mini, char *str, int *quote);
 char		*var_handler(t_mini *mini, char *str, int *quote);
 char		*random_file(t_mini *mini);
+char		*token_typer(t_type type[3], char *str);
+void		new_token(t_mini *mini, char *str, t_type options[3]);
+char		*home_handler(t_mini *mini, char *str);
 
 /* Heredoc */
 void		heredoc(t_mini *mini);
@@ -222,6 +226,5 @@ void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
-void		parser_err(t_mini *mini, char *str, int err);
 
 #endif
