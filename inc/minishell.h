@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 15:34:25 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 16:07:39 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void		init_mini(t_mini **mini, char **env, char *name);
 int			init_env(t_mini **mini, char **env_array);
 void		increment_shell_level(t_mini **mini);
 void		sig_init(void);
+int			readline_hook(void);
 void		readline_setup(t_mini *mini, char **rl, char *str);
 void		reinit(t_mini **mini);
 void		sig_handler(int code);
@@ -218,8 +219,8 @@ void		new_token(t_mini *mini, char *str, t_type options[3]);
 char		*home_handler(t_mini *mini, char *str);
 
 /* Heredoc */
+void		expand_heredoc(t_mini *mini, t_token **token, int fd);
 void		heredoc(t_mini *mini);
-char		*expand_line(t_mini *mini, char *str, int fd);
 void		delete_heredoc(t_mini *mini);
 
 /* Parser */

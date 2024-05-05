@@ -3,66 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/04 11:58:19 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/05 16:08:38 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char		*expand_line(t_mini *mini, char *str, int fd);
 
-int readline_hook()
-{
-	rl_done = 0;
-	if (get_sig()->status == INTERUPT)
-	{
-		rl_done = 1;
-	}
-	return (0);
-}
-static unsigned int	my_rand(t_mini *mini);
-static void	expand_heredoc(t_mini *mini, t_token **token, int fd);
-//protected random iteration
-char	*random_file(t_mini *mini)
-{
-	char 			*file;
-	char 			*tmp;
-	unsigned int	rand;
-	int				i;
-	// static int j =0;
-
-	i = 0;
-	rand = 0;
-	while (i++ < 9)
-	{
-		rand = rand * 10 + my_rand(mini);
-	}
-	tmp = ft_itoa(rand); //protected random iteration
-	if (!tmp)
-		return (NULL);
-	file = ft_strjoin("/tmp/", tmp); //protected random iteration
-	free(tmp);
-	return (file);
-}
-//protected
-static unsigned int	my_rand(t_mini *mini)
-{
-	static unsigned int	seed;
-	int					fd;
-
-	fd = open("/dev/urandom", O_RDONLY); //protected
-	if (fd == -1) 
-		return (error_manager(mini, errno, "open", "/dev/urandom")); //protected
-	if (read(fd, &seed, sizeof(seed)) != sizeof(seed))
-		return (error_manager(mini, errno, "read", "/dev/urandom")); //protected
-	close(fd);
-	seed = (3565867 * seed + 12345) % (1U << 31);
-	return (seed % 10);
-}
-
-//protected random iteration
 void	heredoc(t_mini *mini)
 {
 	t_token	*token;
@@ -75,7 +26,7 @@ void	heredoc(t_mini *mini)
 	{
 		if (token->type == HEREDOC)
 		{
-			token->str = random_file(mini); //protected random iteration
+			token->str = random_file(mini);
 			if (!token->str)
 				error_manager(mini, MALLOC, NULL, NULL);
 			fd = open(token->str, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -83,11 +34,11 @@ void	heredoc(t_mini *mini)
 				error_manager(mini, errno, "open", token->str);
 			token = token->next;
 			if (token->expand == EXPAND)
-				expand_heredoc(mini, &token, fd); //protected random iteration
+				expand_heredoc(mini, &token, fd);
 			while (token && (token->join == JOIN))
 			{
-				expand_heredoc(mini, &token, fd); //protected random iteration
-				token = list_join(token); //protected random iteration
+				expand_heredoc(mini, &token, fd);
+				token = list_join(token);
 				if (!token)
 				{
 					close(fd);
@@ -97,13 +48,14 @@ void	heredoc(t_mini *mini)
 			rl_event_hook = readline_hook;
 			readline_setup(mini, &line, "heredoc");
 			p_line = line;
-			while (line && ft_strcmp(line, token->str) && get_sig()->status != INTERUPT)
+			while (line && ft_strcmp(line, token->str)
+				&& get_sig()->status != INTERUPT)
 			{
 				printf("line = %s %s\n", line, token->str);
 				while (*line)
 				{
 					if (*line == '$')
-						line = expand_line(mini, line + 1, fd); //protected random iteration
+						line = expand_line(mini, line + 1, fd);
 					else
 						write(fd, line++, 1);
 				}
@@ -131,7 +83,7 @@ void	heredoc(t_mini *mini)
 		token = token->next;
 	}
 }
-//protected random iteration
+
 char	*expand_line(t_mini *mini, char *str, int fd)
 {
 	char	*start;
@@ -143,7 +95,7 @@ char	*expand_line(t_mini *mini, char *str, int fd)
 		str++;
 	end = *str;
 	*str = '\0';
-	var = expand_token(&mini, start); //protected random iteration
+	var = expand_token(&mini, start);
 	if (!var)
 	{
 		close(fd);
@@ -153,36 +105,4 @@ char	*expand_line(t_mini *mini, char *str, int fd)
 	free(var);
 	*str = end;
 	return (str++);
-}
-
-//protected random iteration
-static void	expand_heredoc(t_mini *mini, t_token **token, int fd)
-{
-	char	*new_str;
-
-	if ((*token)->expand == EXPAND)
-	{
-
-		new_str = ft_strjoin("$", (*token)->str); //protected random iteration
-		if (!new_str)
-		{
-			close(fd);
-			error_manager(mini, MALLOC, NULL, NULL);
-		}
-		free((*token)->str);
-		(*token)->str = new_str;
-		(*token)->expand = 0;
-	}
-	if ((*token)->next && (*token)->next->expand == EXPAND)
-	{
-		new_str = ft_strjoin("$", (*token)->next->str); //protected random iteration
-		if (!new_str)
-		{
-			close(fd);
-			error_manager(mini, MALLOC, NULL, NULL);
-		}
-		free((*token)->next->str);
-		(*token)->next->str = new_str;
-		(*token)->next->expand = 0;
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 09:45:41 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 15:53:37 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
  * reinitializes the shell for the next line.
  * The loop continues until the shell is instructed to exit.
  * 
- * @param {int} ac - The count of command-line arguments.
- * @param {char**} av - The command-line arguments.
- * @param {char**} env - The environment for the shell.
+ * @param ac The count of command-line arguments.
+ * @param av The command-line arguments.
+ * @param env The environment for the shell.
  * @return {int} - Returns the status of the shell execution.
  */
 int	main(int ac, char **av, char **env)

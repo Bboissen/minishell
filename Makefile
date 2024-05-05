@@ -6,7 +6,7 @@
 #    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/05/05 12:38:12 by talibabtou       ###   ########.fr        #
+#    Updated: 2024/05/05 16:08:00 by talibabtou       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,8 @@ ERROR		=	builtin_err		\
 EXEC		=	exec_utils		\
 				executer
 
-LEXER		=	heredoc			\
+LEXER		=	heredoc_utils	\
+				heredoc			\
 				lex_checks		\
 				lex_quotes		\
 				lex_utils		\

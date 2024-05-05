@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 19:43:28 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 15:54:24 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ void	sig_handler(int code)
 	}
 }
 
+/**
+ * @brief Retrieves a pointer to a static t_sig instance.
+ * To create a singleton.
+ *
+ * @return Pointer to the static t_sig instance.
+ */
 t_sig	*get_sig(void)
 {
 	static t_sig	sig;
