@@ -17,6 +17,15 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
 				int *arg_flag);
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip);
 
+void	cmd_setter(t_mini **mini, t_cmd **cmd, int skip, int *arg_flag)
+{
+	if (*cmd)
+		new_cmd(mini, cmd, arg_flag);
+	init_cmd((*mini), cmd, skip);
+	get_sig()->status = 0;
+	*arg_flag = 0;
+}
+
 int	parser(t_mini *mini)
 {
 	t_token	*token;
@@ -25,10 +34,8 @@ int	parser(t_mini *mini)
 	int		skip;
 
 	arg_flag = 0;
-	skip = 0;
 	token = mini->h_token;
-	init_cmd(mini, &cmd, skip);
-	get_sig()->status = 0;
+	init_cmd(mini, &cmd, 0);
 	while (token)
 	{
 		skip = 0;
@@ -39,17 +46,41 @@ int	parser(t_mini *mini)
 			skip += check_cmd(mini, &cmd, &token, &arg_flag);
 		if (token && token->type == PIPE)
 		{
-			if (cmd)
-				new_cmd(&mini, &cmd, &arg_flag);
-			init_cmd(mini, &cmd, skip);
-			get_sig()->status = 0;
-			arg_flag = 0;
+			cmd_setter(&mini, &cmd, skip, &arg_flag);
 			token = token->next;
 		}
 	}
 	if (cmd)
 		new_cmd(&mini, &cmd, &arg_flag);
 	return (get_sig()->status);
+}
+
+static int	check_write(t_mini *mini, t_cmd **cmd, t_token **token, int fd)
+{
+	if ((*token)->type == APPEND)
+		fd = open((*token)->next->str, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	else if ((*token)->type == TRUNC)
+		fd = open((*token)->next->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd >= 0)
+		close(fd);
+	if (fd < 0 || access((*token)->next->str, W_OK) == -1)
+		return (cmd_skip(mini, cmd, token, errno), ERROR);
+	else
+	{
+		if ((*token)->type == APPEND)
+			(*cmd)->append = 1;
+		else
+			(*cmd)->append = 0;
+		if ((*cmd)->out)
+			free((*cmd)->out);
+		(*cmd)->out = ft_strdup((*token)->next->str);
+		if (!(*cmd)->out)
+		{
+			free_cmd(cmd);
+			error_manager(mini, MALLOC, NULL, NULL);
+		}
+	}
+	return (SUCCESS);
 }
 
 static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
@@ -60,7 +91,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
 		if (access((*token)->next->str, R_OK) == -1)
-			return(cmd_skip(mini, cmd, token, errno), ERROR);
+			return (cmd_skip(mini, cmd, token, errno), ERROR);
 		else
 		{
 			if ((*cmd)->in)
@@ -74,31 +105,8 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		}
 	}
 	else if ((*token)->type == APPEND || (*token)->type == TRUNC)
-	{
-		if ((*token)->type == APPEND)
-			fd = open((*token)->next->str, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else if ((*token)->type == TRUNC)
-			fd = open((*token)->next->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd >= 0)
-			close(fd);
-		if (fd < 0 || access((*token)->next->str, W_OK) == -1)
-			return(cmd_skip(mini, cmd, token, errno), ERROR);
-		else
-		{
-			if ((*token)->type == APPEND)
-				(*cmd)->append = 1;
-			else
-				(*cmd)->append = 0;
-			if ((*cmd)->out)
-				free((*cmd)->out);
-			(*cmd)->out = ft_strdup((*token)->next->str);
-			if (!(*cmd)->out)
-			{
-				free_cmd(cmd);
-				error_manager(mini, MALLOC, NULL, NULL);
-			}
-		}
-	}
+		if (check_write(mini, cmd, token, fd) == ERROR)
+			return (ERROR);
 	(*token) = (*token)->next->next;
 	return (SUCCESS);
 }
@@ -121,18 +129,19 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
 		(*cmd)->args = add_args(mini, cmd, (*token)->str);
 	if ((*cmd)->args && (*cmd)->args[0])
 		stat((*cmd)->args[0], &st);
-	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0 && !S_ISDIR(st.st_mode)))
+	if ((*cmd)->builtin != NONE || ((*cmd)->args
+			&& access((*cmd)->args[0], X_OK) == 0 && !S_ISDIR(st.st_mode)))
 		(*arg_flag)++;
 	else if ((*cmd)->args && access((*cmd)->args[0], F_OK) == -1)
 		return (cmd_skip(mini, cmd, token, MISSING), ERROR);
 	else if ((*cmd)->args && S_ISDIR(st.st_mode))
 		return (cmd_skip(mini, cmd, token, DIRECTORY), ERROR);
-	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR)
-			|| (st.st_uid == 0 && !(st.st_mode & S_IXOTH)) || S_ISDIR(st.st_mode)))
-		{
-			get_sig()->status = 126;
-			return (cmd_skip(mini, cmd, token, errno), ERROR);
-		}
+	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || (st.st_uid == 0
+				&& !(st.st_mode & S_IXOTH)) || S_ISDIR(st.st_mode)))
+	{
+		get_sig()->status = 126;
+		return (cmd_skip(mini, cmd, token, errno), ERROR);
+	}
 	else
 		return (cmd_skip(mini, cmd, token, EXE), ERROR);
 	(*token) = (*token)->next;
