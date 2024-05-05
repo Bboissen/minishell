@@ -6,14 +6,13 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:17:13 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 12:20:26 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 14:59:40 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int	string_setter(char **str, char **start);
-static void	initialize_options(t_type options[3]);
 
 /**
  * @brief Checks the syntax of the input string.
@@ -101,6 +100,7 @@ char	*var_handler(t_mini *mini, char *str, int *quote)
 		return (str);
 	flag = string_setter(&str, &start);
 	end = *str;
+	*str = '\0';
 	initialize_options(options);
 	if (flag == 1)
 		options[2] = EXPAND;
@@ -139,18 +139,6 @@ static int	string_setter(char **str, char **start)
 	while (**str && !ft_isspace(**str) && is_spechar(**str) == 0
 		&& (flag == 0 || !is_spe_expand(**str) || **str == '?'))
 		(*str)++;
-	**str = '\0';
 	return (flag);
 }
 
-/**
- * @brief Initializes the options array.
- *
- * @param options Array of options.
- */
-static void	initialize_options(t_type options[3])
-{
-	options[0] = STR;
-	options[1] = 0;
-	options[2] = 0;
-}

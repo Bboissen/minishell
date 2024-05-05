@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:24:11 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 12:19:22 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 14:53:45 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,13 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	char	end;
 	t_type	options[3];
 
-	str = process_quotes(str, quote);
+	if (*quote == 0 && (!str || *str != '"' ))
+		return (str);
+	while (*str == '"')
+	{
+		str++;
+		*quote = ((*quote) + 1) % 2;
+	}
 	initialize_options(options);
 	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
 		return (new_token(mini, "\0", options), str);
@@ -73,18 +79,6 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	}
 	else
 		*str = end;
-	return (str);
-}
-
-static char	*process_quotes(char *str, int *quote)
-{
-	if (*quote == 0 && (!str || *str != '"' ))
-		return (str);
-	while (*str == '"')
-	{
-		str++;
-		*quote = ((*quote) + 1) % 2;
-	}
 	return (str);
 }
 

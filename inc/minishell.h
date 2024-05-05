@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 12:12:22 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 15:00:06 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ void		sig_init(void);
 void		readline_setup(t_mini *mini, char **rl, char *str);
 void		reinit(t_mini **mini);
 void		sig_handler(int code);
+void		initialize_options(t_type options[3]);
 
 /* Exec */
 
@@ -204,7 +205,7 @@ int			is_spechar(char c);
 int			is_space(int c);
 int			is_spe_builtin(t_token *token);
 int			is_spe_expand(char c);
-t_type		is_join(int **quote, char **str, char *end);
+t_type		is_join(int *quote, char *str, char end);
 int			odd_quote(char *str);
 char		*syntax_check(t_mini *mini, char *str, int *quote);
 char		*string_handler(t_mini *mini, char *str, int *quote);

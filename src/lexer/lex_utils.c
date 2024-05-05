@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 12:20:08 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 15:05:04 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,14 @@ int	is_spe_builtin(t_token *token)
 }
 
 /**
- * @brief Determines if a join operation is needed
- * based on the quote status and character values.
+ * @brief Determines if a join operation is needed based on
+ * the quote status and character values.
  *
- * @param quote Pointer to the quote status.
- * 0 indicates no quote,1 indicates a quote is open.
- * @param str Double pointer to the current position in the string.
- * @param end Pointer to the current character in the string.
- * @return {t_type} - JOIN if a join operation is needed, 0 otherwise.
+ * @param quote Pointer to the quote status. 0 indicates no quote,
+ * 1 indicates a quote is open.
+ * @param str Pointer to the current position in the string.
+ * @param end Current character in the string.
+ * @return {int} - JOIN if a join operation is needed, 0 otherwise.
  */
 t_type	is_join(int *quote, char *str, char end)
 {
