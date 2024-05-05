@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:24:11 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 12:08:07 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 12:19:22 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 		str++;
 		*quote = ((*quote) + 1) % 2;
 	}
-	options[0] = STR;
-	options[1] = 0;
-	options[2] = 0;
+	initialize_options(options);
 	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
 		return (new_token(mini, "\0", options), str);
 	if (*quote == 0)
@@ -52,16 +50,8 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	char	end;
 	t_type	options[3];
 
-	if (*quote == 0 && (!str || *str != '"' ))
-		return (str);
-	while (*str == '"')
-	{
-		str++;
-		*quote = ((*quote) + 1) % 2;
-	}
-	options[0] = STR;
-	options[1] = 0;
-	options[2] = 0;
+	str = process_quotes(str, quote);
+	initialize_options(options);
 	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
 		return (new_token(mini, "\0", options), str);
 	else if (*quote == 0)
@@ -83,6 +73,18 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 	}
 	else
 		*str = end;
+	return (str);
+}
+
+static char	*process_quotes(char *str, int *quote)
+{
+	if (*quote == 0 && (!str || *str != '"' ))
+		return (str);
+	while (*str == '"')
+	{
+		str++;
+		*quote = ((*quote) + 1) % 2;
+	}
 	return (str);
 }
 

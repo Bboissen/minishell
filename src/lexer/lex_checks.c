@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:17:13 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 12:11:38 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 12:20:26 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ char	*string_handler(t_mini *mini, char *str, int *quote)
 		str++;
 	end = *str;
 	*str = 0;
-	options[0] = STR;
-	options[1] = 0;
-	options[2] = 0;
+	initialize_options(options);
 	if (is_spechar(end) == 1)
 		options[1] = JOIN;
 	new_token(mini, start, options);
@@ -106,7 +104,7 @@ char	*var_handler(t_mini *mini, char *str, int *quote)
 	initialize_options(options);
 	if (flag == 1)
 		options[2] = EXPAND;
-	options[1] = is_join(&quote, &str, &end);
+	options[1] = is_join(quote, str, end);
 	if (*start)
 		new_token(mini, start, options);
 	if (end == '"' && *quote == 1)
