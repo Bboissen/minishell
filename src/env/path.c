@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 23:39:46 by bbsn              #+#    #+#             */
+/*   Updated: 2024/05/05 23:40:15 by bbsn             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -28,7 +39,6 @@ int	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 		cmd_filler(mini, cmd, args);
 	return (0);
 }
-
 
 char	*path_checker(char *str, char *cmd, char **path, int *err)
 {

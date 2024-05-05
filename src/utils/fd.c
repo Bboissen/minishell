@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 19:47:05 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 23:41:45 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	delete_heredoc(t_mini *mini)
 	t_token	*current;
 
 	current = mini->h_token;
-
 	while (current != NULL)
 	{
 		if (current->type == HEREDOC)
