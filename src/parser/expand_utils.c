@@ -44,3 +44,22 @@ void	token_refacto(t_mini **mini)
 		free(tmp_token);
 	}
 }
+
+char	*get_error_code(char *str)
+{
+	char	*env_val;
+	char	*tmp;
+
+	env_val = ft_itoa(get_sig()->status);
+	if (!env_val)
+		return (NULL);
+	if (ft_strcmp(str, "?") != 0)
+	{
+		tmp = ft_strjoin(env_val, str + 1);
+		free(env_val);
+		env_val = tmp;
+	}
+	if (!env_val)
+		return (NULL);
+	return (env_val);
+}

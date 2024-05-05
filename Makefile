@@ -39,6 +39,7 @@ BUILTINS	=	cd				\
 				unset
 
 ENV			=	environment		\
+				path			\
 				init			\
 				shlvl			\
 				sort_env

@@ -33,11 +33,11 @@ int	parser(t_mini *mini)
 	arg_flag = 0;
 	token = mini->h_token;
 	init_cmd(mini, &cmd, 0);
+	get_sig()->status = 0;
 	while (token)
 	{
 		skip = 0;
-		if (token && (token->type == INPUT || token->type == HEREDOC
-				|| token->type == APPEND || token->type == TRUNC))
+		if (token && is_file(token->type))
 			skip += check_file(mini, &cmd, &token);
 		if (token && token->type == STR)
 			skip += check_cmd(mini, &cmd, &token, &arg_flag);

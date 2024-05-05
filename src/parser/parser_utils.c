@@ -84,29 +84,10 @@ char	**add_args(t_mini *mini, t_cmd **cmd, char *str)
 	return (new_cmd);
 }
 
-char	*path_checker(char *str, char *cmd, char **path, int *err)
+int	is_file(int type)
 {
-	char		*buff;
-	int			i;
-	struct stat	st;
-
-	i = -1;
-	*err = -1;
-	while (path[++i] && *err == -1)
-	{
-		*err = 0;
-		buff = ft_strjoin(path[i], "/");
-		if (buff == NULL)
-			return (NULL);
-		cmd = ft_strjoin(buff, str);
-		if (cmd == NULL)
-			return (free(buff), NULL);
-		*err = stat(cmd, &st);
-		if (*err == -1)
-			free(cmd);
-		free(buff);
-	}
-	if (*err == -1)
-		return (NULL);
-	return (cmd);
+	if (type == INPUT || type == HEREDOC
+		|| type == APPEND || type == TRUNC)
+		return (1);
+	return (0);
 }

@@ -237,8 +237,10 @@ int			check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 char		*path_checker(char *str, char *cmd, char **path, int *err);
 void		args_cleaner( t_mini *mini, t_cmd **cmd, char **new_cmd);
-
+void		cmd_filler(t_mini *mini, t_cmd **cmd, char *args);
+int			is_file(int type);
 /*Expansion*/
 void		token_join(t_mini **mini);
 void		token_refacto(t_mini **mini);
+char		*get_error_code(char *str);
 #endif
