@@ -48,7 +48,7 @@ void	new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag)
 	*arg_flag = 0;
 }
 
-static void	args_cleaner( t_mini *mini, t_cmd **cmd, char **new_cmd)
+void	args_cleaner( t_mini *mini, t_cmd **cmd, char **new_cmd)
 {
 	free_tab(new_cmd);
 	free_cmd(cmd);

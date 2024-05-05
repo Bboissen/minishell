@@ -156,7 +156,6 @@ t_token	*list_join(t_token *token)
 	free(to_free);
 	return (token);
 }
-
 int	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 {
 	t_env	*local_env;
@@ -168,6 +167,8 @@ int	path_finder(t_mini *mini, t_cmd **cmd, char *str)
 	local_env = mini->h_env;
 	while (local_env && ft_strcmp(local_env->name, "PATH"))
 		local_env = local_env->next;
+	if (!local_env)
+		return (0);
 	path = ft_split(local_env->value, ':');
 	if (path)
 	{
