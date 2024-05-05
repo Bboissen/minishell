@@ -1,0 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_err.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/23 10:03:28 by bbsn              #+#    #+#             */
+/*   Updated: 2024/05/05 10:03:58 by talibabtou       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+void	parser_err(t_mini *mini, char *str, int err)
+{
+	get_sig()->status = 1;
+	if (err == DIRECTORY)
+	{
+		get_sig()->status = DIRECTORY;
+		ft_printfd(STDERR_FILENO, "%s: %s: Is a directory\n", mini->name, str);
+	}
+	else if (err != MALLOC && err != EXE && err != MISSING)
+		ft_printfd(STDERR_FILENO, "%s: %s: %s\n",
+			mini->name, str, strerror(err));
+	else if (err == EXE)
+	{
+		get_sig()->status = EXE;
+		ft_printfd(STDERR_FILENO, "%s: %s: command not found\n",
+			mini->name, str);
+	}
+	else if (err == MISSING)
+	{
+		get_sig()->status = EXE;
+		ft_printfd(STDERR_FILENO, "%s: %s: No such file or directory\n",
+			mini->name, str);
+	}
+	else if (err == MALLOC)
+		error_manager(mini, MALLOC, NULL, NULL);
+}

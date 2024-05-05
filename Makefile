@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+         #
+#    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/05/04 18:00:42 by bboissen         ###   ########.fr        #
+#    Updated: 2024/05/05 12:38:12 by talibabtou       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,53 +29,54 @@ LIBFT_DIR	=	libft/
 
 # Sources & Objects #
 
-BUILTINS	=	cd			\
-				echo		\
-				env			\
-				exit		\
-				export		\
+BUILTINS	=	cd				\
+				echo			\
+				env				\
+				exit			\
 				export_utils	\
-				pwd			\
+				export			\
+				pwd				\
 				unset
 
-ENV			=	env			\
-				init		\
-				shlvl		\
+ENV			=	environment		\
+				init			\
+				shlvl			\
 				sort_env
 
 ERROR		=	builtin_err		\
-				error_manager	
+				error_manager	\
+				lexer_err		\
+				parser_err
 
-EXEC		=	exec_utils	\
+EXEC		=	exec_utils		\
 				executer
-				
-UTILS		=	fd			\
-				free		\
+
+LEXER		=	heredoc			\
+				lex_checks		\
+				lex_quotes		\
+				lex_utils		\
+				lexer
+
+PARSING		=	expansions		\
+				parser_utils	\
+				parser
+
+UTILS		=	clean_exit		\
+				fd				\
 				signal
 
 MAIN		=	minishell
 
-LEXER		=	lexer		\
-				lex_utils	\
-				heredoc		\
-				lexer_err
-
-PARSING		=	expansions		\
- 				parser	\
-				parser_utils	\
-				parser_err
-				
 SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
 				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
+				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
+				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))			\
 				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
 				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
-				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
-				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))		\
 				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
-
 
 # Rules #
 
@@ -105,9 +106,9 @@ force			:
 
 
 clean			:
-				@if [ -d "$(OBJ_DIR)" ]; then				\
+				@if [ -d "$(OBJ_DIR)" ]; then					\
 					echo "Cleaning minishell obj/ directory";	\
-					rm -rf $(OBJ_DIR);						\
+					rm -rf $(OBJ_DIR);							\
 				fi
 				@make -sC libft clean
 

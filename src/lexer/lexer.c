@@ -3,22 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/04 11:16:20 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/05 14:49:18 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	odd_quote(char *str);
+static char	*handle_all_tests(t_mini *mini, char *str, int *quote);
+static void	insert_new_token(t_mini *mini, t_token *new_token);
 
+/**
+ * @brief Main lexer function, processes the input
+ * string and generates tokens.
+ *
+ * @param mini Pointer to the t_mini structure.
+ */
 void	lexer(t_mini *mini)
 {
 	int		quote;
 	char	*str;
-	
+
 	str = mini->rl;
 	if (odd_quote(str))
 		return (lexer_err(mini, NULL, QUOTE, 0));
@@ -32,72 +39,147 @@ void	lexer(t_mini *mini)
 			if (mini->token && (mini->token->join == JOIN))
 				mini->token->join = 0;
 		}
-		str = syntax_check(mini, str, &quote);
-		str = string_handler(mini, str, &quote);
-		str = s_quote_handler(mini, str, &quote);
-		str = d_quote_handler(mini, str, &quote);
-		str = var_handler(mini, str, &quote);
+		str = handle_all_tests(mini, str, &quote);
 	}
 	if (mini->token && mini->token->type != STR)
 		return (lexer_err(mini, NULL, PARSE, 0));
 	if (mini->token && mini->token->join == JOIN)
-			mini->token->join = 0;
+		mini->token->join = 0;
 	mini->token = mini->h_token;
 }
 
-static int	odd_quote(char *str)
+/**
+ * @brief Handles all tests.
+ *
+ * @param mini Pointer to the t_mini structure.
+ * @param str Input string.
+ * @param quote Pointer to the quote variable.
+ */
+static char	*handle_all_tests(t_mini *mini, char *str, int *quote)
 {
-	int		i;
-	int		s_quote;
-	int		d_quote;
+	str = syntax_check(mini, str, quote);
+	str = string_handler(mini, str, quote);
+	str = s_quote_handler(mini, str, quote);
+	str = d_quote_handler(mini, str, quote);
+	str = var_handler(mini, str, quote);
+	return (str);
+}
 
-	i = 0;
-	s_quote = 0;
-	d_quote = 0;
+/**
+ * @brief Creates a new token.
+ *
+ * @param mini Pointer to the t_mini structure.
+ * @param str Input string.
+ * @param options Array of token options.
+ */
+void	new_token(t_mini *mini, char *str, t_type options[3])
+{
+	t_token	*new_token;
+
+	new_token = malloc(sizeof(t_token));
+	if (!new_token)
+		return (lexer_err(mini, NULL, MALLOC, 0));
 	if (str)
 	{
-		while (str[i])
-		{
-			if (str[i] == '\'' && d_quote != 1)
-				s_quote = (s_quote + 1) % 2;
-			else if (str[i] == '"' && s_quote != 1)
-				d_quote = (d_quote + 1) % 2;
-			i++;
-		}
+		new_token->str = ft_strdup(str);
+		if (!new_token->str)
+			return (ft_memdel(new_token), lexer_err(mini, NULL, MALLOC, 0));
 	}
-	return (s_quote % 2 || d_quote % 2);
-}
-
-int	is_spechar(char c)
-{
-	if (c == '\'' || c == '"' || c == '$')
-		return (1);
-	else if (c == '|' || c == '>' || c == '<')
-		return (2);
-	return (0);
-}
-
-int	is_spe_expand(char c)
-{
-	if ((c >= '!' && c <= '/') || (c >= ':' && c <= '@')
-		|| (c >= '[' && c <= ']') || (c >= '{' && c <= '}'))
-		return (1);
 	else
-		return (0);
+		new_token->str = NULL;
+	new_token->type = options[0];
+	new_token->join = options[1];
+	new_token->expand = options[2];
+	new_token->next = NULL;
+	insert_new_token(mini, new_token);
 }
 
-int	is_spe_builtin(t_token *token)
+/**
+ * @brief Inserts a new token into the token list.
+ *
+ * @param mini Pointer to the t_mini structure.
+ * @param new_token Pointer to the new token.
+ */
+static void	insert_new_token(t_mini *mini, t_token *new_token)
 {
-	char 	*str;
-	
-	while (token && token->type != PIPE)
+	if (!mini->token)
 	{
-		str = token->str;
-		if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0
-			|| ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0
-			|| ft_strcmp(str, "ls") == 0)
-			return (1);
-		token = token->prev;
+		new_token->prev = NULL;
+		mini->token = new_token;
+		mini->h_token = mini->token;
 	}
-	return (0);
+	else
+	{
+		new_token->prev = mini->token;
+		mini->token->next = new_token;
+		mini->token = mini->token->next;
+	}
 }
+
+/**
+ * @brief Determines the type of the token.
+ *
+ * @param type Array of token types.
+ * @param str Input string.
+ * @return {char *} - Returns the updated string pointer.
+ */
+char	*token_typer(t_type type[3], char *str)
+{
+	if (!str || *str == '|')
+		type[0] = PIPE;
+	else if (*str == '>')
+	{
+		if (*(str + 1) == '>')
+		{
+			type[0] = APPEND;
+			str++;
+		}
+		else
+			type[0] = TRUNC;
+	}
+	else if (*str == '<')
+	{
+		if (*(str + 1) == '<')
+		{
+			type[0] = HEREDOC;
+			str++;
+		}
+		else
+			type[0] = INPUT;
+	}
+	return (str);
+}
+
+// static char	*process_dquotes(char *str, int *quote)
+// {
+// 	if (*quote == 0 && (!str || *str != '"' ))
+// 		return (str);
+// 	while (*str == '"')
+// 	{
+// 		str++;
+// 		*quote = ((*quote) + 1) % 2;
+// 	}
+// 	return (str);
+// }
+
+// static void	create_token(t_mini *mini, char *start,
+// 				t_type *options, char end)
+// {
+// 	if (end == '$' || ((*(start + 1) && is_spechar(*(start + 1))
+// 				!= 2 && !ft_isspace(*(start + 1)))))
+// 		options[1] = JOIN;
+// 	if (strlen(start) > 0)
+// 		new_token(mini, start, options);
+// }
+
+// static char	*process_squotes(char *str, int *quote)
+// {
+// 	if (!str || *str != '\'' || *quote != 0)
+// 		return (str);
+// 	while (*str == '\'')
+// 	{
+// 		str++;
+// 		*quote = ((*quote) + 1) % 2;
+// 	}
+// 	return (str);
+// }

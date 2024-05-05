@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/04 17:51:32 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/05 14:58:21 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
 static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip);
 
-//protected random iteration
 int	parser(t_mini *mini)
 {
 	t_token	*token;
@@ -27,21 +26,21 @@ int	parser(t_mini *mini)
 	arg_flag = 0;
 	skip = 0;
 	token = mini->h_token;
-	init_cmd(mini, &cmd, skip); //protected random iteration
+	init_cmd(mini, &cmd, skip);
 	get_sig()->status = 0;
 	while (token)
 	{
 		skip = 0;
 		if (token && (token->type == INPUT || token->type == HEREDOC
-			|| token->type == APPEND || token->type == TRUNC))
-			skip += check_file(mini, &cmd, &token); //protected random iteration
+				|| token->type == APPEND || token->type == TRUNC))
+			skip += check_file(mini, &cmd, &token);
 		if (token && token->type == STR)
-			skip += check_cmd(mini, &cmd, &token, &arg_flag); //protected random iteration
+			skip += check_cmd(mini, &cmd, &token, &arg_flag);
 		if (token && token->type == PIPE)
 		{
 			if (cmd)
 				new_cmd(&mini, &cmd, &arg_flag);
-			init_cmd(mini, &cmd, skip); //protected random iteration
+			init_cmd(mini, &cmd, skip);
 			get_sig()->status = 0;
 			arg_flag = 0;
 			token = token->next;
@@ -51,11 +50,11 @@ int	parser(t_mini *mini)
 		new_cmd(&mini, &cmd, &arg_flag);
 	return (get_sig()->status);
 }
-//protected random iteration
+
 static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 {
 	int	fd;
-		
+
 	fd = -1;
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
@@ -65,9 +64,9 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		{
 			if ((*cmd)->in)
 				free((*cmd)->in);
-			(*cmd)->in = ft_strdup((*token)->next->str); //protected random iteration
+			(*cmd)->in = ft_strdup((*token)->next->str);
 			if (!(*cmd)->in)
-				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), ERROR); 
+				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), ERROR);
 		}
 	}
 	else if ((*token)->type == APPEND || (*token)->type == TRUNC)
@@ -88,23 +87,22 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 				(*cmd)->append = 0;
 			if ((*cmd)->out)
 				free((*cmd)->out);
-			(*cmd)->out = ft_strdup((*token)->next->str); //protected random iteration
+			(*cmd)->out = ft_strdup((*token)->next->str);
 			if (!(*cmd)->out)
 				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), ERROR);
 		}
 	}
 	(*token) = (*token)->next->next;
-	return (0);
+	return (SUCCESS);
 }
-//to protect
-// echo'dsfas'$PATH'sdfsdf'
+
 static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 {
 	struct stat	st;
-	
+
 	if (*arg_flag)
 	{
-		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
+		(*cmd)->args = add_args(mini, cmd, (*token)->str);
 		(*token) = (*token)->next;
 		return (SUCCESS);
 	}
@@ -112,7 +110,7 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	if ((*cmd)->builtin == NONE && !ft_strchr((*token)->str, '/'))
 		path_finder(mini, cmd, (*token)->str); //to protect
 	else if (ft_strchr((*token)->str, '/'))
-		(*cmd)->args = add_args(mini, cmd, (*token)->str); //protected random iteration
+		(*cmd)->args = add_args(mini, cmd, (*token)->str);
 	if ((*cmd)->args && (*cmd)->args[0])
 		stat((*cmd)->args[0], &st);
 	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0 && !S_ISDIR(st.st_mode)))
@@ -122,22 +120,21 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	else if ((*cmd)->args && S_ISDIR(st.st_mode))
 		return (parser_err(mini, (*token)->str, DIRECTORY), cmd_skip(mini, cmd, token), ERROR);
 	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || 
-         (st.st_uid == 0 && !(st.st_mode & S_IXOTH)) || S_ISDIR(st.st_mode)))
-		 {
+		(st.st_uid == 0 && !(st.st_mode & S_IXOTH)) || S_ISDIR(st.st_mode)))
+		{
 			parser_err(mini, (*token)->str, errno);
 			get_sig()->status = 126;
 			return (cmd_skip(mini, cmd, token), ERROR);
-		 }
+		}
 	else
 		return (parser_err(mini, (*token)->str, EXE), cmd_skip(mini, cmd, token), ERROR);
 	(*token) = (*token)->next;
 	return (SUCCESS);
 }
 
-//protected random iteration
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 {
-	*cmd = malloc(sizeof(t_cmd)); //protected random iteration
+	*cmd = malloc(sizeof(t_cmd));
 	if (!*cmd)
 		return (error_manager(mini, MALLOC, NULL, NULL));
 	(*cmd)->args = NULL;
@@ -145,7 +142,7 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 		(*cmd)->in = NULL;
 	else
 	{
-		(*cmd)->in = ft_strdup("/dev/null"); //protected random iteration
+		(*cmd)->in = ft_strdup("/dev/null");
 		if (!(*cmd)->in)
 			return (free((*cmd)), error_manager(mini, MALLOC, NULL, NULL));
 	}

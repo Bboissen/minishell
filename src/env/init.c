@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 19:44:01 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 12:25:20 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,16 @@ void	reinit(t_mini **mini)
 		(*mini)->rl = NULL;
 	}
 	delete_heredoc((*mini));
+}
+
+/**
+ * @brief Initializes the options array.
+ *
+ * @param options Array of options.
+ */
+void	initialize_options(t_type options[3])
+{
+	options[0] = STR;
+	options[1] = 0;
+	options[2] = 0;
 }
