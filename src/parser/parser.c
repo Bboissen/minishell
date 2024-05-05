@@ -13,7 +13,8 @@
 #include "minishell.h"
 
 static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token);
-static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
+static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
+				int *arg_flag);
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip);
 
 int	parser(t_mini *mini)
@@ -59,14 +60,17 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	if ((*token)->type == INPUT || (*token)->type == HEREDOC)
 	{
 		if (access((*token)->next->str, R_OK) == -1)
-			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
+			return(cmd_skip(mini, cmd, token, errno), ERROR);
 		else
 		{
 			if ((*cmd)->in)
 				free((*cmd)->in);
 			(*cmd)->in = ft_strdup((*token)->next->str);
 			if (!(*cmd)->in)
-				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), ERROR);
+			{
+				free_cmd(cmd);
+				error_manager(mini, MALLOC, NULL, NULL);
+			}
 		}
 	}
 	else if ((*token)->type == APPEND || (*token)->type == TRUNC)
@@ -78,7 +82,7 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 		if (fd >= 0)
 			close(fd);
 		if (fd < 0 || access((*token)->next->str, W_OK) == -1)
-			return (parser_err(mini, (*token)->next->str, errno), cmd_skip(mini, cmd, token), errno);
+			return(cmd_skip(mini, cmd, token, errno), ERROR);
 		else
 		{
 			if ((*token)->type == APPEND)
@@ -89,14 +93,18 @@ static int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 				free((*cmd)->out);
 			(*cmd)->out = ft_strdup((*token)->next->str);
 			if (!(*cmd)->out)
-				return (free_cmd(cmd), error_manager(mini, MALLOC, NULL, NULL), ERROR);
+			{
+				free_cmd(cmd);
+				error_manager(mini, MALLOC, NULL, NULL);
+			}
 		}
 	}
 	(*token) = (*token)->next->next;
 	return (SUCCESS);
 }
 
-static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
+static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
+				int *arg_flag)
 {
 	struct stat	st;
 
@@ -108,7 +116,7 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	}
 	(*cmd)->builtin = check_blt(cmd, (*token)->str, arg_flag);
 	if ((*cmd)->builtin == NONE && !ft_strchr((*token)->str, '/'))
-		path_finder(mini, cmd, (*token)->str); //to protect
+		path_finder(mini, cmd, (*token)->str);
 	else if (ft_strchr((*token)->str, '/'))
 		(*cmd)->args = add_args(mini, cmd, (*token)->str);
 	if ((*cmd)->args && (*cmd)->args[0])
@@ -116,18 +124,17 @@ static int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag)
 	if ((*cmd)->builtin != NONE || ((*cmd)->args && access((*cmd)->args[0], X_OK) == 0 && !S_ISDIR(st.st_mode)))
 		(*arg_flag)++;
 	else if ((*cmd)->args && access((*cmd)->args[0], F_OK) == -1)
-		return (parser_err(mini, (*token)->str, MISSING), cmd_skip(mini, cmd, token), ERROR);
+		return (cmd_skip(mini, cmd, token, MISSING), ERROR);
 	else if ((*cmd)->args && S_ISDIR(st.st_mode))
-		return (parser_err(mini, (*token)->str, DIRECTORY), cmd_skip(mini, cmd, token), ERROR);
-	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR) || 
-		(st.st_uid == 0 && !(st.st_mode & S_IXOTH)) || S_ISDIR(st.st_mode)))
+		return (cmd_skip(mini, cmd, token, DIRECTORY), ERROR);
+	else if ((*cmd)->args && (!(st.st_mode & S_IXUSR)
+			|| (st.st_uid == 0 && !(st.st_mode & S_IXOTH)) || S_ISDIR(st.st_mode)))
 		{
-			parser_err(mini, (*token)->str, errno);
 			get_sig()->status = 126;
-			return (cmd_skip(mini, cmd, token), ERROR);
+			return (cmd_skip(mini, cmd, token, errno), ERROR);
 		}
 	else
-		return (parser_err(mini, (*token)->str, EXE), cmd_skip(mini, cmd, token), ERROR);
+		return (cmd_skip(mini, cmd, token, EXE), ERROR);
 	(*token) = (*token)->next;
 	return (SUCCESS);
 }

@@ -15,8 +15,13 @@
 static char	*path_checker(char *str, char *cmd, char **path, int *err);
 
 //protected random iteration
-void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token)
+void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token, int err)
 {
+	if (err == INPUT || err == HEREDOC
+			|| err == APPEND || err == TRUNC)
+		parser_err(mini, (*token)->next->str, errno);
+	else
+		parser_err(mini, (*token)->str, err);
 	while ((*token) && (*token)->type != PIPE)
 		(*token) = (*token)->next;
 	free_cmd(cmd);

@@ -224,7 +224,7 @@ void		delete_heredoc(t_mini *mini);
 
 /* Parser */
 int			parser(t_mini *mini);
-void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token);
+void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token, int err);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);

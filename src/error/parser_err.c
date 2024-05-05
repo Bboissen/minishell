@@ -14,7 +14,8 @@
 
 void	parser_err(t_mini *mini, char *str, int err)
 {
-	get_sig()->status = 1;
+	if (get_sig()->status != 126)
+		get_sig()->status = 1;
 	if (err == DIRECTORY)
 	{
 		get_sig()->status = DIRECTORY;
