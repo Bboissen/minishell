@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 23:41:49 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 10:45:17 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,14 @@ static int	env_cpy(char **env_array, t_env **env, int *i)
 
 	*env = malloc(sizeof(t_env));
 	if (!(*env))
-		return (ERROR);
+		return (ERROR); //to protect
 	equals_pos = ft_strchr(env_array[*i], '=');
 	if (equals_pos != NULL)
 	{
-		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]);
+		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]); //to protect
 		if (!(*env)->name)
 			return (free(*env), ERROR);
-		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1);
+		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1); //to protect
 	}
 	else
 	{

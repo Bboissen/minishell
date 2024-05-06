@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 15:00:06 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 10:25:04 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,8 +232,10 @@ char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int			check_file(t_mini *mini, t_cmd **cmd, t_token **token);
 int			check_write(t_mini *mini, t_cmd **cmd, t_token **token, int fd);
-int			check_access(t_mini *mini, t_cmd **cmd, t_token **token, struct stat st);
-int			check_cmd(t_mini *mini, t_cmd **cmd, t_token **token, int *arg_flag);
+int			check_access(t_mini *mini, t_cmd **cmd, t_token **token,
+				struct stat st);
+int			check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
+				int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 char		*path_checker(char *str, char *cmd, char **path, int *err);
 void		args_cleaner( t_mini *mini, t_cmd **cmd, char **new_cmd);

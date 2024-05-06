@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:17 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 09:45:41 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 10:56:22 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ int	main(int ac, char **av, char **env)
 		// }
 		// mini->token = mini->h_token;
 
-		if (mini->token)
+		if (mini->h_token)
 			heredoc(mini);
-		if (mini->token)
+		if (mini->h_token)
 			expand_join(&mini);
 		if (mini->h_token)
 			err = parser(mini);
-		if (mini->cmd)
+		if (mini->h_cmd)
 			cmd_exec(mini);
 
 		// printf("\n-----------------------------------------------\n");

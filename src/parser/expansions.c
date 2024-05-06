@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 10:54:39 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 10:40:58 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,9 @@ t_token	*list_join(t_token *token)
 	t_token	*to_free;
 
 	new_str = malloc(ft_strlen(token->str)
-			+ ft_strlen(token->next->str) + 1);
+			+ ft_strlen(token->next->str) + 1); //to protect
+	if (!new_str)
+		error_manager(NULL, MALLOC, NULL, NULL);
 	ft_strcpy(new_str, token->str);
 	ft_strcat(new_str, token->next->str);
 	free(token->next->str);
