@@ -6,11 +6,15 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/06 13:12:24 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:30:46 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// ------lexer------
+// '''''''e''''''''''c''''''''''''h''''''''o''''''''''''''''''''' bonjour
+// ls ''
 
 /**
  * Expands and joins tokens in the shell.
@@ -110,8 +114,6 @@ t_token	*list_join(t_token *token)
 
 void	cmd_filler(t_mini *mini, t_cmd **cmd, char *args)
 {
-	static int	i = 0;
-
 	(*cmd)->args = malloc(sizeof(char *) * 2);
 	if ((*cmd)->args == NULL)
 	{

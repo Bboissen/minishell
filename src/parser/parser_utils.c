@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 23:41:03 by bbsn             ###   ########.fr       */
+/*   Updated: 2024/05/06 14:17:13 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token, int err)
 {
-	if (err == INPUT || err == HEREDOC
-		|| err == APPEND || err == TRUNC)
+	if ((*token)->type == INPUT || (*token)->type == HEREDOC
+		|| (*token)->type == APPEND || (*token)->type == TRUNC)
 		parser_err(mini, (*token)->next->str, errno);
 	else
 		parser_err(mini, (*token)->str, err);

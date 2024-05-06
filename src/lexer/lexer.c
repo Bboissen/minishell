@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 15:08:24 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 14:54:53 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	lexer(t_mini *mini)
 				mini->token->join = 0;
 		}
 		str = handle_all_tests(mini, str, &quote);
+		// printf("main = %s\n", str);
 	}
 	if (mini->token && mini->token->type != STR)
 		return (lexer_err(mini, NULL, PARSE, 0));
