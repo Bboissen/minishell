@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:24:11 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/06 15:06:13 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:16:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,20 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 		return (str);
 	str = process_squotes(str, &quote);
 	initialize_options(options);
-	if (*quote == 0 && mini->token && is_spe_builtin(mini->token))
+	if (*quote == 0 && mini->token && !mini->token->join && is_spe_builtin(mini->token))
 		return (new_token(mini, "\0", options), str);
 	if (*quote == 0)
 		return (str);
 	start = str;
 	while (*str && *str != '\'')
-		str++
+		str++;
 	*str++ = '\0';
 	if (*(str) && is_spechar(*(str)) != 2 && !ft_isspace(*(str)))
 		options[1] = JOIN;
 	if (*(str) && (is_spechar(*(str)) == 2 || ft_isspace(*(str))))
 		options[1] = 0;
 	new_token(mini, start, options);
-	while (*str && *str != '\'')
+	while (*str && *str == '\'')
 		str++;
 	*quote = 0;
 	return (str);
