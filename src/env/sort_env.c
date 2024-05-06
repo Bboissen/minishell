@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/06 15:28:49 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:29:52 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	print_sorted_env(t_mini *mini)
 	sort_env(tab, str_env_len(tab));
 	i = 0;
 	while (tab[i])
-	{	len = ft_strrchr(tab[i], '=') - tab[i];
+	{	len = ft_strchr(tab[i], '=') - tab[i];
 		delim = tab[i][len];
 		tab[i][len] = '\0';
 		ft_printfd(STDOUT_FILENO, "declare -x %s", tab[i]);
