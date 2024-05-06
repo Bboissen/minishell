@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/06 10:40:58 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:12:24 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,9 @@ t_token	*list_join(t_token *token)
 	t_token	*to_free;
 
 	new_str = malloc(ft_strlen(token->str)
-			+ ft_strlen(token->next->str) + 1); //to protect
+			+ ft_strlen(token->next->str) + 1);
 	if (!new_str)
-		error_manager(NULL, MALLOC, NULL, NULL);
+		return (NULL);
 	ft_strcpy(new_str, token->str);
 	ft_strcat(new_str, token->next->str);
 	free(token->next->str);
@@ -110,6 +110,8 @@ t_token	*list_join(t_token *token)
 
 void	cmd_filler(t_mini *mini, t_cmd **cmd, char *args)
 {
+	static int	i = 0;
+
 	(*cmd)->args = malloc(sizeof(char *) * 2);
 	if ((*cmd)->args == NULL)
 	{

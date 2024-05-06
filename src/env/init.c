@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 12:25:20 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 11:36:10 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	init_mini(t_mini **mini, char **env, char *name)
 	(*mini)->h_token = NULL;
 	(*mini)->env = NULL;
 	(*mini)->h_env = NULL;
+	(*mini)->initial_fds[0] = -1;
+	(*mini)->initial_fds[1] = -1;
 	init_env(mini, env);
 	increment_shell_level(mini);
 	sig_init();

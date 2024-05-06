@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/06 10:45:17 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:43:40 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,14 @@ static int	env_cpy(char **env_array, t_env **env, int *i)
 
 	*env = malloc(sizeof(t_env));
 	if (!(*env))
-		return (ERROR); //to protect
+		return (ERROR);
 	equals_pos = ft_strchr(env_array[*i], '=');
 	if (equals_pos != NULL)
 	{
-		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]); //to protect
+		(*env)->name = ft_strndup(env_array[*i], equals_pos - env_array[*i]);
 		if (!(*env)->name)
 			return (free(*env), ERROR);
-		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1); //to protect
+		(*env)->value = ft_strdup(ft_strchr(env_array[*i], '=') + 1);
 	}
 	else
 	{

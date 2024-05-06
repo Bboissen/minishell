@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 15:16:04 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 12:59:52 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,11 @@ int	set_env(t_mini *mini, t_env **env, char *name, char *value)
 			{
 				tmp->value = strdup(value);
 				if (!tmp->value)
-					return (error_manager(mini, MALLOC, NULL, NULL), ERROR);
+				{
+					ft_memdel(value);
+					ft_memdel(name);
+					error_manager(mini, MALLOC, NULL, NULL);
+				}
 				return (TRUE);
 			}
 		}
