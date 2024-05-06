@@ -6,19 +6,18 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/06 14:44:04 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 16:52:28 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief Handles errors for the export command.
+ * @brief Error manager for the export command.
  * 
  * @param mini Pointer to the mini shell structure.
  * @param error The error code.
  * @param arg The argument that caused the error.
- * @return {int} - Returns the status of the error handling.
  */
 void	export_err(t_mini *mini, int error, char *arg)
 {
@@ -32,7 +31,7 @@ not a valid identifier\n", mini->name, arg);
 }
 
 /**
- * @brief Handles errors for the cd command.
+ * @brief Error manager for the cd command.
  * 
  * @param mini Pointer to the mini shell structure.
  * @param err The error code.
@@ -58,7 +57,7 @@ getcwd: cannot access parent directories: No such file or directory\n");
 }
 
 /**
- * @brief Handles errors for the exit command.
+ * @brief Error manager for the exit command.
  * 
  * @param mini Pointer to the mini shell structure.
  * @param error The error code.

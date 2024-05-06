@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   error_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:51:27 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/04 11:08:14 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 16:52:59 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Global error manager.
+ * 
+ * @param mini Pointer to the mini shell structure.
+ * @param error The error code.
+ * @param arg The argument that caused the error.
+ * @return {int} - Returns a call to clean_exit.
+ */
 int	error_manager(t_mini *mini, int err, char *fct, char *str)
 {
 	t_sig	*sig;

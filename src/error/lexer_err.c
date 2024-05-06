@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_err.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 10:34:17 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 10:04:30 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 16:54:07 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Error manager for the lexer.
+ * 
+ * @param mini Pointer to the main structure of the shell.
+ * @param str The string that caused the error.
+ * @param err The error code.
+ * @param c The character that caused the error.
+ */
 void	lexer_err(t_mini *mini, char *str, int err, char c)
 {
 	get_sig()->status = SYNTAX;

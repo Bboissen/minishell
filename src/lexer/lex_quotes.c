@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_quotes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:24:11 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/06 15:16:43 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:55:50 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 		return (str);
 	str = process_squotes(str, &quote);
 	initialize_options(options);
-	if (*quote == 0 && mini->token && !mini->token->join && is_spe_builtin(mini->token))
+	if (*quote == 0 && mini->token
+		&& !mini->token->join && is_spe_builtin(mini->token))
 		return (new_token(mini, "\0", options), str);
 	if (*quote == 0)
 		return (str);
@@ -87,7 +88,8 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 		return (str);
 	str = process_dquotes(str, &quote);
 	initialize_options(options);
-	if (*quote == 0 && *str && mini->token && !mini->token->join && is_spe_builtin(mini->token))
+	if (*quote == 0 && *str && mini->token
+		&& !mini->token->join && is_spe_builtin(mini->token))
 		return (new_token(mini, "\0", options), str);
 	else if (*quote == 0)
 		return (str);

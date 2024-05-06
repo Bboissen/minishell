@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 15:09:58 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 11:45:22 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 17:06:30 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 /**
  * @brief Print the current working directory.
  * 
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
  * @return {int} - Returns SUCCESS if the current working directory
  * was printed successfully, ERROR otherwise.
  */

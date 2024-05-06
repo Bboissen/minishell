@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 23:39:25 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/06 13:00:37 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 16:42:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Joins tokens during the parsing.
+ * 
+ * @param mini Pointer to the main structure of the shell.
+ */
 void	token_join(t_mini **mini)
 {
 	(*mini)->token = (*mini)->h_token;
@@ -30,6 +35,11 @@ void	token_join(t_mini **mini)
 	}
 }
 
+/**
+ * @brief Refactors the tokens during the parsing.
+ * 
+ * @param mini Pointer to the main structure of the shell.
+ */
 void	token_refacto(t_mini **mini)
 {
 	t_token	*tmp_token;
@@ -56,6 +66,12 @@ void	token_refacto(t_mini **mini)
 	}
 }
 
+/**
+ * @brief Gets the error code from a string.
+ * 
+ * @param str The string to get the error code from.
+ * @return {char *} - Returns the error code as a string.
+ */
 char	*get_error_code(char *str)
 {
 	char	*env_val;

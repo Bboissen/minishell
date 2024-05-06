@@ -6,14 +6,14 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/06 15:48:49 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 16:08:11 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * Expands and joins tokens in the shell.
+ * @brief Expands and joins tokens in the shell.
  * 
  * @param mini The main structure of the shell.
  */
@@ -47,7 +47,7 @@ void	expand_join(t_mini **mini)
 }
 
 /**
- * Expands a env variable.
+ * @brief Expands a env variable.
  * 
  * @param mini The main structure of the shell.
  * @param str The string to be expanded.
@@ -80,7 +80,7 @@ char	*expand_token(t_mini **mini, char *str)
 }
 
 /**
- * Joins a list of tokens in the shell.
+ * @brief Joins a list of tokens in the shell.
  * 
  * @param token The token to be joined.
  * @return {t_token*} - Returns the joined token.
@@ -108,6 +108,13 @@ t_token	*list_join(t_token *token)
 	return (token);
 }
 
+/**
+ * @brief This function fills a command with arguments.
+ * 
+ * @param mini The main structure of the shell.
+ * @param cmd The command to be filled.
+ * @param args The arguments to be added to the command.
+ */
 void	cmd_filler(t_mini *mini, t_cmd **cmd, char *args)
 {
 	(*cmd)->args = malloc(sizeof(char *) * 2);

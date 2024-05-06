@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:36:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 14:17:40 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 17:08:16 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static size_t	check_n(char **args);
 /**
  * @brief Executes the echo command.
  * 
- * @param mini The mini structure containing the command and its arguments.
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
  * @return {int} - Returns SUCCESS after executing the command.
  */
 int	mini_echo(t_mini *mini, t_cmd *cmd)

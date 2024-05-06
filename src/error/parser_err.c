@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parser_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:03:28 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/05 10:03:58 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 16:53:46 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Error manager for the parser.
+ * 
+ * @param mini The main structure of the shell.
+ * @param str The string to be printed.
+ * @param err The error code.
+ */
 void	parser_err(t_mini *mini, char *str, int err)
 {
 	if (get_sig()->status != 126)

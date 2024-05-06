@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/06 11:10:59 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 16:47:05 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int		cleanup_and_error_handling(t_mini *mini,
 static char		*expand_line(t_mini *mini, char *str, int fd);
 
 /**
- * @brief Heredoc functionality of the shell.
+ * @brief Heredoc functionality to prompt in.
  * 
  * @param mini Pointer to the mini shell structure.
  */

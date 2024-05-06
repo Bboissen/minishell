@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:35:11 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 14:16:48 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 17:07:58 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /**
  * @brief Print the environment variables.
  * 
- * @param mini The main structure of the shell.
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
  * @return {int} - Returns SUCCESS if the environment variables were 
  * printed successfully, the error number otherwise.
  */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/06 14:47:01 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 16:43:57 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	is_spechar(char c)
 		return (1);
 	else if (c == '|' || c == '>' || c == '<')
 		return (2);
-	return (0);
+	return (FALSE);
 }
 
 /**

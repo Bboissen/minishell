@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 19:24:55 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 23:33:25 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 17:08:49 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ static int	change(t_mini *mini, char *path);
 static int	backward_dir(t_mini *mini);
 
 /**
- * @brief Changes the current directory to the one specified in the arguments,
- * or to the home directory if no arguments are given.
+ * @brief Changes the current directory to the one specified
+ * in the arguments, or to the home directory if no arguments are given.
  *
- * @param mini The main structure of the minishell.
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
  * @return {int} - SUCCESS if the directory was changed successfully,
  * ERROR otherwise.
  */

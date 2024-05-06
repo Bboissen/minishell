@@ -3,26 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/05 14:58:21 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 17:14:46 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip);
+static void	cmd_setter(t_mini **mini, t_cmd **cmd, int skip, int *arg_flag);
 
-void	cmd_setter(t_mini **mini, t_cmd **cmd, int skip, int *arg_flag)
-{
-	if (*cmd)
-		new_cmd(mini, cmd, arg_flag);
-	init_cmd((*mini), cmd, skip);
-	get_sig()->status = 0;
-	*arg_flag = 0;
-}
-
+/**
+ * @brief Parses the tokens in the shell.
+ * 
+ * @param mini The main structure of the shell.
+ * @return {int} - Returns the status of the paring.
+ * 
+ */
 int	parser(t_mini *mini)
 {
 	t_token	*token;
@@ -52,6 +51,16 @@ int	parser(t_mini *mini)
 	return (get_sig()->status);
 }
 
+/**
+ * @brief Initializes a command structure.
+ * 
+ * @param mini The main structure of the shell.
+ * @param cmd Pointer to the command structure to be initialized.
+ * @param skip Determines if the input of the command
+ * should be set to "/dev/null".
+ * @return {int} - Returns SUCCESS if the command is successfully initialized,
+ * otherwise returns the result of error_manager.
+ */
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 {
 	*cmd = malloc(sizeof(t_cmd));
@@ -74,5 +83,23 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 	(*cmd)->builtin = NONE;
 	(*cmd)->prev = NULL;
 	(*cmd)->next = NULL;
-	return (0);
+	return (SUCCESS);
+}
+
+/**
+ * @brief Sets a command in the shell.
+ * 
+ * @param mini Pointer to the main structure of the shell.
+ * @param cmd Pointer to the command to be set.
+ * @param skip Determines if the input of the command
+ * should be set to "/dev/null".
+ * @param arg_flag Pointer to the argument flag.
+ */
+static void	cmd_setter(t_mini **mini, t_cmd **cmd, int skip, int *arg_flag)
+{
+	if (*cmd)
+		new_cmd(mini, cmd, arg_flag);
+	init_cmd((*mini), cmd, skip);
+	get_sig()->status = SUCCESS;
+	*arg_flag = 0;
 }

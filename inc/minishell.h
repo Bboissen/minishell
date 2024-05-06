@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/06 10:25:04 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:13:33 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,7 @@
 /* Includes */
 
 # include "libft.h"
-# include "printf.h"
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <string.h>
 # include <fcntl.h>
-# include <dirent.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <limits.h>
@@ -34,20 +28,18 @@
 /* Defines */
 
 # define BUFF_SIZE 4096
-# define PATH_MAX 4096
 
 typedef enum e_type
 {
 	EMPTY = 0,
 	STR,
-	VAR,
 	TRUNC,
 	APPEND,
 	INPUT,
 	HEREDOC,
 	PIPE,
 	JOIN,
-	EXPAND
+	EXPAND,
 }	t_type;
 
 typedef enum e_builtin
@@ -68,16 +60,12 @@ typedef enum e_error
 	PARSE = 2,
 	SYNTAX = 2,
 	MISSING = 125,
-	PERM = 126,
 	DIRECTORY = 126,
 	EXE = 127,
 	MALLOC = 128,
 	QUOTE = 129,
 	INTERUPT = 130,
 	QUIT = 131,
-	OPEN = 133,
-	READ = 134,
-	FCT = 135,
 }	t_error;
 
 /* Structures */
@@ -202,7 +190,6 @@ void		parser_err(t_mini *mini, char *str, int err);
 /* Lexer */
 void		lexer(t_mini *mini);
 int			is_spechar(char c);
-int			is_space(int c);
 int			is_spe_builtin(t_token *token);
 int			is_spe_expand(char c);
 t_type		is_join(int *quote, char *str, char end);
@@ -219,7 +206,6 @@ char		*home_handler(t_mini *mini, char *str);
 
 /* Heredoc */
 void		heredoc(t_mini *mini);
-// char		*expand_line(t_mini *mini, char *str, int fd);
 void		expand_heredoc(t_mini *mini, t_token **token, int fd);
 void		delete_heredoc(t_mini *mini);
 int			readline_hook(void);
@@ -229,20 +215,16 @@ int			parser(t_mini *mini);
 void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token, int err);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
-t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
 int			check_file(t_mini *mini, t_cmd **cmd, t_token **token);
-int			check_write(t_mini *mini, t_cmd **cmd, t_token **token, int fd);
-int			check_access(t_mini *mini, t_cmd **cmd, t_token **token,
-				struct stat st);
 int			check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
 				int *arg_flag);
 int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
-char		*path_checker(char *str, char *cmd, char **path, int *err);
-void		args_cleaner( t_mini *mini, t_cmd **cmd, char **new_cmd);
 void		cmd_filler(t_mini *mini, t_cmd **cmd, char *args);
 int			is_file(int type);
-/*Expansion*/
+
+/* Expansion */
 void		token_join(t_mini **mini);
 void		token_refacto(t_mini **mini);
 char		*get_error_code(char *str);
+
 #endif
