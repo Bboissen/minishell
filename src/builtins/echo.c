@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:36:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 10:44:13 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 17:08:16 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int		set_fd(t_cmd *cmd);
 static void		print_args(int fd, char **args, size_t start, int n_opt);
 static size_t	check_n(char **args);
 
 /**
  * @brief Executes the echo command.
  * 
- * @param mini The mini structure containing the command and its arguments.
+ * @param mini Pointer to the mini shell structure.
+ * @param cmd Pointer to the command structure.
  * @return {int} - Returns SUCCESS after executing the command.
  */
 int	mini_echo(t_mini *mini, t_cmd *cmd)
@@ -40,20 +40,6 @@ int	mini_echo(t_mini *mini, t_cmd *cmd)
 		n_opt = TRUE;
 	print_args(fd, args, i, n_opt);
 	return (SUCCESS);
-}
-
-/**
- * @brief Sets the file descriptor for the command.
- * 
- * @param cmd A pointer to the command structure.
- * @return {int} - The file descriptor to be used for the command.
- */
-static int	set_fd(t_cmd *cmd)
-{
-	if (cmd->fd[1] != -1)
-		return (cmd->fd[1]);
-	else
-		return (STDOUT_FILENO);
 }
 
 /**

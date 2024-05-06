@@ -3,21 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:25 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/03 11:40:44 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 11:12:41 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
+ * @brief Initializes the signal handling.
+ */
+void	sig_init(void)
+{
+	t_sig	*sig;
+
+	sig = get_sig();
+	sig->status = SUCCESS;
+	sig->working = FALSE;
+	sig->exit = FALSE;
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
+	rl_catch_signals = 0;
+}
+
+/**
  * @brief Signal handler for SIGINT and SIGQUIT signals.
- * 
- * This function is called when a SIGINT or SIGQUIT signal is received.
- * It updates the status of the signal and prints a message to 
- * the standard error.
  * 
  * @param code The signal code. Can be either SIGINT or SIGQUIT.
  */
@@ -50,21 +62,14 @@ void	sig_handler(int code)
 }
 
 /**
- * @brief Initializes the signal handling.
- * 
- * This function initializes the signal handling by setting the default status 
- * and ignoring all signals except SIGINT and SIGQUIT, 
- * which are handled by sig_handler.
+ * @brief Retrieves a pointer to a static t_sig instance.
+ * To create a singleton.
+ *
+ * @return Pointer to the static t_sig instance.
  */
-void	sig_init(void)
+t_sig	*get_sig(void)
 {
-	t_sig	*sig;
+	static t_sig	sig;
 
-	sig = get_sig();
-	sig->status = SUCCESS;
-	sig->working = FALSE;
-	sig->exit = FALSE;
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
-	rl_catch_signals = 0;
+	return (&sig);
 }

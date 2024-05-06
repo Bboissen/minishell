@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:32:57 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 11:43:25 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 17:34:04 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,8 @@ int	mini_export(t_mini *mini, t_cmd *cmd)
 	t_env	*env;
 	int		i;
 
-	*i = 0;
-	*env = mini->h_env;
-	initialize_variables(mini, &env, &value, &i);
+	i = 0;
+	env = mini->h_env;
 	if (!arg_exists(cmd->args, i))
 		return (print_sorted_env(mini), SUCCESS);
 	while (arg_exists(cmd->args, i))
@@ -54,26 +53,25 @@ static void	process_args(t_mini *mini, t_cmd *cmd, t_env **env, int *i)
 	char	*name;
 	char	*value;
 
-	while (arg_exists(cmd->args, *i))
+	name = malloc(sizeof(char) * BUFF_SIZE);
+	if (!name)
+		error_manager(mini, MALLOC, NULL, NULL);
+	get_env_name(name, cmd->args[*i]);
+	if (!is_valid_env(name) || !ft_strcmp(name, "_"))
 	{
-		name = malloc(sizeof(char) * BUFF_SIZE);
-		if (!name)
-			error_manager(mini, MALLOC, NULL, NULL);
-		get_env_name(name, cmd->args[*i]);
-		if (!is_valid_env(name) || !ft_strcmp(name, "_"))
+		if (!is_valid_env(name))
 		{
-			if (!is_valid_env(name))
-				export_err(mini, EINVAL, cmd->args[*i]);
-			(*i)++;
-			continue ;
+			ft_memdel(name);
+			export_err(mini, EINVAL, cmd->args[*i]);
 		}
-		get_env_value(mini, &value, cmd->args[*i], name);
-		if (!set_env(env, name, value))
-			env_add(mini, name, value);
-		ft_memdel(name);
-		if (value)
-			ft_memdel(value);
+		(*i)++;
+		return ;
 	}
+	get_env_value(mini, &value, name, cmd->args[*i]);
+	if (!set_env(mini, env, name, value))
+		env_add(mini, name, value);
+	ft_memdel(name);
+	ft_memdel(value);
 }
 
 /**
@@ -88,21 +86,20 @@ static void	process_args(t_mini *mini, t_cmd *cmd, t_env **env, int *i)
 static int	env_add(t_mini *mini, char *name, char *value)
 {
 	t_env	*new;
-	t_env	*tmp;
 
 	new = malloc(sizeof(t_env));
 	if (!new)
 		error_manager(mini, MALLOC, NULL, NULL);
 	new->name = ft_strdup(name);
 	if (!new->name)
-		return (ft_memdel(name), ft_memdel(value), ft_memdel(new),
+		return (clean_export(new, name, value, FALSE),
 			error_manager(mini, MALLOC, NULL, NULL), ERROR);
 	if (value)
 	{
 		new->value = ft_strdup(value);
 		if (!new->value)
-			return (ft_memdel(name), ft_memdel(value), ft_memdel(new->name),
-				ft_memdel(new), error_manager(mini, MALLOC, NULL, NULL), ERROR);
+			return (clean_export(new, name, value, TRUE),
+				error_manager(mini, MALLOC, NULL, NULL), ERROR);
 	}
 	else
 		new->value = NULL;
@@ -122,14 +119,14 @@ static int	add_env_to_list(t_mini *mini, t_env *new)
 {
 	t_env	*tmp;
 
-	if (mini->env == NULL)
+	if (mini->h_env == NULL)
 	{
 		mini->env = new;
 		mini->h_env = new;
 	}
 	else
 	{
-		tmp = mini->env;
+		tmp = mini->h_env;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 11:05:38 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/02 10:17:15 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/02 15:10:58 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ typedef enum e_bool
 	TRUE
 }	t_bool;
 
-typedef enum e_error
+typedef enum e_return
 {
 	SUCCESS = 0,
 	ERROR = 1,
-}	t_error;
+}	t_return;
 
 char	*get_next_line(int fd);
 

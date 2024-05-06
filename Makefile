@@ -6,7 +6,7 @@
 #    By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 13:59:53 by gdumas            #+#    #+#              #
-#    Updated: 2024/05/04 11:52:46 by talibabtou       ###   ########.fr        #
+#    Updated: 2024/05/05 12:38:12 by talibabtou       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,44 +38,49 @@ BUILTINS	=	cd				\
 				pwd				\
 				unset
 
-ENV			=	env				\
+ENV			=	environment		\
+				path			\
 				init			\
 				shlvl			\
 				sort_env
 
 ERROR		=	builtin_err		\
-				error_manager	
+				error_manager	\
+				lexer_err		\
+				parser_err
 
 EXEC		=	exec_utils		\
 				executer
-				
-UTILS		=	fd				\
-				free			\
+
+LEXER		=	heredoc			\
+				heredoc_utils	\
+				lex_checks		\
+				lex_quotes		\
+				lex_utils		\
+				lexer
+
+PARSING		=	expansions		\
+				expand_utils	\
+				parser_utils	\
+				parser_check	\
+				parser
+
+UTILS		=	clean_exit		\
+				fd				\
 				signal
 
 MAIN		=	minishell
 
-LEXER		=	lexer			\
-				lex_utils		\
-				heredoc			\
-				lexer_err
-
-PARSING		=	expansions		\
- 				parser			\
-				parser_utils	\
-				parser_err
-				
 SRCS		=	$(addprefix $(SRC_DIR)builtins/, $(addsuffix .c, $(BUILTINS)))	\
 				$(addprefix $(SRC_DIR)env/, $(addsuffix .c, $(ENV)))			\
-				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
-				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
 				$(addprefix $(SRC_DIR)error/, $(addsuffix .c, $(ERROR)))		\
 				$(addprefix $(SRC_DIR)exec/, $(addsuffix .c, $(EXEC)))			\
+				$(addprefix $(SRC_DIR)lexer/, $(addsuffix .c, $(LEXER)))		\
+				$(addprefix $(SRC_DIR)parser/, $(addsuffix .c, $(PARSING)))		\
 				$(addprefix $(SRC_DIR)utils/, $(addsuffix .c, $(UTILS)))		\
 				$(addprefix $(SRC_DIR), $(addsuffix .c, $(MAIN)))
 
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
-
 
 # Rules #
 

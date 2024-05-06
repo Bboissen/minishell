@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:43 by gdumas            #+#    #+#             */
-/*   Updated: 2024/04/29 16:36:37 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/05 23:41:45 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 /**
  * @brief Closes file descriptors if they are not standard input or output.
- * 
- * This function checks if the file descriptors are not standard input (0) or 
- * standard output (1), and if they are not, it closes them and sets them to -1.
  * 
  * @param fd An array of file descriptors to be closed.
  */
@@ -45,14 +42,13 @@ void	delete_heredoc(t_mini *mini)
 	t_token	*current;
 
 	current = mini->h_token;
-
 	while (current != NULL)
 	{
 		if (current->type == HEREDOC)
 		{
 			if (unlink(current->next->str) == -1)
 			{
-				// perror
+				error_manager(mini, errno, "unlink", current->next->str);
 				current = current->next;
 			}
 		}
@@ -61,22 +57,15 @@ void	delete_heredoc(t_mini *mini)
 }
 
 /**
- * @brief Calculate the size of the command.
+ * @brief Sets the file descriptor for the command.
  * 
- * @param h_cmd The head of the command list.
- * @return {int} The size of the command list.
+ * @param cmd A pointer to the command structure.
+ * @return {int} - The file descriptor to be used for the command.
  */
-int	cmd_size(t_cmd *h_cmd)
+int	set_fd(t_cmd *cmd)
 {
-	t_cmd	*tmp;
-	int		i;
-
-	tmp = h_cmd;
-	i = 0;
-	while (tmp)
-	{
-		tmp = tmp->next;
-		i++;
-	}
-	return (i);
+	if (cmd->fd[1] != -1)
+		return (cmd->fd[1]);
+	else
+		return (STDOUT_FILENO);
 }

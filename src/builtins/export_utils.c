@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 11:16:09 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/04 11:44:47 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 16:49:19 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_env_name(char *dest, const char *src)
 	int	i;
 
 	i = 0;
-	while (src[i] && src[i] != '=' && ft_strlen(src) < BUFF_SIZE)
+	while (src[i] && src[i] != '=' && ft_strlen(src) < BUFF_SIZE - 1)
 	{
 		dest[i] = src[i];
 		i++;
@@ -43,14 +43,16 @@ char	*get_env_name(char *dest, const char *src)
  * @param arg Pointer to the string from which the value will be extracted.
  * @param name Pointer to the name of the environment variable.
  */
-void	get_env_value(t_mini *mini, char **value, char *arg, char *name)
+void	get_env_value(t_mini *mini, char **value, char *name, char *arg)
 {
 	if (strchr(arg, '='))
 	{
 		*value = ft_strdup(arg + ft_strlen(name) + 1);
 		if (!*value)
-			return (error_manager(mini, MALLOC, NULL, NULL),
-				ft_memdel(name), ERROR);
+		{
+			ft_memdel(name);
+			error_manager(mini, MALLOC, NULL, NULL);
+		}
 	}
 	else
 		*value = NULL;
@@ -77,4 +79,20 @@ int	is_valid_env(const char *name)
 		i++;
 	}
 	return (TRUE);
+}
+
+/**
+ * @brief Cleans up memory allocated for an exported environment variable.
+ *
+ * @param new A pointer to the new environment variable to be cleaned up.
+ * @param name A pointer to the name of the environment variable.
+ * @param value A pointer to the value of the environment variable.
+ */
+void	clean_export(t_env *new, char *name, char *value, int flag)
+{
+	ft_memdel(name);
+	ft_memdel(value);
+	if (flag)
+		ft_memdel(new->name);
+	ft_memdel(new);
 }

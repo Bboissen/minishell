@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 11:07:34 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 14:32:34 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,8 @@ int	mini_exit(t_mini *mini, t_cmd *cmd)
 		}
 		sig->status = narg % 256;
 	}
-	ft_printfd(STDERR_FILENO, "exit\n");
 	if (cmd->args && arg_exists(cmd->args, 1))
-		exit_err(mini, ERROR, NULL);
+		return (exit_err(mini, ERROR, NULL), sig->status);
 	sig->exit = TRUE;
 	return (sig->status);
 }

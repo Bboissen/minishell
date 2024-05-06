@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:54:08 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 12:02:37 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 19:47:44 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,47 @@ int	exec_builtin(t_mini *mini, t_cmd *cmd)
 }
 
 /**
+ * @brief Check if an argument exists at a given index.
+ * 
+ * @param args The array of arguments.
+ * @param index The index to check.
+ * @return {int} - TRUE if an argument exists at the given index,
+ * FALSE otherwise.
+ */
+int	arg_exists(char **args, int index)
+{
+	int	i;
+
+	i = 0;
+	if (args == NULL)
+		return (FALSE);
+	while (args[i] != NULL)
+		i++;
+	return (i > index);
+}
+
+/**
+ * @brief Calculate the size of the command.
+ * 
+ * @param h_cmd The head of the command list.
+ * @return {int} - The size of the command list.
+ */
+int	cmd_size(t_cmd *h_cmd)
+{
+	t_cmd	*tmp;
+	int		i;
+
+	tmp = h_cmd;
+	i = 0;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	return (i);
+}
+
+/**
  * @brief Handles file descriptors for input and output redirection.
  * 
  * @param mini Pointer to the mini shell structure.
@@ -65,24 +106,4 @@ void	fd_handler(t_mini *mini, t_cmd *cmd)
 		dup2(out, STDOUT_FILENO);
 		close(out);
 	}
-}
-
-/**
- * @brief Check if an argument exists at a given index.
- * 
- * @param args The array of arguments.
- * @param index The index to check.
- * @return {int} - 1 if an argument exists at the given index,
- * FALSE otherwise.
- */
-int	arg_exists(char **args, int index)
-{
-	int	i;
-
-	i = 0;
-	if (args == NULL)
-		return (FALSE);
-	while (args[i] != NULL)
-		i++;
-	return (i > index);
 }
