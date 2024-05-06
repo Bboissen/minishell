@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:42:56 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/06 16:52:28 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 17:51:41 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ void	exit_err(t_mini *mini, int error, char *arg)
 	}
 	if (error == ERROR)
 	{
-		ft_printfd(STDERR_FILENO, "exit\n\
-%s: exit: too many arguments\n", mini->name);
+		ft_printfd(STDERR_FILENO,
+			"%s: exit: too many arguments\n", mini->name);
 		get_sig()->status = ERROR;
 	}
 }
