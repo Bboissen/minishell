@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:17:59 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/06 16:37:53 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 17:53:50 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,6 @@ int	is_file(int type)
 {
 	if (type == INPUT || type == HEREDOC
 		|| type == APPEND || type == TRUNC)
-		return (FALSE);
-	return (TRUE);
+		return (TRUE);
+	return (FALSE);
 }
