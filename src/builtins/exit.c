@@ -6,7 +6,7 @@
 /*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:05:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 18:09:48 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/06 14:32:34 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	mini_exit(t_mini *mini, t_cmd *cmd)
 	sig = get_sig();
 	narg = 0;
 	overflow = FALSE;
-	ft_printfd(STDERR_FILENO, "exit\n");
 	if (cmd->args)
 	{
 		narg = ft_atoi_exit(cmd->args[0], 0, &overflow);

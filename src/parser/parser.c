@@ -6,21 +6,23 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:28:07 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/05 19:09:05 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/05 14:58:21 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip);
-static void	cmd_setter(t_mini **mini, t_cmd **cmd, int skip, int *arg_flag);
 
-/**
- * @brief Parses the tokens in the mini shell.
- * 
- * @param mini Pointer to the mini shell structure.
- * @return {int} - Returns the status of the signal.
- */
+void	cmd_setter(t_mini **mini, t_cmd **cmd, int skip, int *arg_flag)
+{
+	if (*cmd)
+		new_cmd(mini, cmd, arg_flag);
+	init_cmd((*mini), cmd, skip);
+	get_sig()->status = 0;
+	*arg_flag = 0;
+}
+
 int	parser(t_mini *mini)
 {
 	t_token	*token;
@@ -31,11 +33,11 @@ int	parser(t_mini *mini)
 	arg_flag = 0;
 	token = mini->h_token;
 	init_cmd(mini, &cmd, 0);
+	get_sig()->status = 0;
 	while (token)
 	{
 		skip = 0;
-		if (token && (token->type == INPUT || token->type == HEREDOC
-				|| token->type == APPEND || token->type == TRUNC))
+		if (token && is_file(token->type))
 			skip += check_file(mini, &cmd, &token);
 		if (token && token->type == STR)
 			skip += check_cmd(mini, &cmd, &token, &arg_flag);
@@ -50,14 +52,6 @@ int	parser(t_mini *mini)
 	return (get_sig()->status);
 }
 
-/**
- * @brief Initializes a command structure.
- * 
- * @param mini Pointer to the mini shell structure.
- * @param cmd Double pointer to the command structure.
- * @param skip Integer indicating whether to skip certain operations.
- * @return {int} - Returns SUCCESS if successful, ERROR otherwise.
- */
 static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 {
 	*cmd = malloc(sizeof(t_cmd));
@@ -80,22 +74,5 @@ static int	init_cmd(t_mini *mini, t_cmd **cmd, int skip)
 	(*cmd)->builtin = NONE;
 	(*cmd)->prev = NULL;
 	(*cmd)->next = NULL;
-	return (SUCCESS);
-}
-
-/**
- * @brief Sets the command structure based on the parsed tokens.
- * 
- * @param mini Double pointer to the mini shell structure.
- * @param cmd Double pointer to the command structure.
- * @param skip Integer indicating whether to skip certain operations.
- * @param arg_flag Pointer to the argument flag.
- */
-static void	cmd_setter(t_mini **mini, t_cmd **cmd, int skip, int *arg_flag)
-{
-	if (*cmd)
-		new_cmd(mini, cmd, arg_flag);
-	init_cmd((*mini), cmd, skip);
-	get_sig()->status = 0;
-	*arg_flag = 0;
+	return (0);
 }

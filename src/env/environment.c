@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:43:56 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 18:51:55 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 12:43:40 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static size_t	size_env_tab(t_env *env_lst);
 static char		*append_name_value(t_env *env_lst, int i, int j, int k);
 
 /**
- * @brief Initializes the environment linked list from an 
+ * Initializes the environment linked list from an 
  * array of environment variables.
  * 
  * @param mini The mini structure.
@@ -51,7 +51,7 @@ int	init_env(t_mini **mini, char **env_array)
 }
 
 /**
- * @brief Copies an environment variable from an array to a linked list.
+ * Copies an environment variable from an array to a linked list.
  * 
  * @param mini The mini structure.
  * @param env_array The array of environment variables.
@@ -89,7 +89,7 @@ static int	env_cpy(char **env_array, t_env **env, int *i)
 }
 
 /**
- * @brief Converts the environment list into an array of strings.
+ * Converts the environment list into an array of strings.
  * 
  * @param env The environment list.
  * @return {char **} - Returns an array of strings, each string 
@@ -121,7 +121,7 @@ char	**env_to_tab(t_mini *mini)
 }
 
 /**
- * @brief Calculates the size of the environment list.
+ * Calculates the size of the environment list.
  * 
  * @param env_lst The environment list.
  * @return {size_t} - Returns the number of nodes in the list.
@@ -140,7 +140,7 @@ static size_t	size_env_tab(t_env *env_lst)
 }
 
 /**
- * @brief Appends the name and value of an environment variable into a string.
+ * Appends the name and value of an environment variable into a string.
  * 
  * @param env_lst The node of the environment list.
  * @return {char *} - Returns a string with the format "name=value".

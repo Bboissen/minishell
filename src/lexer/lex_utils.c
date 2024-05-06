@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 11:04:00 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 15:05:04 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 14:47:01 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	is_spe_builtin(t_token *token)
 		str = token->str;
 		if (ft_strcmp(str, "export") == 0 || ft_strcmp(str, "exit") == 0
 			|| ft_strcmp(str, "env") == 0 || ft_strcmp(str, "cd") == 0
-			|| ft_strcmp(str, "ls") == 0)
+			|| ft_strcmp(str, "ls") == 0 || ft_strcmp(str, "echo") == 0)
 			return (TRUE);
 		token = token->prev;
 	}

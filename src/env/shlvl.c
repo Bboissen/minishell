@@ -6,7 +6,7 @@
 /*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:07 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 18:53:11 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/04 23:17:04 by talibabtou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static int	get_lvl(const char *str);
 static int	invalid_lvl(const char *str);
 
 /**
- * @brief Increment the shell level in the environment at minishell booting.
+ * Increment the shell level in the environment at minishell booting.
  * 
- * @param env The environment to increment the shell level in.
+ * @param env - The environment to increment the shell level in.
  */
 void	increment_shell_level(t_mini **mini)
 {
@@ -71,7 +71,7 @@ static void	update_shell_level(t_mini **mini, int shell_level)
 }
 
 /**
- * @brief Get the shell level from the SHLVL env value.
+ * Get the shell level from the SHLVL env value.
  * 
  * @param str The string to get the level from.
  * @return {int} - Returns the shell level.
@@ -98,7 +98,7 @@ static int	get_lvl(const char *str)
 }
 
 /**
- * @brief Check if a string represents a valid shell level.
+ * Check if a string represents a valid shell level.
  * 
  * @param str The string to check.
  * @return {int} - Returns SUCCESS if the string is

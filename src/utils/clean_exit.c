@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:45 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/04 23:28:27 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 14:34:36 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,17 @@ int	clean_exit(t_mini *mini)
 	mini->cmd = mini->h_cmd;
 	close_fds(mini->initial_fds);
 	if (mini->token)
-		free_token(&(mini->token));
+		free_token(&(mini->h_token));
 	if (mini->cmd)
-		free_cmd(&(mini->cmd));
+		free_cmd(&(mini->h_cmd));
 	if (mini->env)
-		free_env(mini->env);
+		free_env(mini->h_env);
 	if (mini->rl)
 		free(mini->rl);
 	rl_clear_history();
 	free(mini);
+	if (sig->exit == TRUE)
+		ft_printfd(STDERR_FILENO, "exit\n");
 	exit(status);
 }
 

@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:04:59 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 18:52:41 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 14:37:13 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief Initialize the mini structure with the given environment.
+ * Initialize the mini structure with the given environment.
  * 
- * @param mini - The main structure of the shell.
- * @param env - The environment for the shell.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @param {char**} env - The environment for the shell.
  */
 void	init_mini(t_mini **mini, char **env, char *name)
 {
@@ -35,17 +35,19 @@ void	init_mini(t_mini **mini, char **env, char *name)
 	(*mini)->h_token = NULL;
 	(*mini)->env = NULL;
 	(*mini)->h_env = NULL;
+	(*mini)->initial_fds[0] = -1;
+	(*mini)->initial_fds[1] = -1;
 	init_env(mini, env);
 	increment_shell_level(mini);
 	sig_init();
 }
 
 /**
- * @brief Sets up and reads a line from the terminal with a custom prompt.
+ * Sets up and reads a line from the terminal with a custom prompt.
  * 
- * @param rl - The string to store the read line.
- * @param mini - The main structure of the shell.
- * @param str - The string to be used as the base of the prompt.
+ * @param {char*} rl - The string to store the read line.
+ * @param {t_mini*} mini - The main structure of the shell.
+ * @param {char*} str - The string to be used as the base of the prompt.
  */
 void	readline_setup(t_mini *mini, char **rl, char *str)
 {
@@ -68,10 +70,10 @@ void	readline_setup(t_mini *mini, char **rl, char *str)
 }
 
 /**
- * @brief Reinitializes the mini structure and frees memory.
+ * Reinitializes the mini structure and frees memory.
  * 
- * @param mini - The mini structure to reinitialize.
- * @param rl - The readline string to free.
+ * @param {t_mini*} mini - The mini structure to reinitialize.
+ * @param {char*} rl - The readline string to free.
  */
 void	reinit(t_mini **mini)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 12:24:24 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 18:30:50 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 12:45:56 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

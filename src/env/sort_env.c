@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:09 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 18:54:28 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 15:49:32 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ static int	str_env_len(char **env_tab);
 /**
  * @brief Print the environment variables in sorted order.
  * 
- * @param env The environment to print.
+ * @param env - The environment to print.
  */
 void	print_sorted_env(t_mini *mini)
 {
 	int		i;
+	int		len;
+	char	delim;
 	char	**tab;
 
 	tab = env_to_tab(mini);
@@ -30,7 +32,16 @@ void	print_sorted_env(t_mini *mini)
 	i = 0;
 	while (tab[i])
 	{
-		ft_printfd(STDOUT_FILENO, "declare -x %s\n", tab[i]);
+		len = ft_strchr(tab[i], '=') - tab[i];
+		delim = tab[i][len];
+		tab[i][len] = '\0';
+		ft_printfd(STDOUT_FILENO, "declare -x %s", tab[i]);
+		if (delim)
+		{
+			ft_printfd(STDOUT_FILENO, "%s", "=\"");
+			ft_printfd(STDOUT_FILENO, "%s", tab[i] + len + 1);
+			ft_printfd(STDOUT_FILENO, "\"\n");
+		}
 		i++;
 	}
 	free_tab(tab);
@@ -39,8 +50,8 @@ void	print_sorted_env(t_mini *mini)
 /**
  * @brief Sort an array of strings in ascending order.
  * 
- * @param tab The array to sort.
- * @param env_len The length of the array.
+ * @param tab - The array to sort.
+ * @param env_len - The length of the array.
  */
 static void	sort_env(char **tab, int env_len)
 {
@@ -87,12 +98,12 @@ static int	str_env_len(char **env_tab)
 
 /**
  * @brief Updates an environment variable in the environment list.
+ * 
+ * @param t_env** env - The pointer to the environment list.
+ * @param char* name - The name of the environment variable to set.
+ * @param char* value - The value to set the environment variable to.
  * If the environment variable already exists, its value is updated.
  * If it does not exist, a new environment variable is created.
- * 
- * @param env The pointer to the environment list.
- * @param name The name of the environment variable to set.
- * @param value The value to set the environment variable to.
  */
 int	set_env(t_mini *mini, t_env **env, char *name, char *value)
 {
@@ -108,7 +119,11 @@ int	set_env(t_mini *mini, t_env **env, char *name, char *value)
 			{
 				tmp->value = strdup(value);
 				if (!tmp->value)
-					return (error_manager(mini, MALLOC, NULL, NULL), ERROR);
+				{
+					ft_memdel(value);
+					ft_memdel(name);
+					error_manager(mini, MALLOC, NULL, NULL);
+				}
 				return (TRUE);
 			}
 		}
@@ -118,10 +133,10 @@ int	set_env(t_mini *mini, t_env **env, char *name, char *value)
 }
 
 /**
- * @brief Retrieves the value of an environment variable by its name.
+ * Retrieves the value of an environment variable by its name.
  * 
- * @param env The environment list.
- * @param name The name of the environment variable.
+ * @param t_env* env - The environment list.
+ * @param char* name - The name of the environment variable.
  * @return {char*} - Returns the value of the environment variable if
  * found, NULL otherwise.
  */

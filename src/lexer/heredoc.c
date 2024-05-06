@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:12:49 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/05 18:48:45 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 11:10:59 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	heredoc(t_mini *mini)
 	{
 		if (token->type == HEREDOC)
 		{
+			get_sig()->status = 0;
 			fd = file_and_token(mini, &token, fd);
 			rl_event_hook = readline_hook;
 			readline_setup(mini, &line, "heredoc");

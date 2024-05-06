@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 19:02:13 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 10:25:04 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,6 @@ void		init_mini(t_mini **mini, char **env, char *name);
 int			init_env(t_mini **mini, char **env_array);
 void		increment_shell_level(t_mini **mini);
 void		sig_init(void);
-int			readline_hook(void);
 void		readline_setup(t_mini *mini, char **rl, char *str);
 void		reinit(t_mini **mini);
 void		sig_handler(int code);
@@ -219,9 +218,11 @@ void		new_token(t_mini *mini, char *str, t_type options[3]);
 char		*home_handler(t_mini *mini, char *str);
 
 /* Heredoc */
-void		expand_heredoc(t_mini *mini, t_token **token, int fd);
 void		heredoc(t_mini *mini);
+// char		*expand_line(t_mini *mini, char *str, int fd);
+void		expand_heredoc(t_mini *mini, t_token **token, int fd);
 void		delete_heredoc(t_mini *mini);
+int			readline_hook(void);
 
 /* Parser */
 int			parser(t_mini *mini);
@@ -229,10 +230,19 @@ void		cmd_skip(t_mini *mini, t_cmd **cmd, t_token **token, int err);
 void		new_cmd(t_mini **mini, t_cmd **cmd, int *arg_flag);
 char		**add_args(t_mini *mini, t_cmd **cmd, char *str);
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag);
-int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
 int			check_file(t_mini *mini, t_cmd **cmd, t_token **token);
+int			check_write(t_mini *mini, t_cmd **cmd, t_token **token, int fd);
+int			check_access(t_mini *mini, t_cmd **cmd, t_token **token,
+				struct stat st);
 int			check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
 				int *arg_flag);
-
-
+int			path_finder(t_mini *mini, t_cmd **cmd, char *str);
+char		*path_checker(char *str, char *cmd, char **path, int *err);
+void		args_cleaner( t_mini *mini, t_cmd **cmd, char **new_cmd);
+void		cmd_filler(t_mini *mini, t_cmd **cmd, char *args);
+int			is_file(int type);
+/*Expansion*/
+void		token_join(t_mini **mini);
+void		token_refacto(t_mini **mini);
+char		*get_error_code(char *str);
 #endif

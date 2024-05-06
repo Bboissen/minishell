@@ -3,24 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parser_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bbsn <bbsn@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/05 19:01:08 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 19:07:40 by talibabtou       ###   ########.fr       */
+/*   Created: 2024/05/05 23:39:36 by bbsn              #+#    #+#             */
+/*   Updated: 2024/05/05 23:39:37 by bbsn             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * @brief Checks write permissions for a file and handles file opening.
- * 
- * @param mini Pointer to the mini shell structure.
- * @param cmd Double pointer to the command structure.
- * @param token Double pointer to the token structure.
- * @param fd File descriptor.
- * @return {int} - Returns SUCCESS if successful, ERROR otherwise.
- */
 int	check_write(t_mini *mini, t_cmd **cmd, t_token **token, int fd)
 {
 	if ((*token)->type == APPEND)
@@ -49,14 +40,6 @@ int	check_write(t_mini *mini, t_cmd **cmd, t_token **token, int fd)
 	return (SUCCESS);
 }
 
-/**
- * @brief Checks file permissions and handles file opening.
- * 
- * @param mini Pointer to the mini shell structure.
- * @param cmd Double pointer to the command structure.
- * @param token Double pointer to the token structure.
- * @return {int} - Returns SUCCESS if successful, ERROR otherwise.
- */
 int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 {
 	int	fd;
@@ -85,15 +68,6 @@ int	check_file(t_mini *mini, t_cmd **cmd, t_token **token)
 	return (SUCCESS);
 }
 
-/**
- * @brief Checks access permissions for a command.
- * 
- * @param mini Pointer to the mini shell structure.
- * @param cmd Double pointer to the command structure.
- * @param token Double pointer to the token structure.
- * @param st Stat structure containing information about the file.
- * @return {int} - Returns SUCCESS if successful, ERROR otherwise.
- */
 int	check_access(t_mini *mini, t_cmd **cmd, t_token **token,
 			struct stat st)
 {
@@ -111,15 +85,6 @@ int	check_access(t_mini *mini, t_cmd **cmd, t_token **token,
 		return (cmd_skip(mini, cmd, token, EXE), ERROR);
 }
 
-/**
- * @brief Checks a command and its arguments.
- * 
- * @param mini Pointer to the mini shell structure.
- * @param cmd Double pointer to the command structure.
- * @param token Double pointer to the token structure.
- * @param arg_flag Pointer to the argument flag.
- * @return {int} - Returns SUCCESS if successful, ERROR otherwise.
- */
 int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
 				int *arg_flag)
 {
@@ -147,15 +112,6 @@ int	check_cmd(t_mini *mini, t_cmd **cmd, t_token **token,
 	return (SUCCESS);
 }
 
-/**
- * @brief Checks if a command is a built-in command.
- * 
- * @param cmd Double pointer to the command structure.
- * @param str Pointer to the command string.
- * @param arg_flag Pointer to the argument flag.
- * @return {t_builtin} - Returns the type of the built-in command,
- * or NONE if the command is not built-in.
- */
 t_builtin	check_blt(t_cmd **cmd, char *str, int *arg_flag)
 {
 	if (ft_strcmp(str, "echo") == 0)

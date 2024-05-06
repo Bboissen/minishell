@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_quotes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:24:11 by talibabtou        #+#    #+#             */
-/*   Updated: 2024/05/05 15:50:12 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 15:16:43 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,21 @@ char	*s_quote_handler(t_mini *mini, char *str, int *quote)
 		return (str);
 	str = process_squotes(str, &quote);
 	initialize_options(options);
-	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
+	if (*quote == 0 && mini->token && !mini->token->join && is_spe_builtin(mini->token))
 		return (new_token(mini, "\0", options), str);
 	if (*quote == 0)
 		return (str);
 	start = str;
-	while (*str != '\'')
+	while (*str && *str != '\'')
 		str++;
 	*str++ = '\0';
 	if (*(str) && is_spechar(*(str)) != 2 && !ft_isspace(*(str)))
 		options[1] = JOIN;
-	while (*str == '\'')
-		str++;
 	if (*(str) && (is_spechar(*(str)) == 2 || ft_isspace(*(str))))
 		options[1] = 0;
 	new_token(mini, start, options);
+	while (*str && *str == '\'')
+		str++;
 	*quote = 0;
 	return (str);
 }
@@ -87,7 +87,7 @@ char	*d_quote_handler(t_mini *mini, char *str, int *quote)
 		return (str);
 	str = process_dquotes(str, &quote);
 	initialize_options(options);
-	if (*quote == 0 && *str && mini->token && is_spe_builtin(mini->token))
+	if (*quote == 0 && *str && mini->token && !mini->token->join && is_spe_builtin(mini->token))
 		return (new_token(mini, "\0", options), str);
 	else if (*quote == 0)
 		return (str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talibabtou <talibabtou@student.42.fr>      +#+  +:+       +#+        */
+/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/05 10:54:39 by talibabtou       ###   ########.fr       */
+/*   Updated: 2024/05/06 15:48:49 by gdumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
-	t_token	*tmp_token;
 
 	(*mini)->token = (*mini)->h_token;
 	while ((*mini)->token)
@@ -40,45 +39,11 @@ void	expand_join(t_mini **mini)
 					error_manager((*mini), MALLOC, NULL, NULL);
 			}
 			else if (!tmp[0])
-			{
-				if ((*mini)->token == (*mini)->h_token && !(*mini)->token->next)
-					free_token(&(*mini)->h_token);
-				else
-				{
-					tmp_token = (*mini)->token;
-					if ((*mini)->token->prev)
-					{
-						(*mini)->token->prev->next = (*mini)->token->next;
-						(*mini)->token = (*mini)->token->prev;
-					}
-					else
-					{
-						(*mini)->h_token = (*mini)->token->next;
-						(*mini)->token = (*mini)->h_token;
-					}
-					if ((*mini)->token->next)
-						(*mini)->token->next->prev = (*mini)->token->prev;
-					free(tmp_token->str);
-					free(tmp_token);
-				}
-			}
+				token_refacto(mini);
 		}
 		(*mini)->token = (*mini)->token->next;
 	}
-	(*mini)->token = (*mini)->h_token;
-	while ((*mini)->token)
-	{
-		if ((*mini)->token->join)
-		{
-			if ((*mini)->token == (*mini)->h_token)
-				(*mini)->h_token = (*mini)->token->next;
-			(*mini)->token = list_join((*mini)->token);
-			if (!(*mini)->token)
-				error_manager((*mini), MALLOC, NULL, NULL);
-		}
-		else
-			(*mini)->token = (*mini)->token->next;
-	}
+	token_join(mini);
 }
 
 /**
@@ -92,27 +57,11 @@ char	*expand_token(t_mini **mini, char *str)
 {
 	t_env	*env;
 	char	*env_val;
-	char	*tmp;
-	t_sig	*sig;
 
-	sig = get_sig();
 	env = (*mini)->h_env;
 	env_val = NULL;
 	if (!ft_strncmp(str, "?", 1))
-	{
-		env_val = ft_itoa(sig->status);
-		if (!env_val)
-			return (NULL);
-		if (ft_strcmp(str, "?") != 0)
-		{
-			tmp = ft_strjoin(env_val, str + 1);
-			free(env_val);
-			env_val = tmp;
-		}
-		if (!env_val)
-			return (NULL);
-		return (env_val);
-	}
+		return (get_error_code(str));
 	while (env && env->name)
 	{
 		if (!ft_strcmp(str, env->name))
@@ -143,6 +92,8 @@ t_token	*list_join(t_token *token)
 
 	new_str = malloc(ft_strlen(token->str)
 			+ ft_strlen(token->next->str) + 1);
+	if (!new_str)
+		return (NULL);
 	ft_strcpy(new_str, token->str);
 	ft_strcat(new_str, token->next->str);
 	free(token->next->str);
@@ -155,4 +106,17 @@ t_token	*list_join(t_token *token)
 	free(to_free->str);
 	free(to_free);
 	return (token);
+}
+
+void	cmd_filler(t_mini *mini, t_cmd **cmd, char *args)
+{
+	(*cmd)->args = malloc(sizeof(char *) * 2);
+	if ((*cmd)->args == NULL)
+	{
+		free_cmd(cmd);
+		free(args);
+		error_manager(mini, MALLOC, NULL, NULL);
+	}
+	(*cmd)->args[0] = args;
+	(*cmd)->args[1] = NULL;
 }
