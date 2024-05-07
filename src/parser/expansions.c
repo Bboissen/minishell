@@ -49,13 +49,14 @@ void	expand_join(t_mini **mini)
 				if (!split)
 					error_manager((*mini), MALLOC, NULL, NULL);
 				free((*mini)->token->str);
-				(*mini)->token->str = split[0];
+				(*mini)->token->str = ft_strdup(split[0]);
 				while (split[i])
 				{
 					initialize_options(options);
 					new_token((*mini), split[i], options);
 					i++;
 				}
+				free_tab(split);
 			}
 		}
 		(*mini)->token = (*mini)->token->next;
