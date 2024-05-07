@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 23:39:25 by bbsn              #+#    #+#             */
-/*   Updated: 2024/05/06 16:42:13 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/07 14:23:03 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ void	token_join(t_mini **mini)
  * 
  * @param mini Pointer to the main structure of the shell.
  */
-void	token_refacto(t_mini **mini)
+int	token_refacto(t_mini **mini)
 {
 	t_token	*tmp_token;
 
 	if ((*mini)->token == (*mini)->h_token && !(*mini)->token->next)
-		free_token(&(*mini)->h_token);
+		return (free_token(&(*mini)->h_token), ERROR);
 	else
 	{
 		tmp_token = (*mini)->token;
@@ -64,6 +64,7 @@ void	token_refacto(t_mini **mini)
 		free(tmp_token->str);
 		free(tmp_token);
 	}
+	return (SUCCESS);
 }
 
 /**

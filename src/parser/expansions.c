@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/06 16:08:11 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/07 14:26:53 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	split_tokens(t_mini **mini, char *tmp);
 
 /**
  * @brief Expands and joins tokens in the shell.
@@ -20,11 +22,7 @@
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
-	char 	**split;
-	int		i = 1;
-	t_type	options[3];
 
-	(*mini)->token = (*mini)->h_token;
 	while ((*mini)->token)
 	{
 		if ((*mini)->token->expand)
@@ -41,27 +39,46 @@ void	expand_join(t_mini **mini)
 				if (!(*mini)->token)
 					error_manager((*mini), MALLOC, NULL, NULL);
 			}
-			else if (!tmp[0])
-				token_refacto(mini);
-			else if (ft_strchr((*mini)->token->str, ' '))
-			{
-				split = ft_split((*mini)->token->str, ' ');
-				if (!split)
-					error_manager((*mini), MALLOC, NULL, NULL);
-				free((*mini)->token->str);
-				(*mini)->token->str = ft_strdup(split[0]);
-				while (split[i])
-				{
-					initialize_options(options);
-					new_token((*mini), split[i], options);
-					i++;
-				}
-				free_tab(split);
-			}
+			else
+				if (split_tokens(mini, tmp))
+					return ;
 		}
 		(*mini)->token = (*mini)->token->next;
 	}
 	token_join(mini);
+}
+
+/**
+ * @brief insert and refacto the token list.
+ * 
+ * @param mini The main structure of the shell.
+ * @param tmp Temporary variable from the environment.
+ */
+static int	split_tokens(t_mini **mini, char *tmp)
+{
+	char	**split;
+	int		i;
+	t_type	options[3];
+
+	if (ft_strchr((*mini)->token->str, ' '))
+	{
+		split = ft_split((*mini)->token->str, ' ');
+		if (!split)
+			error_manager((*mini), MALLOC, NULL, NULL);
+		free((*mini)->token->str);
+		(*mini)->token->str = ft_strdup(split[0]);
+		i = 1;
+		while (split[i])
+		{
+			initialize_options(options);
+			new_token((*mini), split[i], options);
+			i++;
+		}
+		free_tab(split);
+	}
+	else if (!tmp[0])
+		return (token_refacto(mini));
+	return (SUCCESS);
 }
 
 /**

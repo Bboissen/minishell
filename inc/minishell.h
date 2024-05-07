@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:10 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/06 17:13:33 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/07 14:06:39 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ int			is_file(int type);
 
 /* Expansion */
 void		token_join(t_mini **mini);
-void		token_refacto(t_mini **mini);
+int			token_refacto(t_mini **mini);
 char		*get_error_code(char *str);
 
 #endif

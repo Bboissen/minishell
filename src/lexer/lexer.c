@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdumas <gdumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:33:41 by bboissen          #+#    #+#             */
-/*   Updated: 2024/05/06 15:54:37 by gdumas           ###   ########.fr       */
+/*   Updated: 2024/05/07 13:16:05 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	insert_new_token(t_mini *mini, t_token *new_token)
 			printf("new %s\n", mini->token->str);
 			new_token->next = mini->token->next;
 			mini->token->next->prev = new_token;
+			mini->token->next = new_token;
 		}
 		new_token->prev = mini->token;
 		mini->token->next = new_token;
