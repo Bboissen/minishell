@@ -6,7 +6,7 @@
 /*   By: bboissen <bboissen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 18:44:41 by gdumas            #+#    #+#             */
-/*   Updated: 2024/05/07 14:41:13 by bboissen         ###   ########.fr       */
+/*   Updated: 2024/05/07 14:49:03 by bboissen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static int	split_tokens(t_mini **mini, char *tmp)
 	char	**split;
 	int		i;
 	t_type	options[3];
+
 	if (ft_strchr((*mini)->token->str, ' '))
 	{
 		split = ft_split((*mini)->token->str, ' ');
@@ -67,7 +68,7 @@ static int	split_tokens(t_mini **mini, char *tmp)
 		free((*mini)->token->str);
 		(*mini)->token->str = ft_strdup(split[0]);
 		if (!(*mini)->token->str)
-			return(free_tab(split),
+			return (free_tab(split),
 				error_manager((*mini), MALLOC, NULL, NULL), ERROR);
 		i = 0;
 		while (split[++i])
