@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 static char	*handle_all_tests(t_mini *mini, char *str, int *quote);
-static void	insert_new_token(t_mini *mini, t_token *new_token);
+// static void	insert_new_token(t_mini *mini, t_token *new_token);
 
 /**
  * @brief Main lexer function, processes the input
@@ -100,7 +100,7 @@ void	new_token(t_mini *mini, char *str, t_type options[3])
  * @param mini Pointer to the t_mini structure.
  * @param new_token Pointer to the new token.
  */
-static void	insert_new_token(t_mini *mini, t_token *new_token)
+void	insert_new_token(t_mini *mini, t_token *new_token)
 {
 	if (!mini->token)
 	{
@@ -110,6 +110,12 @@ static void	insert_new_token(t_mini *mini, t_token *new_token)
 	}
 	else
 	{
+		if (mini->token->next)
+		{
+			printf("new %s\n", mini->token->str);
+			new_token->next = mini->token->next;
+			mini->token->next->prev = new_token;
+		}
 		new_token->prev = mini->token;
 		mini->token->next = new_token;
 		mini->token = mini->token->next;

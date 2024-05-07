@@ -203,7 +203,7 @@ char		*random_file(t_mini *mini);
 char		*token_typer(t_type type[3], char *str);
 void		new_token(t_mini *mini, char *str, t_type options[3]);
 char		*home_handler(t_mini *mini, char *str);
-
+void		insert_new_token(t_mini *mini, t_token *new_token);
 /* Heredoc */
 void		heredoc(t_mini *mini);
 void		expand_heredoc(t_mini *mini, t_token **token, int fd);

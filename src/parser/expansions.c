@@ -20,6 +20,9 @@
 void	expand_join(t_mini **mini)
 {
 	char	*tmp;
+	char 	**split;
+	int		i = 1;
+	t_type	options[3];
 
 	(*mini)->token = (*mini)->h_token;
 	while ((*mini)->token)
@@ -40,6 +43,20 @@ void	expand_join(t_mini **mini)
 			}
 			else if (!tmp[0])
 				token_refacto(mini);
+			else if (ft_strchr((*mini)->token->str, ' '))
+			{
+				split = ft_split((*mini)->token->str, ' ');
+				if (!split)
+					error_manager((*mini), MALLOC, NULL, NULL);
+				free((*mini)->token->str);
+				(*mini)->token->str = split[0];
+				while (split[i])
+				{
+					initialize_options(options);
+					new_token((*mini), split[i], options);
+					i++;
+				}
+			}
 		}
 		(*mini)->token = (*mini)->token->next;
 	}
